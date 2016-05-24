@@ -2,8 +2,8 @@
 layout: post
 title: "[Mysql] 主从复制"
 data: 2016-05-23 16:31:32
-categories: uncategorized
-tags: jekyll
+categories: database
+tags: mysql
 ---
 
 ## mysql 主从复制  ##
