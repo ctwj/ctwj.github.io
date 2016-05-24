@@ -1,0 +1,36 @@
+---
+author: ww
+comments: true
+date: 2015-09-21 01:41:38+00:00
+layout: post
+link: http://www.gl6.cc/blog/wordpress%e7%9a%84%e9%80%89%e9%a1%b9api.html
+slug: wordpress%e7%9a%84%e9%80%89%e9%a1%b9api
+title: WordPress的选项API
+wordpress_id: 153
+categories:
+- WordPress
+tags:
+- wordpress
+---
+
+选项API
+	选项API是一组函数，它是的当wordpress,插件和主题需要保存或获取数据的时候，访问数据库更加容易。
+
+	选项默认保存在数据库一个叫wp_options的表里面，可以是文本、数字、数组或对象。比如，WordPress保存博客的标题在这个表中，还有激活的插件列表，显示在控制面板的最新文章，或最新检测新版本的时间。
+
+	你将要学会，怎么使用这些函数来访问、更新、保存选项。add_option(),update_options(),get_option(),和delete_option().
+
+保存选项
+	你开始保存你的第一个插件选项，它的名字将叫 boj_myplugin_color 并有一个red的值，调用函数完成这件事的代码前如下：
+	
+
+	第一个参数是你的选项名字，给它一个独一无二的名字，让他具有意义能看出用途是至关重要的
+		》	唯一性：它将永远不会与WordPress的已经存在的选项或将来的选项冲突，也不会与可能有其他插件创建的选项冲突。
+		》	自解释性：这样命名，让它看起来显然是插件的设置，而不是由WordPress创建的。
+
+	第二个参数是选项的值，它几乎可以保存任意的变量，字符串、数字、浮点数字、布尔型、对象、数组。
+
+	更新一个选项的值有一个类是的函数调用：
+	
+
+	add_option() 和 update_option() 这两个函数的区别是，第一个函数当检测到选项名已经存在时，不会人、做任何事情，第二个函数会在更新值的时候检测选项名存不存在，如果需要会创建这个选项。

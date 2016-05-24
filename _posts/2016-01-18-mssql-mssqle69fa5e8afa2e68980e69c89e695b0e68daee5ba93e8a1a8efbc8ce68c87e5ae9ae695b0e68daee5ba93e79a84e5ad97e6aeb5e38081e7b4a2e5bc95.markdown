@@ -1,0 +1,43 @@
+---
+author: ww
+comments: true
+date: 2016-01-18 15:10:10+00:00
+layout: post
+link: http://www.gl6.cc/blog/mssql-mssql%e6%9f%a5%e8%af%a2%e6%89%80%e6%9c%89%e6%95%b0%e6%8d%ae%e5%ba%93%e8%a1%a8%ef%bc%8c%e6%8c%87%e5%ae%9a%e6%95%b0%e6%8d%ae%e5%ba%93%e7%9a%84%e5%ad%97%e6%ae%b5%e3%80%81%e7%b4%a2%e5%bc%95.html
+slug: mssql-mssql%e6%9f%a5%e8%af%a2%e6%89%80%e6%9c%89%e6%95%b0%e6%8d%ae%e5%ba%93%e8%a1%a8%ef%bc%8c%e6%8c%87%e5%ae%9a%e6%95%b0%e6%8d%ae%e5%ba%93%e7%9a%84%e5%ad%97%e6%ae%b5%e3%80%81%e7%b4%a2%e5%bc%95
+title: '[MSSQL]  MSSQL查询所有数据库表，指定数据库的字段、索引'
+wordpress_id: 443
+categories:
+- database
+tags:
+- MSSQL
+---
+
+
+
+    
+    --查询所有数据库
+    USE master
+    go
+    select [name] from [sysdatabases] order by [name]
+    
+    
+    --查询其中一个数据库test，就可以得到这个数据库中的所有的表名了，语句如下：
+    
+    
+    USE test
+    go
+    
+    select [id], [name] from [sysobjects] where [type] = 'u' order by [name]
+    
+    
+    --查出v_lyb这个表中所有的字段
+    select [name] from [syscolumns] where [id] = 21575115 order by [colid]
+    
+    
+    --得到该表中的记录条数前提这个表中要建立索引
+    
+    select [o].[id], [o].[name], [i].[rows] from [sysindexes] [i], [sysobjects] [o] where [i].[first]>0 and [o].[id]=[i].[id] and [o].[type]='u' and [o].[id]=21575115
+
+
+

@@ -1,0 +1,299 @@
+---
+author: ww
+comments: true
+date: 2015-09-18 23:14:42+00:00
+layout: post
+link: http://www.gl6.cc/blog/ecshop-%e6%a8%a1%e6%9d%bf%e7%bb%8f%e5%b8%b8%e7%94%a8%e5%88%b0%e7%9a%84%e6%a0%87%e7%ad%be.html
+slug: ecshop-%e6%a8%a1%e6%9d%bf%e7%bb%8f%e5%b8%b8%e7%94%a8%e5%88%b0%e7%9a%84%e6%a0%87%e7%ad%be
+title: ECSHOP 模板经常用到的标签
+wordpress_id: 142
+categories:
+- ECShop
+tags:
+- 模板
+---
+
+{foreach},{foreachelse}
+
+{foreach} 用于像循环访问一个数字索引数组一样循环访问一个关联数组，与仅能访问数字索引数组的{section}不同，{foreach}的语法比 {section}的语法简单得多，但是作为一个折衷方案也仅能用于单个数组。每个{foreach}标记必须与关闭标记{/foreach}成对出现。
+
+属性
+
+1、from    类型：array数组 必要性：Yes必要 默认值：n/a    描述：循环访问的数组
+
+2、item     类型：string字符串     必要性：Yes必要     默认值：n/a     描述：当前元素的变量名
+
+3、key      类型：string字符串     必要性：No可选     默认值：n/a     描述：当前键名的变量名
+
+4、name   类型：string字符串     必要性：No可选     默认值：n/a     描述：用于访问foreach属性的foreach循环的名称
+
+from和item是必要属性
+{foreach}循环的name可以是任何字母，数组，下划线的组合，参考PHP变量。
+{foreach}循环可以嵌套，嵌套的{foreach}的名称应当互不相同。
+from属性通常是值数组，被用于判断{foreach}的循环次数。
+在from变量中没有值时，将执行{foreachelse}。
+{foreach}循环也有自身属性的变量，可以通过{$smarty.foreach.name.property}访问，其中"name"是name属性。
+注意：name属性仅在需要访问{foreach}属性时有效，与{section}不同。访问未定义name的{foreach}属性不会抛出一个错误，但将导致不可预知的结果。
+{foreach}属性有index, iteration, first, last, show, total.
+
+示例：
+
+例一. item属性
+assign('myArray', $arr);
+?>
+
+用模板以无序列表输出$myArray
+
+
+
+
+{foreach from=$myArray item=foo}
+
+  * {$foo}
+
+{/foreach}
+
+
+上例将输出：
+
+
+
+  * 1000
+
+
+  * 1001
+
+
+  * 1002
+
+
+
+例二. 演示item和key属性
+
+ 'Tennis', 3 => 'Swimming', 8 => 'Coding');
+$smarty->assign('myArray', $arr);
+?>
+
+用模板按键名/键值对的形式输出$myArray, 类似于PHP的foreach。
+
+
+{foreach from=$myArray key=k item=v}
+
+  * {$k}: {$v}
+
+{/foreach}
+
+
+上例将输出：
+
+
+
+  * 9: Tennis
+
+
+  * 3: Swimming
+
+
+  * 8: Coding
+
+
+
+例三. {foreach}的item属性是关联数组
+
+ array('no' => 2456, 'label' => 'Salad'),
+96 => array('no' => 4889, 'label' => 'Cream')
+);
+$smarty->assign('items', $items_list);
+?>
+
+模板中，url通过$myId输出$items
+
+
+{foreach from=$items key=myId item=i}
+
+  * [{$i.no}: {$i.label}
+
+{/foreach}
+
+
+上例将输出：
+
+
+
+  * [2456: Salad
+
+
+  * [4889: Cream
+
+
+
+例四. {foreach}使用嵌套的item和key
+
+向Smarty设置一个数组，对于每个键名对应的每个循环值都包括键。
+
+assign('contacts', array(
+array('phone' => '1',
+'fax' => '2',
+'cell' => '3'),
+array('phone' => '555-4444',
+'fax' => '555-3333',
+'cell' => '760-1234')
+));
+?>
+
+用于输出$contact的模板。
+
+{foreach name=outer item=contact from=$contacts}
+
+
+* * *
+
+
+{foreach key=key item=item from=$contact}
+{$key}: {$item}  
+
+{/foreach}
+{/foreach}
+
+上例将输出：
+
+
+
+* * *
+
+
+phone: 1  
+
+fax: 2  
+
+cell: 3  
+
+
+
+* * *
+
+
+phone: 555-4444  
+
+fax: 555-3333  
+
+cell: 760-1234  
+
+
+例五. 使用{foreachelse}的数据库示例
+
+一个数据库（例如PEAR或ADODB）的搜索脚本示例，
+
+assign('results', $db->getAssoc($sql) );
+?>
+
+借助{foreachelse}标记在没有结果时模板输出"None found"字样。
+
+{foreach key=cid item=con from=$results}
+[{$con.name} - {$con.nick}](contact.php?contact_id={$cid})  
+
+{foreachelse}
+No items were found in the search
+{/foreach}
+
+.index包含当前数组索引，从零开始。
+
+例六. index示例
+
+{* 每五行输出一次头部区块 *}
+<table >
+{foreach from=$items key=myId item=i name=foo}
+{if $smarty.foreach.foo.index % 5 == 0}
+<tr >Title</tr>
+{/if}
+<tr >
+<td >{$i.label}
+</td></tr>
+{/foreach}
+</table>  
+
+iteration包含当前循环次数，与index不同，从1开始，每次循环增长1。
+
+例七. iteration和index示例
+
+{* this will output 0|1, 1|2, 2|3, ... etc *}
+{* 该例将输出0|1, 1|2, 2|3, ... 等等 *}
+{foreach from=$myArray item=i name=foo}
+{$smarty.foreach.foo.index}|{$smarty.foreach.foo.iteration},
+{/foreach}  
+
+first在当前{foreach}循环处于初始位置时值为TRUE。
+
+例八. first属性示例
+
+{* 对于第一个条目显示LATEST而不是id *}
+<table >
+{foreach from=$items key=myId item=i name=foo}
+<tr >
+
+<td >{if $smarty.foreach.foo.first}LATEST{else}{$myId}{/if}
+</td>
+
+<td >{$i.label}
+</td>
+</tr>
+{/foreach}
+</table>  
+
+last在当前{foreach}循环处于最终位置是值为TRUE。
+
+例九. last属性示例
+
+{* 在列表结束时增加一个水平标记 *})
+{foreach from=$items key=part_id item=prod name=products}
+{$prod}{if $smarty.foreach.products.last}
+
+* * *
+
+{else},{/if}
+{foreachelse}
+... content ...
+{/foreach}  
+
+show是{foreach}的参数. show是一个布尔值。如果值为FALSE，{foreach}将不被显示。如果有对应的{foreachelse}，将被显示。
+
+total包括{foreach}将循环的次数，既可以在{foreach}中使用，也可以在之后使用。
+
+例十. total属性示例
+
+{* 在结束位置显示行数 *}
+{foreach from=$items key=part_id item=prod name=foo}
+{$prod.name>
+
+* * *
+
+
+{if $smarty.foreach.foo.last}
+
+
+{$smarty.foreach.foo.total} items
+
+
+{/if}
+{foreachelse}
+... something else ...
+{/foreach}
+
+问题
+
+{foreach from=$custid item=curr_id key=num}
+{if num is odd}
+干啥
+{else}
+干其他的
+{/if}
+{/foreach}
+
+与以下的代码的区别，odd和enen的意义？
+{foreach from=$custid item=curr_id key=num}
+{if num%2==0}
+干啥
+{else}
+干其他的
+{/if}
+{/foreach}

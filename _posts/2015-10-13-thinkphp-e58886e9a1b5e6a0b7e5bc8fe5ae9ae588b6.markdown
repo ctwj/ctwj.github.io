@@ -1,0 +1,77 @@
+---
+author: ww
+comments: true
+date: 2015-10-13 01:11:00+00:00
+layout: post
+link: http://www.gl6.cc/blog/thinkphp-%e5%88%86%e9%a1%b5%e6%a0%b7%e5%bc%8f%e5%ae%9a%e5%88%b6.html
+slug: thinkphp-%e5%88%86%e9%a1%b5%e6%a0%b7%e5%bc%8f%e5%ae%9a%e5%88%b6
+title: Thinkphp 分页样式定制
+wordpress_id: 173
+categories:
+- PHP
+tags:
+- thinkphp
+- 分页
+---
+
+1. Page类有个config变量可以通过 setConfig 来修改变量
+
+    
+    
+    import("ORG.Util.Page");
+    $page= new Page($c_count, $page_rows);
+    $page->setConfig('prev', '‹ previous');
+    $page->setConfig('next', 'next ›');
+    $page->setConfig('first', '« first');
+    $page->setConfig('last', 'last »');
+    $page->setConfig('theme', '%first% %upPage% %linkPage% %downPage% %end%');
+    
+
+
+
+2. 其中可配置的显示项如下
+
+    
+    
+    'header'=>'条记录',
+    'prev'=>'上一页',
+    'next'=>'下一页',
+    'first'=>'第一页',
+    'last'=>'最后一页'
+    
+
+
+
+3. theme 这个也是可配置项，他用与配置分页显示的顺序是否显示和隐藏等等
+其中有如下可显示项，从名字可以看出都是要现实的什么，upPage downPage 分别为前后5页
+
+    
+    
+    '%header%',
+    '%nowPage%',
+    '%totalRow%',
+    '%totalPage%',
+    '%upPage%',
+    '%downPage%',
+    '%first%',
+    '%prePage%',
+    '%linkPage%',
+    '%nextPage%',
+    '%end%'
+    
+
+
+只要清楚这些很容易能配置出想要的分页效果，再自定义样式即可
+
+4. tp的分页显示项 %first% 显示的条件是，当前页大于 分页栏每页显示的页数，如果分页栏显示5页，只有第6页才回显示 %first%
+如果有需求第二页开始显示，需要修改Page.class.php 第116行
+
+    
+    
+    if($nowCoolPage == 1){
+                $theFirst   =   $this->nowPage == 1 ?  '' : "<a>".$this->config['first']."</a>";
+                $prePage    =   '';
+    
+
+
+这样就能第二页开始显示 %first%

@@ -1,0 +1,29 @@
+---
+author: ww
+comments: true
+date: 2016-03-10 07:28:24+00:00
+layout: post
+link: http://www.gl6.cc/blog/mysql-%e6%9c%80%e5%a4%a7%e8%bf%9e%e6%8e%a5%e6%95%b0.html
+slug: mysql-%e6%9c%80%e5%a4%a7%e8%bf%9e%e6%8e%a5%e6%95%b0
+title: '[mysql] 最大连接数'
+wordpress_id: 524
+categories:
+- database
+- uncategorized
+tags:
+- mysql
+---
+
+可以在 mysql 客户端使用以下命令查看
+**mysql> show variables like 'max_connections';**
+
+要对 mysql 的最大连接数进行修改，有三种方法：
+1.在 my.cnf 配置文件里面修改 max_connections 的值，然后重启 mysql 就行。如果 my.ini 文件中没有找到 max_connections 条目，可自行添加以下条目：
+**max_connections = 200**
+2.命令行下执行** set GLOBAL max_connections=200**
+3.修改源代码
+MySQL服务器允许的最大连接数16384,添加了最大允许连接数，对系统消耗增加不
+其他状态查询命令：
+显示当前运行的线程：mysql>** show processlist**
+显示当前状态：mysql>** show status**
+显示安装后的可用存储引擎和默认引擎 ：**show engines;**

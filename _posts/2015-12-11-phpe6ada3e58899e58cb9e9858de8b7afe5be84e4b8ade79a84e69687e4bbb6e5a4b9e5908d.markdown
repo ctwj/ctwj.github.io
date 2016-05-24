@@ -1,0 +1,30 @@
+---
+author: ww
+comments: true
+date: 2015-12-11 03:58:53+00:00
+layout: post
+link: http://www.gl6.cc/blog/php%e6%ad%a3%e5%88%99%e5%8c%b9%e9%85%8d%e8%b7%af%e5%be%84%e4%b8%ad%e7%9a%84%e6%96%87%e4%bb%b6%e5%a4%b9%e5%90%8d.html
+slug: php%e6%ad%a3%e5%88%99%e5%8c%b9%e9%85%8d%e8%b7%af%e5%be%84%e4%b8%ad%e7%9a%84%e6%96%87%e4%bb%b6%e5%a4%b9%e5%90%8d
+title: '[PHP]正则匹配路径中的文件夹名'
+wordpress_id: 359
+categories:
+- PHP
+tags:
+- 正则表达式
+---
+
+正则匹配路径中的文件夹名
+
+    
+    // 跳过指定目录 .idea .svn  resource temp test
+                    if (DIRECTORY_SEPARATOR == '\\') {
+                        $dirpat = '#(\\\\\\.idea\\\\|\\\\\\.svn\\\\|\\\\resource\\\\)#i';
+                    } else {
+                        $dirpat = '#(\\/\\.idea\\\\|\\/\\.svn\\\\|\\/resource\\/)#i';
+                    }
+                    if ( preg_match($dirpat,$file->getRealPath(),$match)){
+                        continue;
+                    }
+
+
+

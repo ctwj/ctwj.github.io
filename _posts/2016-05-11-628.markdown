@@ -1,0 +1,42 @@
+---
+author: ww
+comments: true
+date: 2016-05-11 02:02:17+00:00
+layout: post
+link: http://www.gl6.cc/blog/628.html
+slug: '628'
+title: '[ngrok] 内网穿透工具'
+wordpress_id: 628
+categories:
+- uncategorized
+tags:
+- ngrok
+- 内网
+---
+
+能够通过一个外网服务器,直接访问到内网的服务
+
+ 配置
+
+    
+    #./ngrok -config ngrok.cfg -subdomain=phc 80
+    
+    server_addr: "server.ngrok.cc:4443"
+    auth_token: "9f56e765b1850e08b9b6xxx1f40d6f5e"
+    tunnels:
+      sunny:
+       subdomain: "phc"
+       proto:
+        http: 127.0.0.1:80
+        https: 127.0.0.1:80
+
+
+刚开始好好的,后来再启动提示`Invalid address  'sunny': missing port in address sunny`
+用`./ngrok -config ngrok.cfg -subdomain=phc 80`启动成功了
+后台运行`setsid ./ngrok -config=./ngrok.cfg -subdomain=test 80`
+
+其它参考文章:https://imququ.com/post/self-hosted-ngrokd.html
+官方文档:https://ngrok.com/docs
+http://tonybai.com/2015/03/14/selfhost-ngrok-service/
+http://www.sunnyos.com/article-show-48.html
+http://www.ekan001.com/articles/38

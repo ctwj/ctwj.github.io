@@ -1,0 +1,39 @@
+---
+author: ww
+comments: true
+date: 2015-12-24 03:19:16+00:00
+layout: post
+link: http://www.gl6.cc/blog/javascript-%e5%a4%9a%e8%a1%8c%e6%96%87%e6%9c%ac%e6%ba%a2%e5%87%ba%e6%98%be%e7%a4%ba%e7%9c%81%e7%95%a5%e5%8f%b7.html
+slug: javascript-%e5%a4%9a%e8%a1%8c%e6%96%87%e6%9c%ac%e6%ba%a2%e5%87%ba%e6%98%be%e7%a4%ba%e7%9c%81%e7%95%a5%e5%8f%b7
+title: '[javascript] 多行文本溢出显示省略号(…)'
+wordpress_id: 387
+categories:
+- Javascript
+- uncategorized
+tags:
+- javascript
+---
+
+JavaScript 方案
+用js也可以根据上面的思路去模拟，实现也很简单，推荐几个做类似工作的成熟小工具：
+
+1.Clamp.js
+下载及文档地址：https://github.com/josephschmitt/Clamp.js
+使用也非常简单：
+
+var module = document.getElementById("clamp-this-module");
+$clamp(module, {clamp: 3});
+
+2.jQuery插件-jQuery.dotdotdot
+这个使用起来也很方便：
+
+$(document).ready(function() {
+	$("#wrapper").dotdotdot({
+		//	configuration goes here
+	});
+});
+下载及详细文档地址：https://github.com/BeSite/jQuery.dotdotdot或http://dotdotdot.frebsite.nl/
+
+参考：
+http://www.cssmojo.com/line-clamp_for_non_webkit-based_browsers/#what-can-we-do-across-browsers
+http://css-tricks.com/line-clampin/

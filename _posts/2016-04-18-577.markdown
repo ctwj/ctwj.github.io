@@ -1,0 +1,57 @@
+---
+author: ww
+comments: true
+date: 2016-04-18 07:16:12+00:00
+layout: post
+link: http://www.gl6.cc/blog/577.html
+slug: '577'
+title: '[php] 记录某个ip的行为'
+wordpress_id: 577
+categories:
+- PHP
+---
+
+
+
+    
+    <?php 
+    define('RECORD_IP', '127.0.0.1');
+    define('LOG_FILE', 'log4p.txt');
+    
+    if ( isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] == RECORD_IP )
+    {
+    
+    	if ( !empty($_SERVER['QUERY_STRING']) ){
+    		
+    		$url = $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+    	} else {
+    		$url = $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+    	}
+    	
+    	$cookie = $_COOKIE;
+    
+    	if ( !isset($_SESSION) )
+    	{
+    		session_start();
+    	}
+    	$session = $_SESSION;
+    
+    	$post = $_POST;
+    
+    	$get = $_GET;
+    
+    	$data = json_encode(array('cookie'=>$cookie,'session'=>$session,'post'=>$post,'get'=>$get));
+    	
+    	$time = new \Datetime('now', new \DatetimeZone('PRC'));
+    	
+    	$method = $_SERVER['REQUEST_METHOD'];
+    
+    	$info = "{$time->format('Y-m-d H:i:s')} |- {$method} -|+ {$url} +|- $data\r\n"; 
+    	
+    	file_put_contents(LOG_FILE, $info, FILE_APPEND);
+    }
+    
+    ?>
+
+
+

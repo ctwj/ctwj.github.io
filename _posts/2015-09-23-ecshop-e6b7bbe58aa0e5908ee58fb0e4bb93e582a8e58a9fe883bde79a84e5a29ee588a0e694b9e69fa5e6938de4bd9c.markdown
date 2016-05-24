@@ -1,0 +1,343 @@
+---
+author: ww
+comments: true
+date: 2015-09-23 01:43:12+00:00
+layout: post
+link: http://www.gl6.cc/blog/ecshop-%e6%b7%bb%e5%8a%a0%e5%90%8e%e5%8f%b0%e4%bb%93%e5%82%a8%e5%8a%9f%e8%83%bd%e7%9a%84%e5%a2%9e%e5%88%a0%e6%94%b9%e6%9f%a5%e6%93%8d%e4%bd%9c.html
+slug: ecshop-%e6%b7%bb%e5%8a%a0%e5%90%8e%e5%8f%b0%e4%bb%93%e5%82%a8%e5%8a%9f%e8%83%bd%e7%9a%84%e5%a2%9e%e5%88%a0%e6%94%b9%e6%9f%a5%e6%93%8d%e4%bd%9c
+title: Ecshop 添加后台仓储功能的增删改查操作
+wordpress_id: 157
+categories:
+- ECShop
+tags:
+- ecshop
+---
+
+
+
+    
+    assign('depot_list',    $depot_list['depot_list']);
+        $smarty->assign('filter',       $depot_list['filter']);
+        $smarty->assign('record_count', $depot_list['record_count']);
+        $smarty->assign('page_count',   $depot_list['page_count']);
+        
+        $smarty->assign('ur_here',       '仓库列表');
+        $smarty->assign('action_link',   array('href' => 'depot_manage.php?act=add', 'text' => '添加仓库'));
+        $smarty->assign('cfg_lang', $_CFG['lang']);
+        
+        $smarty->assign('full_page',    1);   //这个full_page在分页中很重要
+    
+        assign_query_info();
+        
+        $smarty->display('depot_list.htm');
+    }
+    
+    /*------------------------------------------------------ */
+    //-- 添加仓库
+    /*------------------------------------------------------ */
+    if ($_REQUEST['act'] == 'insert')
+    {
+        /* 权限判断 */
+        admin_priv('depot_manage');
+        
+        /* 仓库名字重复判断 */
+        $name = addslashes($_POST['name']);
+        $check_sql = 'select 1 from ecs_depot where name ="'. $name . '"';
+        $repeat = $db->getOne($check_sql);
+        if ( $repeat ) {
+            $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+            sys_msg( '仓库名字重复', 0, $link);
+        }
+        
+        
+        $dlogo = '';
+        if ( !empty( $_FILES ) && $_FILES['dlogo']['error'] != 4 ) {
+            if ( isset($_FILES['dlogo']['error']) && $_FILES['dlogo']['error'] == 1 ) {
+                $error_message = $GLOBALS['err']->last_message();
+                show_message('上传的仓库LOGO过大', '返回到用户中心', 'user.php?act=profile', 'error');
+            }
+            
+            /* 生成文件名 */
+            $urlstr = date('Ymd');
+            for ($i = 0; $i  $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+                sys_msg( '不允许的图片后缀', 0, $link);
+            }
+            
+            $source_file = $_FILES['dlogo']['tmp_name'];
+            $file_name   = $urlstr . '.' .$ftype;
+    
+            if (!move_upload_file($source_file, DEPOT_IMG_PATH.$file_name))
+            {
+                $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+                sys_msg($_LANG['upfile_error'], 0, $link);
+            }
+            else
+            {
+                $dlogo = $file_name;
+            }
+        }
+    
+        $name       =   addslashes($_POST['name']);
+        $free_total =   floatval($_POST['free_total']);
+        $charge     =   floatval($_POST['charge']);
+    
+        /*插入数据*/
+        $sql = "INSERT INTO ".$ecs->table('depot')."( name,free_total, dlogo, charge) ".
+                 "VALUES ('$name','$free_total', '$dlogo', '$charge')";
+    
+        $db->query($sql);
+        $insert_id = $db->insert_id();
+    
+        $link[0]['text'] = '回到仓库列表';
+        $link[0]['href'] = 'depot_manage.php?act=list';
+    
+        $link[1]['text'] = '继续添加仓库';
+        $link[1]['href'] = 'depot_manage.php?act=add';
+    
+        // 记录日志
+        admin_log($insert_id,'add','depot');
+    
+        clear_cache_files(); // 清除相关的缓存文件
+    
+        sys_msg('添加仓库成功',0, $link);
+    }
+    
+    /*------------------------------------------------------ */
+    //-- 添加仓库界面
+    /*------------------------------------------------------ */
+    if ($_REQUEST['act'] == 'add')
+    {
+        /* 权限判断 */
+        admin_priv('depot_manage');
+    
+        $smarty->assign('ur_here',       '添加仓库');
+        $smarty->assign('action_link',   array('href' => 'depot_manage.php?act=list', 'text' => '仓库列表'));
+    
+        $depot['free_total']    =   100.00;
+        $depot['charge']       =   100.00; 
+        
+        $smarty->assign('depot', $depot);
+        $smarty->assign('form_act', 'insert');
+        $smarty->assign('action',   'add');
+        $smarty->assign('cfg_lang', $_CFG['lang']);
+    
+        assign_query_info();
+        $smarty->display('depot_info.htm');
+    }
+    
+    /*------------------------------------------------------ */
+    //-- 编辑仓库界面
+    /*------------------------------------------------------ */
+    if ($_REQUEST['act'] == 'edit')
+    {
+        /* 权限判断 */
+        admin_priv('depot_manage');
+    
+        $id = intval($_GET['id']);
+    
+        $sql = 'SELECT * FROM ' .$ecs->table('depot'). " WHERE id = '$id'";
+    
+        $depot = $db->getRow($sql);
+    
+        $smarty->assign('depot', $depot);
+    
+        // 设置面包屑导航
+        $smarty->assign('ur_here',       '编辑仓库');
+        $smarty->assign('action_link',   array('href' => 'depot_manage.php?act=list', 'text' => '仓库列表'));
+    
+        $smarty->assign('form_act', 'update');
+        $smarty->assign('action',   'edit');
+        $smarty->assign('cfg_lang', $_CFG['lang']);
+    
+        assign_query_info();
+        $smarty->display('depot_info.htm');
+    }
+    
+    /*------------------------------------------------------ */
+    //-- 编辑仓库
+    /*------------------------------------------------------ */
+    if ($_REQUEST['act'] == 'update')
+    {
+        /* 权限判断 */
+        admin_priv('depot_manage');
+    
+        $id = intval($_POST['id']);
+    
+        $name = addslashes($_POST['name']);
+    
+        $check_sql = 'SELECT id FROM ' . $ecs->table('depot') .
+            ' WHERE id != "' . $id . '" and name = "' . $name . '"';
+    
+        if ( $db->getOne( $check_sql ) ) {
+            $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+            sys_msg('重复的仓库名', 0, $link);
+        }
+    
+        if ( isset($_FILES['dlogo']['error']) && $_FILES['dlogo']['error'] == 1 ) {
+            $error_message = $GLOBALS['err']->last_message();
+            show_message('上传的身份证图片过大', '返回到用户中心', 'user.php?act=profile', 'error');
+        }
+    
+        if ( isset($_FILES['dlogo']['error']) && $_FILES['dlogo']['error'] == 4 ) {
+            $dlogo = '';
+        } else  {
+            /* 生成文件名 */
+            $urlstr = date('Ymd');
+            for ($i = 0; $i  $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+                sys_msg( '不允许的图片后缀', 0, $link);
+            }
+    
+            $source_file = $_FILES['dlogo']['tmp_name'];
+            $file_name   = $urlstr . '.' .$ftype;
+    
+            if (!move_upload_file($source_file, DEPOT_IMG_PATH.$file_name))
+            {
+                $link[] = array('text' => $_LANG['go_back'], 'href' => 'javascript:history.back(-1)');
+                sys_msg($_LANG['upfile_error'], 0, $link);
+            }
+            else
+            {
+                $dlogo = $file_name;
+            }
+        }
+    
+        $depot['dlogo']         = $dlogo;
+        $depot['name']          = $name;
+        $depot['free_total']    = floatval($_POST['free_total']);
+        $depot['charge']        = floatval($_POST['charge']);
+    
+        if ($db->autoExecute($ecs->table('depot'), $depot, 'UPDATE', "id='$id'") !== false)
+        {
+    
+            $links = array(array('href' => 'depot_manage.php?act=list', 'text' => $_LANG['back_list']));
+            sys_msg('编辑仓库成功', 0, $links);
+        }
+        else
+        {
+            sys_msg($_LANG['编辑仓库失败'], 1);
+        }
+    }
+    
+    /*------------------------------------------------------ */
+    //-- 移除仓库
+    /*------------------------------------------------------ */
+    if ($_REQUEST['act'] == 'remove')
+    {
+        check_authz_json('depot_priv');
+    
+        $id = intval($_GET['id']);
+    
+        $sql = "DELETE FROM " .$ecs->table('depot'). " WHERE id = '$id'";
+        $res = $db->query($sql);
+    
+        admin_log('', 'remove', 'depot');
+    
+        $url = 'depot_manage.php?act=query&' . str_replace('act=remove', '', $_SERVER['QUERY_STRING']);
+    
+        ecs_header("Location: $urln");
+        exit;
+    }
+    
+    /*------------------------------------------------------ */
+    //-- 批处理
+    /*------------------------------------------------------ */
+    if ($_REQUEST['act'] == 'batch')
+    {
+        admin_priv('depot_manage');
+        
+        $command = $_REQUEST['sel_action'];
+        
+        $ids = $_REQUEST['checkboxes'];
+             
+        switch ( $command ) 
+        {
+            case 'remove':
+                $id_list = join(',',$ids);
+                
+                $sql = 'DELETE FROM '. $ecs->table('depot') . ' WHERE id in (' . $id_list . ')';
+                $res = $db->query($sql);
+    
+                if ( $res ) {
+                    admin_log('', 'remove', 'depot');
+                } else {
+                    sys_msg( '删除失败!', 1);
+                }
+    
+                break;
+            default :
+                sys_msg( '无效的操作!', 1);
+        }
+        
+        $links = array(array('href' => 'depot_manage.php?act=list', 'text' => $_LANG['back_list']));
+            sys_msg('操作成功', 0, $links);
+        
+    }
+    
+    /*------------------------------------------------------ */
+    //-- ajax 查询
+    /*------------------------------------------------------ */
+    if ($_REQUEST['act'] == 'query')
+    {
+        /* 权限判断 */
+        admin_priv('depot_manage');
+    
+        $is_delete = empty($_REQUEST['is_delete']) ? 0 : intval($_REQUEST['is_delete']);
+        $depot_list = get_depot_list();
+    
+        
+        $smarty->assign('depot_list',   $depot_list['depot_list']);
+        $smarty->assign('filter',       $depot_list['filter']);
+        $smarty->assign('record_count', $depot_list['record_count']);
+        $smarty->assign('page_count',   $depot_list['page_count']);
+    
+        // 这里没有设置 full_page 所以 最后模板解析出来就去掉了头尾，只剩下内容
+        
+        $sort_flag  = sort_flag($depot_list['filter']);
+        $smarty->assign($sort_flag['tag'], $sort_flag['img']);
+    
+        make_json_result($smarty->fetch('depot_list.htm'), '',
+            array('filter' => $depot_list['filter'], 'page_count' => $depot_list['page_count']));
+    }
+    
+    
+    function get_depot_list()
+    {
+        /* 查询条件 */
+    	$filter['keywords']     = empty($_REQUEST['keywords']) ? 0 : trim($_REQUEST['keywords']);
+    	if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
+    	{
+    		$filter['keywords'] = json_str_iconv($filter['keywords']);
+    	}
+    	$filter['sort_by']      = empty($_REQUEST['sort_by']) ? 'id' : trim($_REQUEST['sort_by']);
+    	$filter['sort_order']   = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);
+    
+    	$where = (!empty($filter['keywords'])) ? " AND name LIKE '%" . mysql_like_quote($filter['keywords']) . "%' " : '';
+    	
+    	$sql  = "SELECT count(id) FROM " .$GLOBALS['ecs']->table('depot'). " WHERE 1=1 $where ";
+    	
+    	$filter['record_count'] = $GLOBALS['db']->getOne($sql);
+    
+    	/* 分页大小 */
+    	$filter = page_and_size($filter);
+    
+    	/* 获取列表 */
+    	$arr = array();
+    	$sql  = "SELECT * FROM " .$GLOBALS['ecs']->table('depot'). " WHERE 1=1 $where " .
+    	" ORDER BY $filter[sort_by] $filter[sort_order] ".
+    	" LIMIT ". $filter['start'] .", $filter[page_size]";
+    	$res  = $GLOBALS['db']->query($sql);
+    
+    	while ($row = $GLOBALS['db']->fetchRow($res))
+    	{
+    		//$row['order_time'] = local_date($GLOBALS['_CFG']['time_format'], $row['order_time']);
+    		$arr[] = $row;
+    	}
+    	$filter['keywords'] = stripslashes($filter['keywords']);
+        
+    	$arr = array('depot_list' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+        
+    	return $arr;
+    }
+
+
+

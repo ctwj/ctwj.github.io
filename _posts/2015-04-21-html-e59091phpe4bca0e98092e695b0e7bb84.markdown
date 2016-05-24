@@ -1,0 +1,24 @@
+---
+author: ww
+comments: true
+date: 2015-04-21 06:17:06+00:00
+layout: post
+link: http://www.gl6.cc/blog/html-%e5%90%91php%e4%bc%a0%e9%80%92%e6%95%b0%e7%bb%84.html
+slug: html-%e5%90%91php%e4%bc%a0%e9%80%92%e6%95%b0%e7%bb%84
+title: html 向php传递数组
+wordpress_id: 72
+categories:
+- PHP
+---
+
+有两个方法
+
+1, 使用 表单+checkbox传递
+
+2, 使用javascript 序列化数组，然后再传递
+其中序列化有现在的js组件 json2.js 
+var list= new Array();
+JSON.stringify(list)
+php端解码
+$ids = $_GET['ids'];
+$ids = stripcslashes(htmlspecialchars_decode(urldecode($ids)));

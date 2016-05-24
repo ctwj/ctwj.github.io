@@ -1,0 +1,33 @@
+---
+author: ww
+comments: true
+date: 2015-10-20 04:58:40+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e5%85%b3%e4%ba%8ephp%e7%9a%84%e7%b1%bb%e4%b8%ad%e4%b8%a4%e4%b8%aa%e6%9e%84%e9%80%a0%e5%87%bd%e6%95%b0.html
+slug: '%e5%85%b3%e4%ba%8ephp%e7%9a%84%e7%b1%bb%e4%b8%ad%e4%b8%a4%e4%b8%aa%e6%9e%84%e9%80%a0%e5%87%bd%e6%95%b0'
+title: 关于php的类中两个构造函数
+wordpress_id: 185
+categories:
+- PHP
+---
+
+class test{
+
+public function __construct()
+{
+return;
+}
+
+public function test()
+{
+return;
+}
+
+}
+
+像上面的情况是允许的，根本原因是为了兼容
+php4 支持 类名一样的构造函数，php5 支持 __construct
+
+要注意的是 test 不能 写在 __construct 的前面去，因为有可能会报错，
+Redefining already constructor for
+具体什么时候报错看php版本

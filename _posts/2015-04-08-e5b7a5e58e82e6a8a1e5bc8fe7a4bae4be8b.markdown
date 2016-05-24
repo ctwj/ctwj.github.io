@@ -1,0 +1,260 @@
+---
+author: ww
+comments: true
+date: 2015-04-08 00:49:51+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e5%b7%a5%e5%8e%82%e6%a8%a1%e5%bc%8f%e7%a4%ba%e4%be%8b.html
+slug: '%e5%b7%a5%e5%8e%82%e6%a8%a1%e5%bc%8f%e7%a4%ba%e4%be%8b'
+title: 工厂模式示例
+wordpress_id: 60
+categories:
+- PHP
+tags:
+- 设计模式
+---
+
+这个是HeadFirst设计模式里面的工厂模式示例
+PizzaStore类里面的createPizza方法是工厂方法，能够解决依赖问题，但是要求子类继承并实现这个接口，是通过继承的方法来解耦。
+IPizzaIngredientFactory是抽象工厂的接口，通过组合的方式来实现，如果工厂里面需要新增产品，就需要修改接口了。
+
+
+    
+    
+    <?php
+    
+    namespace Factory;
+    
+    /**
+     * Pizza 基类
+     * Class Pizza
+     * @package Factory
+     */
+    abstract class Pizza{
+        protected $name;
+        protected $dough;
+        protected $sauce;
+        protected $veggies = array();
+        protected $cheese;
+        protected $pepperoni;
+        protected $clam;
+    
+        /**
+         * 准备工作
+         * @return mixed
+         */
+        abstract public function prepare();
+        public function bake(){
+            echo "Bake for 25 minutes at 350<br>";
+        }
+        public function cut(){
+            echo "Cutting the pizza into diagonal slices<br>";
+        }
+        public function box(){
+            echo "place pizza in official PizzaStore box<br>";
+        }
+        public function setName($name){
+            $this->name = $name;
+        }
+        public function getName(){
+            return $this->name;
+        }
+    
+        public function __toString(){
+    
+        }
+    }
+    
+    /**
+     * CheesePizza 其原料通过PizzaIngredientFactory提供,使得Pizza的生产与原料解耦
+     * Class CheesePizza
+     * @package Factory
+     */
+    class CheesePizza extends Pizza{
+        protected $ingredientFactory;
+        public function __construct(IPizzaIngredientFactory $ingredientFactory){
+            $this->ingredientFactory = $ingredientFactory;
+        }
+        public function prepare(){
+            echo "Preparing {$this->name}<br>";
+            $this->dough = $this->ingredientFactory->createDough();
+            $this->sauce = $this->ingredientFactory->createSauce();
+            $this->cheese = $this->ingredientFactory->createCheese();
+        }
+    }
+    
+    /**
+     * ClamPizza 其原料通过PizzaIngredientFactory提供
+     * Class CheesePizza
+     * @package Factory
+     */
+    class ClamPizza extends Pizza{
+        protected $ingredientFactory;
+        public function __construct(IPizzaIngredientFactory $ingredientFactory){
+            $this->ingredientFactory = $ingredientFactory;
+        }
+        public function prepare(){
+            echo "Preparing {$this->name}<br>";
+            $this->dough = $this->ingredientFactory->createDough();
+            $this->sauce = $this->ingredientFactory->createSauce();
+            $this->cheese = $this->ingredientFactory->createCheese();
+        }
+    }
+    class ChicagoStyleCheesePizza extends Pizza{
+        protected $ingredientFactory;
+        public function __construct(IPizzaIngredientFactory $ingredientFactory){
+            $this->ingredientFactory = $ingredientFactory;
+        }
+        public function prepare(){
+            echo "Preparing {$this->name}<br>";
+            $this->dough = $this->ingredientFactory->createDough();
+            $this->sauce = $this->ingredientFactory->createSauce();
+            $this->cheese = $this->ingredientFactory->createCheese();
+        }
+    }
+    
+    /**
+     * 原料工厂的接口
+     * Interface IPizzaIngredientFactory
+     * @package Factory
+     */
+    interface IPizzaIngredientFactory{
+        public function createDough();
+        public function createSauce();
+        public function createCheese();
+        public function createVeggies();
+        public function createPepperoni();
+        public function createClam();
+    }
+    
+    class ThinCrustDough{}
+    class MarinareSauce{}
+    class ReggianoCheese{}
+    class Onion{}
+    class Garlic{}
+    class Mushroom{}
+    class RedPepper{}
+    
+    /**
+     * 原料工厂
+     * Class NYPizzaIngredientFactory
+     * @package Factory
+     */
+    class NYPizzaIngredientFactory implements IPizzaIngredientFactory{
+        public function CreateDough(){
+            return new ThinCrustDough();
+        }
+        public function createSauce(){
+            return new MarinareSauce();
+        }
+        public function createCheese(){
+            return new  ReggianoCheese();
+        }
+        public function createVeggies(){
+            $veggies = array();
+            $veggies[] = new Garlic();
+            $veggies[] = new Onion();
+            $veggies[] = new Mushroom();
+            $veggies[] = new RedPepper();
+            return $veggies;
+        }
+        public function createPepperoni(){
+            return new SlicedPepperoni();
+        }
+        public function createClam(){
+            return new FreshClams();
+        }
+    }
+    
+    class ChicagoPizzaIngredientFactory implements IPizzaIngredientFactory{
+        public function CreateDough(){
+            return new ThinCrustDough();
+        }
+        public function createSauce(){
+            return new MarinareSauce();
+        }
+        public function createCheese(){
+            return new  ReggianoCheese();
+        }
+        public function createVeggies(){
+            $veggies = array();
+            $veggies[] = new Garlic();
+            $veggies[] = new Onion();
+            $veggies[] = new Mushroom();
+            $veggies[] = new RedPepper();
+            return $veggies;
+        }
+        public function createPepperoni(){
+            return new SlicedPepperoni();
+        }
+        public function createClam(){
+            return new FreshClams();
+        }
+    }
+    
+    /**
+     * PizzaStore 基类，通过抽象方法createPizza 让子类创建Pizza，实现PizzaStore 与 Pizza 的解耦
+     * Class PizzaStore
+     * @package Factory
+     */
+    abstract class PizzaStore{
+        abstract function createPizza($type);
+    
+        public final function OrderPizza($type){
+            $pizza = null;
+            /** @var Pizza $pizza */
+            $pizza = $this->createPizza($type);
+            $pizza->prepare();
+            $pizza->bake();
+            $pizza->cut();
+            $pizza->box();
+            return $pizza;
+        }
+    
+    }
+    
+    /**
+     * PizzaStore 通过不能工厂提供的原料来生产不同的产品
+     * Class NYPizzaStore
+     * @package Factory
+     */
+    class NYPizzaStore extends PizzaStore{
+        /**
+         * @param $type
+         * @override
+         */
+        public function createPizza($type){
+            $pizza = null;
+            $pizzaIngredientFactory = new NYPizzaIngredientFactory();
+            if ($type == 'cheese'){
+                $pizza = new CheesePizza($pizzaIngredientFactory);
+                $pizza->setName("New York Style Cheese");
+            } else {
+                $pizza = new ClamPizza($pizzaIngredientFactory);
+                pizza.setName("New York Style Clam Pizza");
+            }
+            return $pizza;
+        }
+    }
+    class ChicagoPizzaStore extends PizzaStore{
+        public function createPizza($type){
+            $pizza = null;
+            $pizzaIngredientFactory = new NYPizzaIngredientFactory();
+            if ($type == 'cheese'){
+                $pizza = new CheesePizza($pizzaIngredientFactory);
+                $pizza->setName("New York Style Cheese");
+            } else {
+                $pizza = new ClamPizza($pizzaIngredientFactory);
+                $pizza->setName("New York Style Clam Pizza");
+            }
+            return $pizza;
+        }
+    }
+    
+    $nyStore = new NYPizzaStore();
+    $pizza = $nyStore->OrderPizza('cheese');
+    echo "Ethan ordered a {$pizza->getName(0)} <br>";
+    echo '<hr>';
+    $cgStore = new ChicagoPizzaStore();
+    $pizza = $cgStore->OrderPizza('clam');
+    echo "Joel ordered a {$pizza->getName(0)} <br>";
+    

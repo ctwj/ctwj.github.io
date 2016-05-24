@@ -1,0 +1,28 @@
+---
+author: ww
+comments: true
+date: 2015-12-05 14:22:43+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e7%97%95%e8%bf%b9%e6%b8%85%e7%90%86-%e6%b8%85%e9%99%a4cmd%e5%91%bd%e4%bb%a4%e8%a1%8c%e7%9a%84%e5%8e%86%e5%8f%b2%e8%ae%b0%e5%bd%95.html
+slug: '%e7%97%95%e8%bf%b9%e6%b8%85%e7%90%86-%e6%b8%85%e9%99%a4cmd%e5%91%bd%e4%bb%a4%e8%a1%8c%e7%9a%84%e5%8e%86%e5%8f%b2%e8%ae%b0%e5%bd%95'
+title: '[痕迹清理] 清除cmd命令行的历史记录'
+wordpress_id: 343
+categories:
+- safe
+- uncategorized
+tags:
+- 日志清理
+- 痕迹清理
+---
+
+   1、单击桌面左下角的“开始”菜单，弹出的窗口单击“运行”命令；
+
+　　2、在打开框中输入“CMD”命令，单击“确定”，调用出命令提示符窗口；
+
+　　3、在命令提示符窗口下键入以下命令，按回车键；
+　　reg delete "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU" /f
+
+　　4、返回显示操作成功结束的消息，说明已将该注册表项删除；
+
+　　5、最后再键入以下命令来重启explorer.exe进程，达到刷新注册表的作用。
+　　cmd /k taskkill /f /im explorer.exe && explorer.exe

@@ -1,0 +1,44 @@
+---
+author: ww
+comments: true
+date: 2016-02-22 08:17:59+00:00
+layout: post
+link: http://www.gl6.cc/blog/crontab-%e5%ae%9a%e6%97%b6%e4%bb%bb%e5%8a%a1%e6%af%8f%ef%bc%95%e5%88%86%e9%92%9f%e6%89%a7%e8%a1%8c%e4%b8%80%e6%ac%a1.html
+slug: crontab-%e5%ae%9a%e6%97%b6%e4%bb%bb%e5%8a%a1%e6%af%8f%ef%bc%95%e5%88%86%e9%92%9f%e6%89%a7%e8%a1%8c%e4%b8%80%e6%ac%a1
+title: crontab 定时任务,每５分钟执行一次
+wordpress_id: 487
+categories:
+- Linux
+tags:
+- crontab
+- 定时任务
+---
+
+１.　先保证服务开启
+
+    
+    service crond start
+
+
+２.　添加任务
+
+编辑　/etc/crontab  文件
+
+    
+    SHELL=/bin/bash
+    PATH=/sbin:/bin:/usr/sbin:/usr/bin
+    MAILTO=root
+    HOME=/
+    
+    # For details see man 4 crontabs
+    
+    # Example of job definition:
+    # .---------------- minute (0 - 59)
+    # |  .------------- hour (0 - 23)
+    # |  |  .---------- day of month (1 - 31)
+    # |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+    # |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+    # |  |  |  |  |
+    # *  *  *  *  * user-name command to be executed
+    */5 * * * *  root /usr/bin/php  /usr/www/task.php
+    */5 * * * *  root /usr/bin/php  /usr/www/task1.php

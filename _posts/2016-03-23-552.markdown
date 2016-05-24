@@ -1,0 +1,300 @@
+---
+author: ww
+comments: true
+date: 2016-03-23 03:33:12+00:00
+layout: post
+link: http://www.gl6.cc/blog/552.html
+slug: '552'
+title: '[php] 数组实现的字典树Trie'
+wordpress_id: 552
+categories:
+- algorithm
+- PHP
+tags:
+- trie
+---
+
+
+ php数组实现的字典树及测试
+
+
+    
+    <?php
+    	include('Trie.class.php');
+    	header('Content-type: text/html; charset=utf-8');
+    
+    	
+    	$file = 'a.txt';
+    	$usage = memory_get_usage();
+    	echo '没有读取文件:',formatBytes($usage);
+    
+    	echo '<br><br>文件大小',formatBytes(filesize($file));
+    
+    	$usage = memory_get_usage();
+    	$s = file_get_contents($file);
+    	echo '<br><br>将文件读取到字符串',formatBytes(memory_get_usage()-$usage);
+    
+    	$usage = memory_get_usage();
+    	$a = array();
+    	$a = explode("\n", $s);
+    	echo '<br><br>将文件中字符存放到一个数组',formatBytes(memory_get_usage()-$usage);
+    	echo '<br>数组大小',count($a);
+    
+    	// 将文件读取到字典树中
+    	$usage = memory_get_usage();
+    	$mt = microtime(true);
+    	$t = new Trie($a);
+    	echo '<br><br>将文件中字符存放到字典树',formatBytes(memory_get_usage()-$usage);
+    	$dt = microtime(true)-$mt;
+    	echo '<br><br>字典树构建时间:',round($dt,3),'秒';
+    
+    	echo '<br><br>字典树测试:<br>';
+    	$test = '/admin/ubb/admin_login.asp';
+    
+    	$test = '/modules/webmail/mailattach.php?userfile=../../some.php&userfile_name=../attachments/file.txt&attachments=1';
+    	trieTest($test, $t);
+    	$test = '中国人';
+    	trieTest($test, $t);
+    	$test = '中国';
+    	trieTest($test, $t);
+    
+    
+    function trieTest($test,$t)
+    {
+    	$mt = microtime(true);
+    	if ( $t->find($test) ) {
+    
+    		echo $test,' in trie!<br>';
+    	} else {
+    		echo $test,' not in trie!<br>';
+    	}
+    	$dt = microtime(true)-$mt;
+    	echo '时间:',round($dt,3),'秒<br><br>';
+    }
+    
+    
+    
+    
+    
+    function formatBytes($size) { 
+      $units = array(' B', ' KB', ' MB', ' GB', ' TB'); 
+      for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024; 
+      return round($size, 2).$units[$i]; 
+     }
+
+
+
+
+
+测试结果:
+没有读取文件:143.17 KB
+
+文件大小1.82 MB
+
+将文件读取到字符串1.82 MB
+
+将文件中字符存放到一个数组14.31 MB
+数组大小131568
+
+将文件中字符存放到字典树98.46 MB
+
+字典树构建时间:13.5秒
+
+字典树测试:
+/modules/webmail/mailattach.php?userfile=../../some.php&userfile_name=../attachments/file.txt&attachments=1 in trie!
+时间:0.001秒
+
+中国人 not in trie!
+时间:0秒
+
+中国 not in trie!
+时间:0秒
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+    
+    <?php
+    	class Trie{
+    		private $map;
+    
+    		public function Trie($array)
+    		{
+    			$this->map = array();
+    			foreach ($array as $key => $vWord) {
+    				$wordArray	= $this->str_split_utf8( $vWord );
+    				$this->mkMapSub( $wordArray, $this->map );
+    			}
+    		}
+    
+    		public function __destruct()
+    		{
+    
+    		}
+    
+    		/*
+    		    搜索字符串
+    		*/
+    		public function find($str)
+    		{
+    			$f = $this->str_split_utf8($str);
+    			return $this->wordInMap($f, $this->map);
+    		}
+    
+    		/*
+    		*	将字符串加入到trie
+    		*/
+    		public function add($str)
+    		{
+    
+    		}
+    
+    		/*
+    		    切分数组
+    		*/
+    		private function retSubArray($array,$start,$end)
+    		{
+    		    $retArray = array();
+    		    $count = 0;
+    		    foreach($array as $v)
+    		    {
+    		        if($count >= $end) break; 
+    		        if($count >= $start )
+    		        {
+    		            $retArray[] = $v;
+    		        }
+    		        $count++;
+    		    }
+    		    return $retArray;
+    		}
+    
+    		/*
+    		    递归的将str_split_utf8生成的数组查到字典树中
+    		*/
+    		private function mkMapSub($wordArray, &$mapSubArray)
+    		{
+    		    $length = count($wordArray);
+    		    if ($length > 0) {
+    		        // 取出第一个字
+    		        $word = $wordArray[0];
+    		        // 查看字典树中是否匹配第一个字,没有的话就插入这个字
+    		        if (!isset($mapSubArray[$wordArray[0]])) {
+    		            $mapSubArray[$wordArray[0]] = array();
+    		        }
+    		        if($length == 1)
+    		        {// 只有一个字，就插入一个结束标识
+    		            $mapSubArray[$wordArray[0] . "end"] = 1;
+    		        }
+    		        // 已经插入的字出栈
+    		        array_shift($wordArray);
+    		        // 递归插入
+    		        $this->mkMapSub($wordArray, $mapSubArray[$word]);
+    		    }
+    		}
+    
+    		/*
+    		    递归查询词是否在字典树中
+    		*/
+    		private function wordInMap($str, &$map)
+    		{
+    		    if (count($str) == 1) {
+    		        // 一个字的情况
+    		        if (isset($map[$str[0]]) && $map[$str[0]] == array()) 
+    		        { 
+    		            return true;
+    		        } else {  
+    		        if( isset($map[$str[0] . "end"]) && $map[$str[0] . "end"] == 1 )
+    		        {  
+    		            return true;
+    		        }
+    		            return false;
+    		        }
+    		    } else {
+    		        // 按字递归查找
+    
+    		        $word = array_shift($str);
+    		        if (isset($map[$word])) { 
+    		            return $this->wordInMap($str, $map[$word]);
+    		        } else {
+    		            return false;
+    		        }
+    		    }
+    		}
+    
+    		/*
+    		    查找一个句子中是否在字典树中有词命中
+    		*/
+    		function longStrInMap($str, &$map)
+    		{
+    		    if(wordInMap($str,$map))
+    		    {
+    		        return array($str);
+    		    }
+    		    $strArray = str_split_utf8($str);
+    		    $length = count($strArray);
+    		    $hasList = array();
+    		    for ($index = 0; $index < $length; $index++) {
+    		        $word = $strArray[$index];
+    		        if (isset($map[$word])) 
+    		        {
+    		            //尝试测试子数组
+    		            for ($subIndex = $index; $subIndex <= $length; $subIndex++)
+    		            {
+    		                $subStr = $this->retSubArray($strArray,$index,$subIndex); 
+    		                if(wordInMap($subStr,$map))
+    		                {
+    		                    $hasList[] = $subStr;
+    		                }
+    		            }
+    		        }
+    		    } 
+    		    $retArray = array();
+    		    foreach($hasList as $v)
+    		    {
+    		        $retArray[] = implode("",$v);
+    		    }
+    		    return $retArray;
+    		}
+    
+    		/*
+    		    将可能含有中文的字符串进行拆分，如 “我爱北京” 转换成 array("我","爱","北","京")
+    		*/
+    		private function str_split_utf8($str)
+    		{
+    			$str = trim($str);
+    		    $split = 1;
+    		    $array = array();
+    		    for ($i = 0; $i < strlen($str);) {
+    		        $value = ord($str[$i]);
+    		        if ($value > 127) {
+    		            if ($value >= 192 && $value <= 223) {
+    		                $split = 2;
+    		            } elseif ($value >= 224 && $value <= 239) {
+    		                $split = 3;
+    		            } elseif ($value >= 240 && $value <= 247) {
+    		                $split = 4;
+    		            }
+    		        } else {
+    		            $split = 1;
+    		        }
+    		        $key = null;
+    		        for ($j = 0; $j < $split; $j++, $i++) {
+    		            $key .= @$str[$i];
+    		        }
+    		        array_push($array, $key);
+    		    }
+    		    return $array;
+    		}
+    	}
+
+
+

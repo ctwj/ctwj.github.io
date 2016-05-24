@@ -1,0 +1,74 @@
+---
+author: ww
+comments: true
+date: 2016-01-20 14:43:07+00:00
+layout: post
+link: http://www.gl6.cc/blog/delphi-%e6%b3%9b%e5%9e%8b%e9%98%9f%e5%88%97-tqueue.html
+slug: delphi-%e6%b3%9b%e5%9e%8b%e9%98%9f%e5%88%97-tqueue
+title: '[delphi] 泛型队列 TQueue'
+wordpress_id: 447
+categories:
+- Delphi
+- uncategorized
+tags:
+- delphi
+---
+
+需要引用 Generics.Collections
+
+    
+    unit Unit1;
+    
+    interface
+    
+    uses
+      Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+      Dialogs, StdCtrls;
+    
+    type
+      TForm1 = class(TForm)
+        Button1: TButton;
+        procedure Button1Click(Sender: TObject);
+      end;
+    
+    var
+      Form1: TForm1;
+    
+    implementation
+    
+    {$R *.dfm}
+    
+    uses Generics.Collections;
+    
+    procedure TForm1.Button1Click(Sender: TObject);
+    var
+      Queue: TQueue<string>;
+      s,str: string;
+    begin
+      Queue := TQueue<string>.Create();
+    
+      {入列}
+      Queue.Enqueue('AAA');
+      Queue.Enqueue('BBB');
+      Queue.Enqueue('CCC');
+      Queue.Enqueue('DDD');
+    
+      {查看}
+      str := '';
+      for s in Queue do str := str + s + ' ';
+      ShowMessage(str); {AAA BBB CCC DDD}
+    
+      {出列, 并查看出列元素}
+      ShowMessage(Queue.Dequeue); {AAA}
+    
+      str := '';
+      for s in Queue do str := str + s + ' ';
+      ShowMessage(str); {BBB CCC DDD}
+    
+      {查看下一个将要出列的是}
+      ShowMessage(Queue.Peek); {BBB}
+    
+      Queue.Free;
+    end;
+    
+    end.

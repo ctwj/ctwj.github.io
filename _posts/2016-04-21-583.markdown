@@ -1,0 +1,53 @@
+---
+author: ww
+comments: true
+date: 2016-04-21 02:19:01+00:00
+layout: post
+link: http://www.gl6.cc/blog/583.html
+slug: '583'
+title: '[php] 手机检测类 MobileDetect'
+wordpress_id: 583
+categories:
+- PHP
+---
+
+demo:http://demo.mobiledetect.net/
+
+github:https://github.com/serbanghita/Mobile-Detect
+
+tutorial:http://blog.csdn.net/pleasecallmewhy/article/details/9981453
+
+实例
+ 
+
+    
+    //使用实例
+     
+    include 'Mobile_Detect.php';
+    $detect = new Mobile_Detect();
+     
+    // Check for any mobile device.
+    if ($detect->isMobile())
+     
+    // Check for any tablet.
+    if($detect->isTablet())
+     
+    // Check for any mobile device, excluding tablets.
+    if ($detect->isMobile() && !$detect->isTablet())
+     
+    if ($detect->isMobile() && !$detect->isTablet())
+     
+    // Alternative to $detect->isAndroidOS()
+    $detect->is('AndroidOS');
+     
+    // Batch usage
+    foreach($userAgents as $userAgent){
+      $detect->setUserAgent($userAgent);
+      $isMobile = $detect->isMobile();
+    }
+     
+    // Version check.
+    $detect->version('iPad'); // 4.3 (float)
+
+
+

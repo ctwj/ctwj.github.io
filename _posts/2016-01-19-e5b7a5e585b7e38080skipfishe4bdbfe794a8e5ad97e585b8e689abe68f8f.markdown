@@ -1,0 +1,137 @@
+---
+author: ww
+comments: true
+date: 2016-01-19 02:09:10+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e5%b7%a5%e5%85%b7%e3%80%80skipfish%e4%bd%bf%e7%94%a8%e5%ad%97%e5%85%b8%e6%89%ab%e6%8f%8f.html
+slug: '%e5%b7%a5%e5%85%b7%e3%80%80skipfish%e4%bd%bf%e7%94%a8%e5%ad%97%e5%85%b8%e6%89%ab%e6%8f%8f'
+title: '[工具]　skipfish使用字典扫描'
+wordpress_id: 445
+categories:
+- safe
+- uncategorized
+tags:
+- skipfish
+---
+
+命令
+
+skipfish -S list.wl -o /var/www/html/gl6.cc http://www.gl6.cc
+
+字典保存为list.wl
+ 
+
+    
+    ws 1 1 1 /editor/
+    ws 1 1 1 /cgi-bin/index.cgi 
+    ws 1 1 1 /editor/upfile_ok.php
+    ws 1 1 1 /wysiwyg/img_add.html 
+    ws 1 1 1 /main/editor/insert_image.php
+    ws 1 1 1 /bbs/editor/popupsgecko/insert_imagefrm.html 
+    ws 1 1 1 /bbs/editor/sample_editor.html 
+    ws 1 1 1 /bbs/editor/popupsgecko/insert_image.html 
+    ws 1 1 1 /cms/include/raineditor/codephp/sample.html 
+    ws 1 1 1 /cms/include/raineditor/README.txt 
+    ws 1 1 1 /cms/include/raineditor2/sample.php 
+    ws 1 1 1 /cms/include/raineditor2/sample.php 
+    ws 1 1 1 /editor/popups/insert_image.php 
+    ws 1 1 1 /editor/popupsgecko/insert_image.php
+    ws 1 1 1 /main/bbs/editor/upload.php
+    ws 1 1 1 /editor_in.php?form_name=mailForm&dir_path=..&form_content=content&editor_size=600
+    ws 1 1 1 /Editor
+    ws 1 1 1 /write.asp
+    ws 1 1 1 /admin/editor/
+    ws 1 1 1 /inc/
+    ws 1 1 1 /inc/db.inc
+    ws 1 1 1 /include/img_file.php
+    ws 1 1 1 /include/download.php 
+    ws 1 1 1 /main
+    ws 1 1 1 /site_admin
+    ws 1 1 1 /Editor/KNEditor.htm
+    ws 1 1 1 /Editor/insert_image_form.asp
+    ws 1 1 1 /Aboard/Editor/insert_image_form.asp
+    ws 1 1 1 /lib/editor/popup.img.php?id=contents
+    ws 1 1 1 /editor_image.php
+    ws 1 1 1 /editor_image_ok.php
+    ws 1 1 1 /upphoto2.asp
+    ws 1 1 1 /common/upphoto2.asp
+    ws 1 1 1 /common/UpPhoto.asp
+    ws 1 1 1 /fckeditor/ 
+    ws 1 1 1 /editor/editor/filemanager/connectors/uploadtest.html 
+    ws 1 1 1 /lib/FCKeditor/editor/filemanager/browser/default/browser.html
+    ws 1 1 1 /fckeditor/editor/filemanager/connectors/uploadtest.html 
+    ws 1 1 1 /admin/input_image.php
+    ws 1 1 1 /editor/editor/filemanager/connectors/uploadtest.html
+    ws 1 1 1 /fckeditor/editor/filemanager/connectors/uploadtest.html
+    ws 1 1 1 /cheditor/insert_image.php
+    ws 1 1 1 /cheditor/insert_image.html
+    ws 1 1 1 /cheditor4/insert_image.html
+    ws 1 1 1 /bbs/popup_write.php
+    ws 1 1 1 /SmartEditor/popup/quick_photo/Photo_Quick_UploadPopup.html
+    ws 1 1 1 /smarteditor2/popup/quick_photo/Photo_Quick_UploadPopup.php
+    ws 1 1 1 /geditor/upload.php
+    ws 1 1 1 /alditor/alditorImage.html?id=content_alditor
+    ws 1 1 1 /editor/demo.php
+    ws 1 1 1 /editor/ html_edit.html
+    ws 1 1 1 /editor/upfile.html
+    ws 1 1 1 /easy_editor/fileup.php
+    ws 1 1 1 /upimg.php
+    ws 1 1 1 /editor/SWE.php
+    ws 1 1 1 /upload.html
+    ws 1 1 1 /Spac_Editor/spac_editor.php
+    ws 1 1 1 /Spac_Editor/index.html
+    ws 1 1 1 /edit/board.html 
+    ws 1 1 1 /gmEditor/editor.php 
+    ws 1 1 1 /lib/meditor/popup.image.php?idx=0 
+    ws 1 1 1 /meditor/popup.image.php?idx=0 
+    ws 1 1 1 /?m=editor 
+    ws 1 1 1 /bbs/write.php?id=photo&page=1&sn1=&divpage=1&sn=on&ss=off&sc=off&keyword=%B0%FC%B8%AE%C0%DA&select_arrange=headnum&desc=asc&no=&mode=write&sn1=&divpage=1 
+    ws 1 1 1 /board/editor/upfile.html?db=
+    ws 1 1 1 /ok_editor_v14/download.php
+    ws 1 1 1 /ok_editor_v14/upload_fileswf.html
+    ws 1 1 1 /ok_editor_v14/popup/imageeditor.html
+    ws 1 1 1 /ok_editor/download.php
+    ws 1 1 1 /ok_editor/upload_fileswf.html
+    ws 1 1 1 /ok_editor/popup/imageeditor.html
+    ws 1 1 1 /popup/
+    ws 1 1 1 /popUp/
+    ws 1 1 1 /cheditor5/ 
+    ws 1 1 1 /cheditor5/imageUpload/upload.php 
+    ws 1 1 1 /cheditor5/popup/image.html
+    ws 1 1 1 /dbadmin/
+    ws 1 1 1 /banner/banner_gate.php?bidx= 
+    ws 1 1 1 /copy/copy05.htm?s_idx= 
+    ws 1 1 1 /bbs/board.php?id=
+    ws 1 1 1 /pre_mh/detail/read.php?no= 
+    ws 1 1 1 /fdmt_dir/member_allinfo.php 
+    ws 1 1 1 /bbs/download_5.asp?fileName=../../../common/Dbcon.asp
+    ws 1 1 1 /sub3/sub2.php?year=
+    ws 1 1 1 /main/doc/review/read_frm.php?ridx=
+    ws 1 1 1 /web/home.php?field=&pds_type=101&s_subj=&start=10&s_que=&mode=&go=pds_list 
+    ws 1 1 1 home.php?go=gallery_list&pds_type=14 
+    ws 1 1 1 /autocart/market/product/product_detail.php?item_no= 
+    ws 1 1 1 /market/product/product_detail.php?item_no= 
+    ws 1 1 1 /contents/file_seed.html?idx=6873227
+    ws 1 1 1 /cms/tdi/tdmain.html 
+    ws 1 1 1 /module/common/upload2.php?upload_mode=BBS&bbs_code=1
+    ws 1 1 1 /common/js/cheditor/example/multi.html
+    ws 1 1 1 /common/js/cheditor/example/modify.html
+    ws 1 1 1 /common/js/chxupload/chxupload.js
+    ws 1 1 1 /js/chxupload/chxupload.js
+    ws 1 1 1 /chxupload/chxupload.js
+    ws 1 1 1 /common/js/swfupload/swfupload.js
+    ws 1 1 1 /js/swfupload/swfupload.js
+    ws 1 1 1 /swfupload/swfupload.js
+    ws 1 1 1 /editor/popups/insert_image_old.php
+    ws 1 1 1 /editor/RainEditor.js
+    ws 1 1 1 /editor/popups/uploaods/download.php
+    ws 1 1 1 /editor/popups/upload_file.php
+    ws 1 1 1 /editor/upload_file.php
+    ws 1 1 1 /ckeditor/samples/
+    ws 1 1 1 /editor/editor.jsp
+    ws 1 1 1 /editor/tdi/tdmain.html
+    ws 1 1 1 /admin/fck2/editor/filemanager/upload/test.html
+    ws 1 1 1 /admin/fck2/
+
+
+

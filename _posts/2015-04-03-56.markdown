@@ -1,0 +1,91 @@
+---
+author: ww
+comments: true
+date: 2015-04-03 06:08:12+00:00
+layout: post
+link: http://www.gl6.cc/blog/56.html
+slug: '56'
+title: doctrine 使用注意事项
+wordpress_id: 56
+categories:
+- Linux
+tags:
+- doctrine
+---
+
+1. createQueryBuilder 不是用来处理dql的，如果写了dql 可以使用 createquery 来实现
+
+    
+    
+    // 使用createQuery
+    $dql = 'SELECT article FROM \Ctwj\Entity\Article article JOIN article.collectMember member';
+    $q = $this->getEntityManager()->createQuery($dql);
+    $r = $q->getResult();*/
+    // 使用createQueryBuilder
+    $qb = $this->getEntityManager()->createQueryBuilder();
+    $qb->select('u')->from('\Ctwj\Entity\Article','u')->join('u.collectMember','e')
+    ->where('e.id=:uid')->setParameter('uid', $member->getId())->setMaxResults($pagecount)
+    ->setFirstResult(($page-1)*$pagecount);
+    $result = $qb->getQuery()->getArrayResult();
+    
+
+
+
+2. 查看sql语句
+1) 通过 getSQL
+
+    
+    
+    $qb = $this->getEntityManager()->createQueryBuilder();
+    echo $qb->getQuery()->getSQL();
+    
+
+
+2) 通过EchoSQLLogger
+
+    
+    
+    $this->getEntityManager()->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger());
+    //或者
+    $stack = new \Doctrine\DBAL\Logging\DebugStack();
+    $this->getEntityManager()->getConfiguration()->setSQLLogger($stack);
+    //do something
+    var_dump($stack);
+    
+
+
+
+3.错误 A new entity was found through the relationship 'Ctwj\Entity\MethodLog#method' that was not configured to cascade persist operations for entity
+Example :
+
+    
+    
+    $category = $em->find("Category", 10);
+
+
+
+$product = new Product();
+$product->setCategory($category)
+
+$em->persist($product);
+$em->flush();
+//这个报了相同的错误，解决方法如下，将persist方法，改成merge
+$category = $em->find("Category", 10);
+
+$product = new Product();
+$product->setCategory($category)
+
+$em->merge($product);
+$em->flush();
+
+
+
+4.判断一个字段为NULL,使用is
+
+->where('u.parent is NULL')
+
+
+
+5. orderby分两个参数，写成一句会报错
+
+->orderby('u.id', 'desc')

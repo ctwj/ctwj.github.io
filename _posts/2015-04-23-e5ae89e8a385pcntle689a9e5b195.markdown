@@ -1,0 +1,45 @@
+---
+author: ww
+comments: true
+date: 2015-04-23 03:29:58+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e5%ae%89%e8%a3%85pcntl%e6%89%a9%e5%b1%95.html
+slug: '%e5%ae%89%e8%a3%85pcntl%e6%89%a9%e5%b1%95'
+title: 安装pcntl扩展
+wordpress_id: 78
+categories:
+- Linux
+- PHP
+tags:
+- php扩展
+---
+
+1. 下载源码,如果是编译安装，就不需要这步了
+可以从 http://br.php.net/get/php-5.5.24.tar.gz/from/a/mirror 选择一个镜像，下载回本地
+
+    
+    
+    wget http://jp1.php.net/distributions/php-5.5.24.tar.gz
+    tar -zxvf php-5.5.24.tar.gz
+    
+
+
+
+2. 编译扩展
+
+    
+    
+    cd php-5.5.24/ext/pcntl
+    /usr/etc/php/bin/phpize
+    ./configure --with-php-config=/usr/etc/php/bin/php-config
+    make install
+    
+
+
+成功后提示编译好的扩展路径
+Installing shared extensions:     /usr/etc/php/lib/php/extensions/no-debug-non-zts-20121212/
+
+3. 配置php.ini，添加扩展
+extension=pcntl.so
+
+4. 重启php apache

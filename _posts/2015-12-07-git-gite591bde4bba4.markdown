@@ -1,0 +1,27 @@
+---
+author: ww
+comments: true
+date: 2015-12-07 14:18:27+00:00
+layout: post
+link: http://www.gl6.cc/blog/git-git%e5%91%bd%e4%bb%a4.html
+slug: git-git%e5%91%bd%e4%bb%a4
+title: '[GIT] git命令'
+wordpress_id: 351
+categories:
+- uncategorized
+tags:
+- git
+---
+
+1. 忽略一个文件的修改
+git update-index --assume-unchanged 
+
+2. 放弃修改  
+git stash
+
+3. 新建分支
+git branch 
+git remote add  
+git checkout 
+git push origin 
+参考　http://blog.sina.com.cn/s/blog_7101508c010147s6.html

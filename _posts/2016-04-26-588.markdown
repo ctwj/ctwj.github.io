@@ -1,0 +1,58 @@
+---
+author: ww
+comments: true
+date: 2016-04-26 06:36:07+00:00
+layout: post
+link: http://www.gl6.cc/blog/588.html
+slug: '588'
+title: '[php] GeoIP扩展,转换ip地址为国家,城市等'
+wordpress_id: 588
+categories:
+- PHP
+tags:
+- geoip
+---
+
+安装
+apt-get install php5-geoip
+
+数据库下载地址
+http://dev.maxmind.com/geoip/legacy/geolite/
+如果函数报错需要下载对应文件放到对应的位置
+`PHP Warning: geoip_record_by_name(): Required database not available at /usr/share/GeoIP/GeoIPCity.dat. in php shell code on line 1`
+下载 http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.xz
+解压 改名为 GeoIPCity.dat 上传到 /usr/share/GeoIP/ 中即可解决报错.
+
+函数
+geoip_country_code_by_name 
+http://php.net/manual/en/function.geoip-country-code-by-name.php
+ip地址转化为国家编号
+
+geoip_country_name_by_name
+http://php.net/manual/en/function.geoip-country-name-by-name.php
+ip地址转化为国家名
+
+geoip_record_by_name
+http://php.net/manual/zh/function.geoip-record-by-name.php
+ip地址转化为详细记录的数组
+ 
+
+    
+    php > print_r( geoip_record_by_name(  "61.139.2.69" ) );
+    Array
+    (
+        [continent_code] => AS
+        [country_code] => CN
+        [country_code3] => CHN
+        [country_name] => China
+        [region] => 32
+        [city] => Chengdu
+        [postal_code] => 
+        [latitude] => 30.666700363159
+        [longitude] => 104.06670379639
+        [dma_code] => 0
+        [area_code] => 0
+    )
+
+
+

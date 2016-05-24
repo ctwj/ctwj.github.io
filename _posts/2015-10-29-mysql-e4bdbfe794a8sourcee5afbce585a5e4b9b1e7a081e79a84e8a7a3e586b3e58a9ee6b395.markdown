@@ -1,0 +1,43 @@
+---
+author: ww
+comments: true
+date: 2015-10-29 01:09:09+00:00
+layout: post
+link: http://www.gl6.cc/blog/mysql-%e4%bd%bf%e7%94%a8source%e5%af%bc%e5%85%a5%e4%b9%b1%e7%a0%81%e7%9a%84%e8%a7%a3%e5%86%b3%e5%8a%9e%e6%b3%95.html
+slug: mysql-%e4%bd%bf%e7%94%a8source%e5%af%bc%e5%85%a5%e4%b9%b1%e7%a0%81%e7%9a%84%e8%a7%a3%e5%86%b3%e5%8a%9e%e6%b3%95
+title: MYSQL 使用source导入乱码的解决办法
+wordpress_id: 193
+categories:
+- database
+- uncategorized
+tags:
+- mysql
+---
+
+1. 导出
+
+mysqldump -uroot -p --default-character-set=utf8  dbname > E://dbname.sql
+
+2. 导入
+
+mysql -u root -p --default-character-set=utf8
+use dbname
+source E:dbname.sql
+
+// 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

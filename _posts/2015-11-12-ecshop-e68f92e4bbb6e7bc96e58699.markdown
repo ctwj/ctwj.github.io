@@ -1,0 +1,310 @@
+---
+author: ww
+comments: true
+date: 2015-11-12 03:01:12+00:00
+layout: post
+link: http://www.gl6.cc/blog/ecshop-%e6%8f%92%e4%bb%b6%e7%bc%96%e5%86%99.html
+slug: ecshop-%e6%8f%92%e4%bb%b6%e7%bc%96%e5%86%99
+title: ecshop 插件编写
+wordpress_id: 256
+categories:
+- ECShop
+tags:
+- ecshop
+- 插件
+---
+
+## ecshop 产品二维码插件的实现
+
+
+前言
+首先要说明的是，我没有发现后台哪有插件，晚上一大批插件，结果下载下来全部都是改文件， 就是说其实ecshop是没有插件机制的。
+既然没有插件机制，我们需要实现功能，就需要做到这几点
+添加菜单列表
+添加配置页
+实现相应功能
+
+
+### 实践
+
+
+
+
+
+	
+  1. ecshop 菜单添加
+
+
+
+
+打开`admin/includes/inc_menu.php` 这个是菜单配置文件
+
+
+
+
+找到 system 相关，添加需要的菜单到最后，当然`product_qrcode.php` 还没有这个文件
+
+
+
+
+    
+    $modules['11_system']['021_reg_fields']             = 'reg_fields.php?act=list';
+    $modules['11_system']['022_product_qrcode']         = 'product_qrcode.php?act=config';
+
+
+找到` languages/zh_cn/admin/common.php `把菜单的中文名写入
+
+    
+    $_LANG['022_product_qrcode'] = '商品二维码设置';
+    
+
+
+刷新后台不出意外，菜单显示了。
+
+
+
+	
+  2. 添加配置
+
+
+依照第一步的设置，新建 admin/product_qrcode.php 文件，新建模板页 admin/templates/qrcode_config.htm
+在数据库中可以找到，ecs_shop_config， 这个表保存着店铺的配置信息，可以把插件的信息也保存在这个表里面
+同时上传的logo 需要在data里面新建一个文件夹保存，在data下新建一个qrcode的目录。
+
+    
+    <?php
+    /**
+     * User: ww
+     * Date: 2015/11/11 0011
+     * Time: 上午 9:07
+     */
+    
+    define('IN_ECS', true);
+    
+    require(dirname(__FILE__) . '/includes/init.php');
+    
+    /* act操作项的初始化 */
+    $_REQUEST['act'] = trim($_REQUEST['act']);
+    if (empty($_REQUEST['act']))
+    {
+        $_REQUEST['act'] = 'config';
+    }
+    
+    /*------------------------------------------------------ */
+    //-- 配置二维码插件页面
+    /*------------------------------------------------------ */
+    if ($_REQUEST['act'] == 'config') {
+    
+        $qrcode_config = array('config'=>false, 'logo'=>'', 'hint'=>'', 'url'=>'');
+    
+        if ( isset($_POST['config']) )
+        {
+            $logo   = isset($_POST['logo'])? compile_str(trim($_POST['logo'])) : '';
+            $config = $_POST['config'];
+            $hint   = isset($_POST['hint'])? compile_str(trim($_POST['hint'])) : '';;
+            $url    = isset($_POST['url'])? compile_str(trim($_POST['url'])) : '';;
+    
+            if ( isset($_FILES) ) {
+                $logo = '';
+                if ( ! empty($_FILES['logo']['tmp_name'])){
+                    if ( isset($_FILES['logo']['error']) && $_FILES['logo']['error'] == 1 ) {
+                        $error_message = $GLOBALS['err']->last_message();
+                        show_message('上传的LOGO过大', '返回到二维码配置', 'product_qrcode.php?act=config', 'error');
+                    }
+    
+                    $logo_img = (isset($_FILES['logo']['error']) && $_FILES['logo']['error'] == 0) || (!isset($_FILES['logo']['error']) && isset($_FILES['logo']['tmp_name']) && $_FILES['logo']['tmp_name'] != 'none')? $_FILES['logo'] : array();
+    
+                    $logo_path = upload_file($logo_img, 'qrcode');
+    
+                    if ( !$logo_path ) {
+                        $error_message = $GLOBALS['err']->last_message();
+                        show_message($error_message[0], '返回到二维码配置', 'product_qrcode.php?act=config', 'error');
+                    }
+                    $logo = $logo_path;
+                }
+            }
+    
+            $qrcode_config = array(
+                'config'    => $config,
+                'logo'      => $logo,
+                'hint'      => $hint,
+                'url'       => $url
+            );
+    
+            $GLOBALS['db']->autoExecute($ecs->table("shop_config"),
+                array('value'=>json_encode($qrcode_config)),
+                'UPDATE', "code='qrcode_config'");
+    
+            //更新配置
+    
+        } else {
+            /* 获取配置项配置 */
+            $sql = "SELECT  value FROM " . $ecs->table("shop_config") . ' WHERE code="qrcode_config"' ;
+            $shop_config = $db->getRow($sql);
+    
+            // 如果没有这写入一条配置
+            if ( false === $shop_config ){
+                $GLOBALS['db']->autoExecute($ecs->table("shop_config"), array('code'=>'qrcode_config','value'=>''));
+            }
+    
+            if ( $shop_config ) {
+                $config = json_decode( $shop_config['value'], true );
+                $qrcode_config = array(
+                    'config'    => $config['config'],
+                    'logo'      => $config['logo'],
+                    'hint'      => $config['hint'],
+                    'url'       => $config['url']
+                );
+            }
+        }
+    
+        $smarty->assign('qrcode', $qrcode_config);
+        $smarty->display('qrcode_config.htm');
+    
+    } else {
+        die('无效的参数');
+    }
+    
+    
+
+
+
+    
+    {include file="pageheader.htm"}
+    </pre>
+    <div class="main-div">
+    <form action="product_qrcode.php" enctype="multipart/form-data" method="post" name="theForm">
+    <input checked="checked" name="config" type="radio" value="1" />开启 <input checked="checked" name="config" type="radio" value="0" />关闭
+    { if $qrcode.logo and $qrcode.logo != '' } <img id="qrcode_logo" style="max-height: 40px; max-width: 60px;" src="./../data/qrcode/{$qrcode.logo}" alt="" /><a id="removeimg" title="移除LOGO"></a><img src="images/no.gif" alt="" /> {else} <input name="logo" type="file" /> {/if}
+    <input name="url" size="35" type="text" value="{$qrcode.url}" /><span class="notice-span" style="display: block;">手机网站域名为扫二维码跳转地址</span>
+    <input name="hint" type="text" value="{$qrcode.hint}" /><span class="notice-span" style="display: block;">鼠标放到二维码上的提示信息</span>
+    <input class="button" type="submit" value="{$lang.button_submit}" /><input class="button" type="reset" value="{$lang.button_reset}" />
+    <table id="general-table" width="100%">
+    <tbody>
+    <tr>
+    <td class="label">商品二维码</td>
+    </tr>
+    <tr>
+    <td class="label">二维码LOGO</td>
+    <td class="label">手机网站域名</td>
+    <td class="label">提示消息</td>
+    <td class="label"></td>
+    </tr>
+    </tbody>
+    </table>
+    &nbsp;
+    
+    </form>&nbsp;
+    
+    </div>
+    {insert_scripts files="../js/utils.js,validator.js"}<script>// <![CDATA[
+        function removePic()
+        {
+            var img = document.getElementById('qrcode_logo');
+            if ( img ) {
+                var pnode = img.parentNode;
+                pnode.removeChild(img);
+    
+                var inputTag = document.createElement("input");
+                inputTag.type = "file";
+                inputTag.name="logo";
+    
+                var aTag = document.getElementById('removeimg');
+                aTag.parentNode.insertBefore(inputTag, aTag);
+                aTag.parentNode.removeChild(aTag);
+            }
+        }
+    // ]]></script>{include file="pagefooter.htm"}
+
+
+
+
+
+现在可以很愉快的配置插件了。
+
+
+[![12105755](http://www.gl6.cc/blog/wp-content/uploads/2015/11/12105755-300x142.jpg)](http://www.gl6.cc/blog/wp-content/uploads/2015/11/12105755.jpg)
+
+
+
+	
+  3. 添加功能
+
+
+首先需要的是二维码的生成功能，这个前几天记录过，**[传送门](http://www.gl6.cc/blog/php%e7%94%9f%e6%88%90%e4%ba%8c%e7%bb%b4%e7%a0%81.html) **直接添加个文件qrcode.php
+
+    
+    <?php
+    
+    define('IN_ECS', true);
+    
+    $value = base64_decode($_GET['value']);
+    $logo = base64_decode($_GET['logo']);
+    
+    include_once( __DIR__ . "/includes/cls_qrcode.php");
+    if($value){
+        // 二维码
+        // 纠错级别：L、M、Q、H
+        $errorCorrectionLevel = 'L';
+        // 点的大小：1到10
+        $matrixPointSize = 4;
+        QRcode::png($value, false, $errorCorrectionLevel, $matrixPointSize, 2);
+    }
+
+
+这样就有一个链接访问时二维码了
+接下来就要在产品页显示了，由于是在产品页显示，所以在goods.php文件中，要加入相应的功能，读取配置，并绑定数据到模板。
+修改代码，在文件最后写函数
+
+    
+    function get_qrcode_config( $product_id )
+    {
+    	$qrcode_config = array();
+    
+    	/* 获取配置项配置 */
+    	$sql = "SELECT  value FROM " . $GLOBALS['ecs']->table("shop_config") . ' WHERE code="qrcode_config"' ;
+    	$shop_config = $GLOBALS['db']->getRow($sql);
+    
+    	if ( $shop_config ) {
+    		$config = json_decode( $shop_config['value'], true );
+    		$qrcode_config = array(
+    				'config'    => intval($config['config']),
+    				'logo'      => base64_encode($config['logo']),
+    				'hint'      => $config['hint'],
+    				'url'       => base64_encode($config['url'] . 'index.php?m=default&c=goods&a=index&id=' . $product_id)
+    		);
+    		return $qrcode_config;
+    	} else {
+    		return false;
+    	}
+    }
+
+
+然后再display前加上
+
+    
+    //二维码
+    $qrcode_config = get_qrcode_config($goods_id);
+    $smarty->assign('qrcode', $qrcode_config );
+    
+
+
+最后修改模板，找到goods.dwt，添加二维码显示
+
+    
+    {if $qrcode.config}
+    <img title="{$qrcode.hint}" alt="{$qrcode.hint}" src="./qrcode.php?value={$qrcode.url}&logo={$qrcode.logo}">
+    {/if}
+    
+
+
+如果一切正常，就能看到商品页的二维码了。
+
+[![1112100416](http://www.gl6.cc/blog/wp-content/uploads/2015/11/1112100416-300x127.jpg)](http://www.gl6.cc/blog/wp-content/uploads/2015/11/1112100416.jpg)
+
+
+### 总结
+
+
+Ecshop 是没有插件机制的，所有见到的插件，都是侵入式开发，需要修改代码和模板。
+在这个小插件中，需要注意的是二维码中value的传值，还有接收参数的过滤。

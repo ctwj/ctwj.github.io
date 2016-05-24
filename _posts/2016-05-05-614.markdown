@@ -1,0 +1,29 @@
+---
+author: ww
+comments: true
+date: 2016-05-05 03:22:55+00:00
+layout: post
+link: http://www.gl6.cc/blog/614.html
+slug: '614'
+title: '[php] ip地址转数字'
+wordpress_id: 614
+categories:
+- database
+- PHP
+tags:
+- ip
+- mysql
+- php
+---
+
+php 中 可以使用 ip2long 和 long2ip 来实现IP地址和数字之间的转化,
+ 
+
+    
+    $long = ip2long('202.105.77.179');
+    $iip = long2ip($long);
+    var_dump($long,$iip);
+
+
+
+mysql 中,可以使用 INET_ATON和INET_NTOA 来实现IP地址和数字之间的转换

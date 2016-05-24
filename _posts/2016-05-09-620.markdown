@@ -1,0 +1,30 @@
+---
+author: ww
+comments: true
+date: 2016-05-09 02:38:14+00:00
+layout: post
+link: http://www.gl6.cc/blog/620.html
+slug: '620'
+title: '[vim] 简单配置tab,行号,高亮'
+wordpress_id: 620
+categories:
+- Linux
+- uncategorized
+tags:
+- vim
+---
+
+/root/.vimrc
+ 
+
+    
+    set nu
+    syntax on
+    set tabstop=4
+    set shiftwidth=4
+    set softtabstop=4
+    set expandtab
+    set encoding=utf8
+
+
+

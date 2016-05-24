@@ -1,0 +1,82 @@
+---
+author: ww
+comments: true
+date: 2015-12-04 03:45:49+00:00
+layout: post
+link: http://www.gl6.cc/blog/mysql-%e5%ad%98%e5%82%a8%e8%bf%87%e7%a8%8b%e5%ae%9e%e4%be%8b.html
+slug: mysql-%e5%ad%98%e5%82%a8%e8%bf%87%e7%a8%8b%e5%ae%9e%e4%be%8b
+title: mysql 存储过程实例
+wordpress_id: 332
+categories:
+- database
+- uncategorized
+tags:
+- mysql
+- 存储过程
+---
+
+其实语句很简单，不需要存储过程都能一句话搞定 ，不过还是学习了下
+
+
+
+    
+    DELIMITER $$
+    Drop procedure if exists updaterate $$
+    CREATE PROCEDURE updaterate()
+    BEGIN
+    	declare end_order,order_id int default 0;			
+        DECLARE end_tag,order_position int default 0;	
+    	/*订单的id和游标结束标志*/
+    
+    	declare order_cur	varchar(4) default '';
+    	declare cur_rate,order_price,usd_price decimal(10,3);		
+    	/*订单的币种和数额*/
+    
+        Declare order_cursor CURSOR FOR select `id`,`currency`,`order_total` from m_orders order by id desc;		
+        /*游标*/
+    
+        /*declare continue handler for not found set `end_order`=1; 查询到空结果*/ 
+    	/*declare continue handler for sqlstate '02000' set end_order=1;*/
+        /*结束标志*/
+    
+    	open order_cursor;								
+    	/*打开游标*/
+    
+    	fetch order_cursor into order_id,order_cur,order_price;										
+    	/*取得数据保存在变量*/
+    
+    	/*根据系统的状态判断的结束标志总提前结束，自己设置结束条件*/
+    	select count(1) into end_tag from m_orders;
+    
+    	repeat
+    			set cur_rate = null;
+    			/*初始化汇率为null*/
+    
+    			select rate into cur_rate from exchange_rate where `FCUR`=order_cur; /*取得币种的汇率*/
+    			
+    			if cur_rate is null then 
+            		select order_id,cur_rate,order_position,order_cur;
+    				update m_orders set `us_order_total`= order_total where `id`=order_id; 
+    				/*没有查出汇率，则输出订单编号与币种，按1比1更新价格*/
+    			else
+    				update m_orders set `us_order_total`= cur_rate * order_price where `id`=order_id; 
+    				/*更新转换价格*/
+    			end if;
+    
+    			set order_position = order_position +1;
+    			/*增加位置*/
+    
+    	fetch order_cursor into order_id,order_cur,order_price;
+    	/*取得下一个订单*/
+    
+      until order_position = end_tag end repeat;
+      close order_cursor;
+    end $$
+    	
+    DELIMITER ;
+    Call updaterate();
+    
+
+
+
+需要说明的是， 变量名字不能取得和查询的字段一样，那样会导致取个空出来。

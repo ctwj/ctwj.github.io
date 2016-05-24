@@ -1,0 +1,42 @@
+---
+author: ww
+comments: true
+date: 2015-12-30 02:50:48+00:00
+layout: post
+link: http://www.gl6.cc/blog/css-li%e6%8d%a2%e8%a1%8c%e5%90%8e%e7%ac%ac%e4%ba%8c%e8%a1%8c%e5%86%85%e7%a9%ba%e5%92%8c%e7%ac%ac%e4%b8%80%e8%a1%8c%e6%b2%a1%e5%af%b9%e9%bd%90%e7%9a%84%e9%97%ae%e9%a2%98.html
+slug: css-li%e6%8d%a2%e8%a1%8c%e5%90%8e%e7%ac%ac%e4%ba%8c%e8%a1%8c%e5%86%85%e7%a9%ba%e5%92%8c%e7%ac%ac%e4%b8%80%e8%a1%8c%e6%b2%a1%e5%af%b9%e9%bd%90%e7%9a%84%e9%97%ae%e9%a2%98
+title: '[css] li换行后第二行内空和第一行没对齐的问题'
+wordpress_id: 411
+categories:
+- Css
+- uncategorized
+tags:
+- css
+---
+
+1. 设置list-style-position:outside　使得li内容可以对齐
+
+    
+    li{
+        line-height: 25px;
+        list-style-position: outside !important;
+        margin-left: 20px;
+    }
+
+
+
+2. 设置　list-style-image 设置图片
+ 
+
+    
+    ul
+      {
+      list-style-image:url("/i/arrow.gif");
+      list-style-type:square;
+      }
+
+
+
+
+
+

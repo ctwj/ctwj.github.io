@@ -1,0 +1,159 @@
+---
+author: ww
+comments: true
+date: 2015-12-25 02:27:19+00:00
+layout: post
+link: http://www.gl6.cc/blog/delphi-xe2indy10%e5%8a%a0%e5%af%86%e5%87%bd%e6%95%b8.html
+slug: delphi-xe2indy10%e5%8a%a0%e5%af%86%e5%87%bd%e6%95%b8
+title: '[delphi] XE2,Indy10加密函數'
+wordpress_id: 394
+categories:
+- Delphi
+- uncategorized
+tags:
+- delphi
+---
+
+
+
+    
+    unit untCheckCode;  
+          
+        interface  
+          
+        function GetFile_MD5(const iFileName: String): String;    // 获取文件MD5  
+        function GetFile_CRC(const iFileName: String): String;    // 获取文件CRC  
+        function GetFile_SHA1(const iFileName: String): String;   // 获取文件SHA1  
+        function GetFile_SHA256(const iFileName: String): String; // 获取文件SHA256  
+        function GetFile_SHA384(const iFileName: String): String; // 获取文件SHA384  
+        function GetFile_SHA512(const iFileName: String): String; // 获取文件SHA512  
+          
+        implementation  
+          
+        uses IdHashMessageDigest, Classes, IdHashCRC, IdHashSHA, IdSSLOpenSSLHeaders;
+           
+        var  
+          FOpenSSLLoad: Boolean;  
+          
+    function GetFile_MD5(const iFileName: string): String;
+    var
+      MemSteam: TMemoryStream;
+      MyMD5   : TIdHashMessageDigest5;
+    begin
+      MemSteam := TMemoryStream.Create;
+      MemSteam.LoadFromFile(iFileName);
+      MyMD5  := TIdHashMessageDigest5.Create;
+      Result := MyMD5.HashStreamAsHex(MemSteam);
+      MyMD5.Free;
+      MemSteam.Free;
+    end;
+          
+        function GetFile_CRC(const iFileName: String): String;  
+        var  
+          crc       : TIdHashCRC32;  
+          fileStream: TMemoryStream;  
+        begin  
+          crc        := TIdHashCRC32.Create;  
+          fileStream := TMemoryStream.Create;  
+          try  
+            fileStream.LoadFromFile(iFileName);  
+            Result := crc.HashStreamAsHex(fileStream);  
+          finally  
+            fileStream.Free;  
+            crc.Free;  
+          end;  
+        end;  
+          
+        function GetFile_SHA1(const iFileName: String): String;  
+        var  
+          SHA1      : TIdHashSHA1;  
+          fileStream: TMemoryStream;  
+        begin  
+          SHA1       := TIdHashSHA1.Create;  
+          fileStream := TMemoryStream.Create;  
+          try  
+            fileStream.LoadFromFile(iFileName);  
+            Result := SHA1.HashStreamAsHex(fileStream);  
+          finally  
+            fileStream.Free;  
+            SHA1.Free;  
+          end;  
+        end;  
+          
+        function GetFile_SHA256(const iFileName: String): String;  
+        var  
+          SHA256    : TIdHashSHA256;  
+          fileStream: TMemoryStream;  
+        begin  
+          if FOpenSSLLoad then  
+          begin  
+            SHA256     := TIdHashSHA256.Create;  
+            fileStream := TMemoryStream.Create;  
+            try  
+              fileStream.LoadFromFile(iFileName);  
+              Result := SHA256.HashStreamAsHex(fileStream);  
+            finally  
+              fileStream.Free;  
+              SHA256.Free;  
+            end;  
+          end  
+          else  
+          begin  
+            Result := 'Error';  
+          end;  
+        end;  
+          
+        function GetFile_SHA384(const iFileName: String): String;  
+        var  
+          SHA384    : TIdHashSHA384;  
+          fileStream: TMemoryStream;  
+        begin  
+          if FOpenSSLLoad then  
+          begin  
+            SHA384     := TIdHashSHA384.Create;  
+            fileStream := TMemoryStream.Create;  
+            try  
+              fileStream.LoadFromFile(iFileName);  
+              Result := SHA384.HashStreamAsHex(fileStream);  
+            finally  
+              fileStream.Free;  
+              SHA384.Free;  
+            end;  
+          end  
+          else  
+          begin  
+            Result := 'Error';  
+          end;  
+        end;  
+          
+        function GetFile_SHA512(const iFileName: String): String;  
+        var  
+          SHA512    : TIdHashSHA512;  
+          fileStream: TMemoryStream;  
+        begin  
+          if FOpenSSLLoad then  
+          begin  
+            SHA512     := TIdHashSHA512.Create;  
+            fileStream := TMemoryStream.Create;  
+            try  
+              fileStream.LoadFromFile(iFileName);  
+              Result := SHA512.HashStreamAsHex(fileStream);  
+            finally  
+              fileStream.Free;  
+              SHA512.Free;  
+            end;  
+          end  
+          else  
+          begin  
+            Result := 'Error';  
+          end;  
+        end;  
+          
+        initialization  
+          
+        FOpenSSLLoad := IdSSLOpenSSLHeaders.Load();  
+          
+        end.  
+
+
+

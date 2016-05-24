@@ -1,0 +1,39 @@
+---
+author: ww
+comments: true
+date: 2015-07-18 07:47:48+00:00
+layout: post
+link: http://www.gl6.cc/blog/php%e6%95%b0%e7%bb%84%e7%bc%96%e7%a0%81%e7%9a%84%e8%bd%ac%e6%8d%a2%e6%96%b9%e5%bc%8f.html
+slug: php%e6%95%b0%e7%bb%84%e7%bc%96%e7%a0%81%e7%9a%84%e8%bd%ac%e6%8d%a2%e6%96%b9%e5%bc%8f
+title: php数组编码的转换方式
+wordpress_id: 109
+categories:
+- PHP
+---
+
+# 
+
+
+
+
+# $data = eval('return '.iconv('gbk','utf-8',var_export($data,true)).';');
+
+
+
+
+
+
+
+
+
+    
+    在这里var_export函数可以输出或返回一个变量的字符串表示。此函数返回关于传递给该函数的变量的结构信息，它和 var_dump() 
+    类似，不同的是其返回的表示是合法的 PHP 代码。
+    可以通过将函数的第二个参数设置为 <strong><tt>TRUE</tt></strong>，从而返回变量的表示。
+    下面就利用这一特性将数组转化为字符串然后再iconv接着再用eval函数将其还原为数组。
+
+
+
+
+
+

@@ -1,0 +1,73 @@
+---
+author: ww
+comments: true
+date: 2015-12-07 11:55:24+00:00
+layout: post
+link: http://www.gl6.cc/blog/mysql-%e5%86%af%e5%a4%a7%e5%a9%b6%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e5%a4%87%e4%bb%bd%e8%84%9a%e6%9c%ac.html
+slug: mysql-%e5%86%af%e5%a4%a7%e5%a9%b6%e7%9a%84%e6%95%b0%e6%8d%ae%e5%ba%93%e5%a4%87%e4%bb%bd%e8%84%9a%e6%9c%ac
+title: '[MYSQL] 冯大婶的数据库备份脚本'
+wordpress_id: 349
+categories:
+- database
+- safe
+- uncategorized
+tags:
+- mysql
+---
+
+
+
+    
+    #!/bin/sh 
+    # mysql_backup.sh: backup mysql databases and keep newest 5 days backup. 
+    #
+    # ---------------------------------------------------------------------- 
+    # This is a free shell script under GNU GPL version 2.0 or above 
+    # Copyright (C) 2006 Sam Tang 
+    # Feedback/comment/suggestions : http://www.real-blog.com/ 
+    # ---------------------------------------------------------------------- 
+    # your mysql login information 
+    # db_user is mysql username 
+    # db_passwd is mysql password 
+    # db_host is mysql host 
+    # ----------------------------- 
+    db_user="username" 
+    db_passwd="password" 
+    db_host="127.0.0.1" 
+    # the directory for story your backup file. 
+    backup_dir="/home/mysqlbackup" 
+    # date format for backup file (dd-mm-yyyy) 
+    time="$(date +"%d-%m-%Y")" 
+    # mysql, mysqldump and some other bin's path 
+    MYSQL="/usr/bin/mysql" 
+    MYSQLDUMP="/usr/bin/mysqldump" 
+    MKDIR="/bin/mkdir" 
+    RM="/bin/rm" 
+    MV="/bin/mv" 
+    GZIP="/bin/gzip" 
+    # check the directory for store backup is writeable 
+    test ! -w $backup_dir && echo "Error: $backup_dir is un-writeable." && exit 0 
+    # the directory for story the newest backup 
+    test ! -d "$backup_dir/backup.0/" && $MKDIR "$backup_dir/backup.0/" 
+    # get all databases 
+    all_db="$($MYSQL -u $db_user -h $db_host -p$db_passwd -Bse 'show databases')" 
+    for db in $all_db 
+    do 
+    $MYSQLDUMP -u $db_user -h $db_host -p$db_passwd $db --skip-lock-tables| $GZIP -9 > "$backup_dir/backup.0/$time.$db.gz" 
+    done 
+    # delete the oldest backup 
+    test -d "$backup_dir/backup.5/" && $RM -rf "$backup_dir/backup.5" 
+    # rotate backup directory 
+    for int in 4 3 2 1 0 
+    do 
+    if(test -d "$backup_dir"/backup."$int") 
+    then 
+    next_int=`expr $int + 1` 
+    $MV "$backup_dir"/backup."$int" "$backup_dir"/backup."$next_int" 
+    fi 
+    done 
+    exit 0; 
+    
+
+
+

@@ -1,0 +1,334 @@
+---
+author: ww
+comments: true
+date: 2015-12-02 09:27:56+00:00
+layout: post
+link: http://www.gl6.cc/blog/php-%e9%80%9a%e8%bf%87-%e6%b1%87%e7%8e%87%e6%8e%a5%e5%8f%a3-%e8%87%aa%e5%8a%a8%e6%9b%b4%e6%96%b0%e6%b1%87%e7%8e%87.html
+slug: php-%e9%80%9a%e8%bf%87-%e6%b1%87%e7%8e%87%e6%8e%a5%e5%8f%a3-%e8%87%aa%e5%8a%a8%e6%9b%b4%e6%96%b0%e6%b1%87%e7%8e%87
+title: php 通过 汇率接口 自动更新汇率
+wordpress_id: 328
+categories:
+- PHP
+tags:
+- 接口
+---
+
+通过接口更新汇率信息，将汇率保存到一个mysql的表中
+
+接口来自 [k780](http://www.k780.com/)  ， 可以设置为自动执行，定时更新汇率
+
+    
+    <?php
+    
+    $erate = new ExchangeRate();
+    
+    // $erate->host    = 'localhost';
+    // $erate->dbname   = 'test';
+    // $erate->user    = 'root';
+    // $erate->pass    = 'root';
+    // $erate->table   = 'exchange_rate';
+    // $erate->field   = array('FCUR', 'TCUR', 'RATE');
+    
+    $erate->updateRate();
+    
+    /**
+     *  保存汇率到数据库
+     * $db PDO对象
+     * $field = array( 'FCUR', 'TCUR', 'RATE' );
+     * $info = array( 'scur'=>'CNY', 'dcur'=>'USD', 'rate'=>6.3)
+     */
+    function saveExchangeRate( $info, $db, $table, $field )
+    {
+        if ( !$db || !isset($info['scur']) || !isset($info['dcur']) || !isset($info['rate']) ) {
+            return false;
+        }
+    
+        $record_sql = "SELECT id,count(1) as count FROM {$table } WHERE {$field[0]}=" . $db->quote(strtoupper($info['scur'])) . " AND {$field[1]}=" . $db->quote(strtoupper($info['dcur']));
+    
+        try{
+    
+            $result = $db->query($record_sql)->fetch();
+    
+            if ( $result['count'] == 0 ) {
+                // 插入
+                $getValue = function ($v) use ($db, &$result) {
+                    $result = $result != '' ? $result . ',' . $db->quote($v): $db->quote($v);
+                };
+    
+                $field = '`' . join('`,`', $field) . '`';
+                $result = '';
+                array_walk($info, $getValue );
+    
+                $insert_sql = "INSERT INTO {$table} ({$field}) VALUES ($result) ";
+                $db->exec($insert_sql);
+            } else {
+    
+                if ( $result['id'] ) {
+                    $sql = "UPDATE {$table} SET {$field[2]}=" . $db->quote($info['rate'])  . ' WHERE id=' . $result['id'];
+                    $db->exec($sql);
+                }
+                
+            }
+    
+        } catch ( \Exception $e) {
+            var_dump($field, $info, 'error when saveExchangeRate', $e->getMessage());
+        }
+        
+    }
+    
+    class ExchangeRate{
+        private $db;
+        public  $host   = 'localhost';
+        public  $dbname = 'test';
+        public  $user   = 'root';
+        public  $pass   = 'root';
+        public  $table  = 'exchange_rate';
+        public  $field  = array('FCUR', 'TCUR', 'RATE');
+    
+        public $base_money = 'USD';
+    
+        public $money_types = array(
+            'CNY'   => '人民币',
+            'USD'   => '美元',
+            'JPY'   => '日元',
+            'EUR'   => '欧元',
+            'GBP'   => '英镑',
+            'DEM'   => '德国马克',
+            'CHF'   => '瑞士法郎',
+            'FRF'   => '法国法郎',
+            'CAD'   => '加拿大元',
+            'AUD'   => '澳大利亚元',
+            'HKD'   => '港币',
+            'THB'   => '泰铢',
+            'KRW'   => '韩国元',
+            'PHP'   => '菲律宾比索',
+        );
+    
+        public function ExchangeRate()
+        {
+            try{
+                $this->db = $this->getDb($this->host, $this->dbname, $this->user, $this->pass);
+            } catch ( \Exception $e ) {
+                die( $e->getMessage() );
+            }
+            
+        }
+    
+        function updateRate($callback='saveExchangeRate', $db=null)
+        {
+            
+    
+            foreach ($this->money_types as $key => $value) {
+                $data['scur'] = $key;
+                $data['dcur']  = $this->base_money;
+                $data['rate']  = $this->getRate($this->getRateSearchString($data['dcur'], $data['scur']));
+    
+                if ( function_exists($callback) && $data['rate'] !== false ) {
+                    $callback($data, $this->db, $this->table, $this->field);
+                }
+            }
+        }
+    
+        function getRateSearchString($scur, $dcur)
+        {
+            $scur = strtoupper($scur);
+            $dcur = strtoupper($dcur);
+    
+            return "http://api.k780.com:88/?app=finance.rate&scur={$scur}&tcur={$dcur}&appkey=youkey&sign=yousign&format=json";
+        }
+    
+        function getRate($query_string = '')
+        {
+    
+                $url = $query_string;
+    
+                $ch = curl_init($url);
+                curl_setopt_array($ch, array(
+                        CURLOPT_RETURNTRANSFER  => 1,
+                        CURLOPT_USERAGENT       => 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)',
+                    )
+                );
+                $result = curl_exec($ch);
+    
+                if ( false === $result ) {
+                    echo curl_errno($ch);
+                    echo 'error';
+                } 
+                curl_close($ch);
+    
+                $data = json_decode($result,true);
+    
+                if ( $data['success'] == 1) {
+                    return $data['result']['rate'];
+                }  else {
+                    return false;
+                }
+    
+        }
+    
+        function getDb($host, $dbname, $user, $pass)
+        {
+            return new PDO("mysql:host={$host};dbname={$dbname}", $user, $pass);
+        }
+    }
+    
+    
+    
+
+
+
+改成静态
+ 
+
+    
+    <?php
+    
+    namespace Util;
+    
+    \Util\ExchangeRate::TPsetting();
+    
+    class ExchangeRate{
+        private static $db;
+        public  static $host   = 'localhost';
+        public  static $dbname = 'test';
+        public  static $user   = 'root';
+        public  static $pass   = 'root';
+        public  static $table  = 'exchange_rate';
+        public  static $field  = array('FCUR', 'TCUR', 'RATE');
+    
+        public static $base_money = 'USD';
+    
+        public static $money_types = array(
+            'CNY'   => '人民币',
+            'USD'   => '美元',
+            'JPY'   => '日元',
+            'EUR'   => '欧元',
+            'GBP'   => '英镑',
+            'DEM'   => '德国马克',
+            'CHF'   => '瑞士法郎',
+            'FRF'   => '法国法郎',
+            'CAD'   => '加拿大元',
+            'AUD'   => '澳大利亚元',
+            'HKD'   => '港币',
+            'THB'   => '泰铢',
+            'KRW'   => '韩国元',
+            'PHP'   => '菲律宾比索',
+            'DKK'   => 'dkk',
+            'ZAR'   => 'zar',
+            'SEK'   => 'sek',
+            'NOK'   => 'nok'
+        );
+    
+        private static function getDB()
+        {
+    
+            try{
+                if ( !self::$db ) self::$db = 
+                    new \PDO("mysql:host=". self::$host . ";dbname=" . self::$dbname, self::$user, self::$pass);
+            } catch ( \Exception $e ) {
+                die( $e->getMessage() );
+            }
+                
+            return self::$db;
+        }
+    
+        public static function updateRate($callback='saveExchangeRate', $db=null)
+        {
+            
+    
+            foreach (self::$money_types as $key => $value) {
+                $data['scur'] = $key;
+                $data['dcur']  = self::$base_money;
+                $data['rate']  = self::getRate(self::getRateSearchString($data['dcur'], $data['scur']));
+    
+                if ( function_exists($callback) && $data['rate'] !== false ) {
+                    $callback($data, self::getDB(), self::$table, self::$field);
+                }
+            }
+        }
+    
+        private static function getRateSearchString($scur, $dcur)
+        {
+            $scur = strtoupper($scur);
+            $dcur = strtoupper($dcur);
+    
+            return "http://api.k780.com:88/?app=finance.rate&scur={$scur}&tcur={$dcur}&appkey=16657&sign=21f7d9a246359c364e92add99ee7ed55&format=json";
+        }
+    
+        private static function getRate($query_string = '')
+        {
+    
+                $url = $query_string;
+    
+                $ch = curl_init($url);
+                curl_setopt_array($ch, array(
+                        CURLOPT_RETURNTRANSFER  => 1,
+                        CURLOPT_USERAGENT       => 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)',
+                    )
+                );
+                $result = curl_exec($ch);
+    
+                if ( false === $result ) {
+                    echo curl_errno($ch);
+                    echo '获取 接口数据失败 :' . $query_string  ;
+                } 
+                curl_close($ch);
+    
+                $data = json_decode($result,true);
+    
+                if ( $data['success'] == 1) {
+                    return $data['result']['rate'];
+                }  else {
+                    return false;
+                }
+    
+        }
+    
+        public static function exchange( $cur, $money )
+        {
+            $cur = strtoupper($cur);
+    
+            if ( !in_array($cur, array_keys(self::$money_types)) || $money<=0 )
+            {
+                return false;
+            }
+    
+            $field = self::$field;
+            $table = self::$table;
+            $db = self::getDB();
+    
+            $record_sql = "SELECT {$field[2]} FROM {$table } WHERE {$field[0]}=" . $db->quote($cur);
+    
+            try{
+    
+                $query = $db->query($record_sql);
+                $result = $query->fetch();
+    
+                if ( false === $result ) die('system error on exchenage' . __LINE__);
+    
+                if (  $result[$field[2]] ) {
+                    return $money / $result[$field[2]];
+                }
+    
+            } catch ( \Exception $e) {
+                var_dump($cur, $money, 'system error on exchenage' . __LINE__, $e->getMessage());
+            }
+        }
+    
+        public static function TPsetting()
+        {
+            if ( function_exists('C') ) {
+                self::$host = C('DB_HOST');
+                self::$dbname = C('DB_NAME');
+                self::$user = C('DB_USER');
+                self::$pass = C('DB_PWD');
+            }
+        }
+    
+        
+    }
+    
+    
+
+
+

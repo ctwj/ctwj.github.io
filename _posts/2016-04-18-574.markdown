@@ -1,0 +1,84 @@
+---
+author: ww
+comments: true
+date: 2016-04-18 05:50:59+00:00
+layout: post
+link: http://www.gl6.cc/blog/574.html
+slug: '574'
+title: '[php] PHP4LOG的使用'
+wordpress_id: 574
+categories:
+- PHP
+tags:
+- php4log
+---
+
+使用php4log记录某个可疑ip的行为
+
+下载地址
+http://apache.fayea.com/logging/log4php/2.3.0/apache-log4php-2.3.0-src.zip
+
+解压到代码目录
+log4p
+
+在目录里面添加配置文件 log4php.properties
+ 
+
+    
+    <?php
+    
+    log4php.rootLogger=DEBUG, A1  
+    log4php.appender.A1=LoggerAppenderFile
+    log4php.appender.A1.file=log.txt
+    log4php.appender.A1.layout=LoggerLayoutPattern  
+    
+    ?>
+
+
+
+添加php文件 log.php
+ 
+
+    
+    <?php 
+    define('RECORD_IP', '127.0.0.1');
+    
+    if ( isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] == RECORD_IP )
+    {
+    	define ("LOG4PHP_DIR", dirname(__FILE__)."/src/main/php");							//php4log目录
+    	require_once(LOG4PHP_DIR . '/Logger.php'); 
+    	Logger::configure(dirname(__FILE__) . '/log4php.properties'); 
+    	$logger = Logger::getLogger('trace');
+    
+    	if ( !empty($_SERVER['QUERY_STRING']) ){
+    		
+    		$url = $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+    	} else {
+    		$url = $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+    	}
+    	
+    	$cookie = $_COOKIE;
+    
+    	if ( !isset($_SESSION) )
+    	{
+    		session_start();
+    	}
+    	$session = $_SESSION;
+    
+    	$post = $_POST;
+    
+    	$get = $_GET;
+    
+    	$data = json_encode(array('cookie'=>$cookie,'session'=>$session,'post'=>$post,'get'=>$get));
+    
+    	$logger->debug(" -|+ {$url} +|- $data"); 
+    }
+    
+    ?>
+
+
+
+在程序中包含 log.php
+include "./log4p/log.php";
+
+之后就能记录127.0.0.1的所有动作了

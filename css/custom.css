@@ -1,0 +1,9 @@
+.post pre{
+	background:#252F29;
+}
+.post *:not(pre)>code{
+	background:#252F29;
+}
+.post_share {
+	background-image: url("/assets/img/background.jpg");
+}

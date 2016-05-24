@@ -1,0 +1,30 @@
+---
+author: ww
+comments: true
+date: 2015-10-28 06:50:12+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f%e5%8c%b9%e9%85%8dutf8%e4%b8%ad%e6%96%87.html
+slug: '%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f%e5%8c%b9%e9%85%8dutf8%e4%b8%ad%e6%96%87'
+title: 正则表达式匹配utf8中文
+wordpress_id: 190
+categories:
+- PHP
+tags:
+- 正则表达式
+---
+
+
+
+    
+    if ( $old_addr['name'] <> $name ) {
+                        if ( filter_var($name, FILTER_VALIDATE_REGEXP,array('options'=>array('regexp'=>'/^[\x{4e00}-\x{9fa5}]+$/u'))) ){
+                            $this->error('请输入中文');
+                        }
+                        $data['name'] = $name;
+                    }
+
+
+
+
+正则表达式匹配utf8中文
+当 filter_var匹配失败时 返回false

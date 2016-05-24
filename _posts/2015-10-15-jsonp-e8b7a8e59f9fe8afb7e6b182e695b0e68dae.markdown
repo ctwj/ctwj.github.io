@@ -1,0 +1,37 @@
+---
+author: ww
+comments: true
+date: 2015-10-15 00:53:50+00:00
+layout: post
+link: http://www.gl6.cc/blog/jsonp-%e8%b7%a8%e5%9f%9f%e8%af%b7%e6%b1%82%e6%95%b0%e6%8d%ae.html
+slug: jsonp-%e8%b7%a8%e5%9f%9f%e8%af%b7%e6%b1%82%e6%95%b0%e6%8d%ae
+title: jsonp 跨域请求数据
+wordpress_id: 177
+categories:
+- PHP
+tags:
+- jsonp
+- 跨域
+---
+
+Jquery Ajax进行跨域
+
+首先将原有的Jquery代码中的dataType改成“jsonp”，具体代码如下：
+
+    
+    
+    // js端
+    $.ajax({
+        url: "http://ajax.yoursite.com/api.php",
+        async: false,
+        dataType: "jsonp",
+        jsonp: "callback",
+        success: function( json ){
+            alert( json );
+        }
+    });
+    
+    //php端
+    $callback = isset( $_GET[ 'callback' ] ) ? $_GET[ 'callback' ] : 'callback';
+    echo $callback . '(' . json_encode( $data ) . ')';
+    

@@ -1,0 +1,36 @@
+---
+author: ww
+comments: true
+date: 2015-09-21 02:35:22+00:00
+layout: post
+link: http://www.gl6.cc/blog/ecshop-%e6%b7%bb%e5%8a%a0%e5%90%8e%e5%8f%b0%e4%bb%93%e5%82%a8%e7%ae%a1%e7%90%86%e8%8f%9c%e5%8d%95.html
+slug: ecshop-%e6%b7%bb%e5%8a%a0%e5%90%8e%e5%8f%b0%e4%bb%93%e5%82%a8%e7%ae%a1%e7%90%86%e8%8f%9c%e5%8d%95
+title: Ecshop 添加后台仓储管理菜单
+wordpress_id: 155
+categories:
+- ECShop
+tags:
+- ecshop
+- 后台菜单
+---
+
+1. admin/includes/inc_menu.php 添加菜单配置
+$modules['17_depot_manage']['01_depot_list']       = 'depot_manage.php?act=list';
+$modules['17_depot_manage']['02_depot_add']       = 'depot_manage.php?act=add';
+
+2. languages/zh_cn/admin/common.php 添加翻译
+$_LANG['17_depot_manage'] = '仓储管理';
+$_LANG['01_depot_list'] = '仓库列表';
+$_LANG['02_depot_add'] = '添加仓库';
+
+3. languages/zh_cn/admin/priv_action.php 添加权限菜单翻译
+$_LANG['depot_manage']  =   '仓储管理';
+$_LANG['depot_list']    =   '仓库列表';
+$_LANG['depot_add']     =   '添加仓库';
+
+4. ecs_admin_action 表中添加权限项
+INSERT INTO ecs_admin_action ('action_id','parent_id','action_code')
+VALUES 
+(136,0,'depot_manage'),
+(137,136,'depot_list'),
+(138,136,'depot_add')

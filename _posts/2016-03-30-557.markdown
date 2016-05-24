@@ -1,0 +1,35 @@
+---
+author: ww
+comments: true
+date: 2016-03-30 04:53:08+00:00
+layout: post
+link: http://www.gl6.cc/blog/557.html
+slug: '557'
+title: '[delphi] 获取域名ip地址'
+wordpress_id: 557
+categories:
+- Delphi
+- uncategorized
+tags:
+- delphi
+---
+
+需要单元  WinSock
+
+
+
+
+
+    
+    var
+      WData : TWSAData;
+      HEnt: PHostEnt;
+      ClName, IPad: string;
+    begin
+    WSAStartup(2, WData);
+           HEnt := GetHostByName(PAnsiChar('www.google.com.hk'));
+           with HEnt^ do
+              IPad := Format('%d.%d.%d.%d', [Byte(h_addr^[0]), Byte(h_addr^[1]),Byte(h_addr^[2]), Byte(h_addr^[3])]); //格式化IP地址
+            ClName := HEnt^.h_name; // 主机名
+            WSACleanup;
+    end;

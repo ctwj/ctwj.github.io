@@ -1,0 +1,43 @@
+---
+author: ww
+comments: true
+date: 2016-01-21 05:46:49+00:00
+layout: post
+link: http://www.gl6.cc/blog/shell%e3%80%80linux%e8%87%aa%e5%8a%a8nikto%e6%89%b9%e9%87%8f%e6%89%ab%e6%8f%8f%e8%84%9a%e6%9c%ac.html
+slug: shell%e3%80%80linux%e8%87%aa%e5%8a%a8nikto%e6%89%b9%e9%87%8f%e6%89%ab%e6%8f%8f%e8%84%9a%e6%9c%ac
+title: '[shell]　linux自动nikto批量扫描脚本'
+wordpress_id: 449
+categories:
+- safe
+- uncategorized
+tags:
+- nikto
+- shell
+---
+
+
+linux自动nikto批量扫描脚本
+
+    
+    count=1
+    
+    cat url.txt | while read line
+    do
+    	echo "====$(date)====" >> log.txt
+    	echo $line >> log.txt
+    
+    	site=`echo "${line}" | awk -F '[/:]' '{print $4}'`
+    	echo $site >> log.txt
+    	
+    	echo "<a href=/nikto/${site}.html>${line}</a><br>" >> /var/www/html/nikto.html
+    	nikto -C all -Format html -output /var/www/html/nikto/${site}.html -h "$line"
+    	echo "====$(date)====" >> log.txt
+    	echo "" >> log.txt
+    	echo "" >> log.txt
+    
+    	count=$(($count + 1))
+    done
+    exit 0
+
+
+

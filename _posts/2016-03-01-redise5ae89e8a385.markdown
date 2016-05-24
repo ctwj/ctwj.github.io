@@ -1,0 +1,30 @@
+---
+author: ww
+comments: true
+date: 2016-03-01 09:18:42+00:00
+layout: post
+link: http://www.gl6.cc/blog/redis%e5%ae%89%e8%a3%85.html
+slug: redis%e5%ae%89%e8%a3%85
+title: redis安装
+wordpress_id: 501
+categories:
+- uncategorized
+tags:
+- redis
+---
+
+[redis-2.8.19](http://www.gl6.cc/blog/wp-content/uploads/2016/03/redis-2.8.19.zip) [redis_php](http://www.gl6.cc/blog/wp-content/uploads/2016/03/redis_php.zip)
+
+1.直接启动
+
+命令行下直接执行  redis-server
+
+2.安装为服务
+
+命令行下直接执行  redis-server -service-install
+
+更加详细的参数
+
+redis-server.exe –service-install D:\redis-2.8.12\redis6380.conf –service-name redisService6380 –port 6380
+
+支持安装多个redis

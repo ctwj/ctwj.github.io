@@ -1,0 +1,40 @@
+---
+author: ww
+comments: true
+date: 2016-04-27 08:15:37+00:00
+layout: post
+link: http://www.gl6.cc/blog/590.html
+slug: '590'
+title: '[php] mime_content_type 函数被废弃'
+wordpress_id: 590
+categories:
+- PHP
+---
+
+mime_content_type 检测文件的 MIME 类型
+http://php.net/manual/zh/function.mime-content-type.php
+已被废弃
+5.3以上的版本会提示函数不存在, 左右,需要保证兼容性的话,需要验证此函数是否存在
+
+替换 
+
+PHP 5.3.0+已经默认支持Fileinfo函数
+用法
+`$finfo    = finfo_open(FILEINFO_MIME);
+$mimetype = finfo_file($finfo, $filename);
+finfo_close($finfo);`
+
+ 
+
+    
+    if ( function_exists('mime_content_type') )
+    {
+        $mimetype = mime_content_type('test.php');
+    } else{
+        $finfo    = finfo_open(FILEINFO_MIME);
+        $mimetype = finfo_file($finfo, $filename);
+        finfo_close($finfo);
+    }
+
+
+

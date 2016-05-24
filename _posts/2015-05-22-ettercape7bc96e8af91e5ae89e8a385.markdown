@@ -1,0 +1,51 @@
+---
+author: ww
+comments: true
+date: 2015-05-22 02:55:59+00:00
+layout: post
+link: http://www.gl6.cc/blog/ettercap%e7%bc%96%e8%af%91%e5%ae%89%e8%a3%85.html
+slug: ettercap%e7%bc%96%e8%af%91%e5%ae%89%e8%a3%85
+title: Ettercap编译安装
+wordpress_id: 92
+categories:
+- Linux
+tags:
+- ettercap
+---
+
+
+
+1.安装需要的库
+#apt-get install debhelper bison check cmake flex ghostscript libbsd-dev libcurl4-openssl-de
+v libgtk2.0-dev \
+libltdl-dev libluajit-5.1-dev libncurses5-dev libnet1-dev libpcap-dev libpcre3-dev libssl-
+dev libgtk-3-dev libcurl3-dev
+
+2.添加 alias yacc="bison" 到~/.bashrc 中
+
+3.
+
+#pkg-config --cflags gtk+-2.0
+4.进入目录
+# cd /usr/local/src
+5.下载安装ncurses
+# wget ftp://invisible-island.net/ncurses/ncurses.tar.gz && tar -zxvf ncurses.tar.gz
+# cd ncurses && ./configure && make && make install
+6.下载安装libpcap
+# wget http://www.tcpdump.org/release/libpcap-1.7.3.tar.gz && tar -zxvf libpcap-1.7.3.tar.gz
+# cd libpcap-1.7.3 && ./configure && make && make install && cd ..
+7.下载安装libnet
+# wget http://ncu.dl.sourceforge.net/project/libnet-dev/libnet-1.1.6.tar.gz && tar -zxvf libnet-1.1.6.tar.gz
+# cd libnet-1.1.6 && ./configure && make && make install && cd ..
+8.下载安装ettercap
+# wget https://github.com/Ettercap/ettercap/releases/download/v0.8.2/ettercap-0.8.2.tar.gz
+# tar -zxvf ettercap-0.8.2.tar.gz && cd ettercap-0.8.2 && mkdir build && cd build && cmake ..
+# make && make install
+
+9.安装成功
+
+root@raspberrypi:~# ettercap
+
+ettercap 0.8.2 copyright 2001-2015 Ettercap Development Team
+
+Please select an User Interface

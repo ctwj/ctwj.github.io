@@ -1,0 +1,78 @@
+---
+author: ww
+comments: true
+date: 2015-11-18 07:11:47+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e6%89%8b%e6%9c%ba%e6%8a%93%e5%8c%85.html
+slug: '%e6%89%8b%e6%9c%ba%e6%8a%93%e5%8c%85'
+title: 手机抓包 获取手机app接口访问数据
+wordpress_id: 277
+categories:
+- uncategorized
+tags:
+- burpsuite
+- 手机抓包
+---
+
+## Burpsuite，charles 手机抓包
+
+
+手机抓包，就是截获手机的访问，简单的方法就是通过软件建立一个代理，让手机流量都通过代理软件，自然就抓到了手机所有的包了。条件只有一个，就是手机和电脑在同一局域网，比如通过同一个路由器上网。
+
+
+### 手机抓包软件
+
+
+Burpsuite，charles 等，类似软件很多
+
+Burpsuite功能强大，是一个很好的开发调试渗透工具，跨平台，严重推荐，charles接触比较少，但是挺方便。
+
+
+### 电脑端配置
+
+
+只要启动软件开启代理即可
+
+
+
+	
+  1. Burpsuite
+
+
+![burpsuite 手机抓包 配置](http://www.gl6.cc/blog/wp-content/uploads/2015/11/burp_setting-300x232.jpg)
+
+位置很好找，Proxy下Options 默认是开启的，一般有个127.0.0.1：8080 这个是针对本机的，添加一个局域网可访问的即可 192.168.0.131:8080
+
+
+
+	
+  2. Charles
+
+
+[caption id="attachment_279" align="alignnone" width="300"][![charles 手机抓包代 理配置](http://www.gl6.cc/blog/wp-content/uploads/2015/11/charles_setting-300x225.jpg)](http://www.gl6.cc/blog/wp-content/uploads/2015/11/charles_setting.jpg) charles 手机抓包代 理配置[/caption]
+
+
+
+位置在 菜单 Proxy –> proxy setting… 下面，如上所配.
+
+
+
+
+### 手机端配置
+
+
+只需要长按所连接的wifi，选择修改网络。使用代理就行了，IP地址为代理软件所在电脑ip，端口为配置的端口，默认burpsuite为8080 ，charles为8888
+
+
+
+接下来对手机进行操作，在软件里就可以看到所有的访问了
+
+burpsuite 手机抓包 截图
+
+![burpsuite 手机抓包 截图](http://www.gl6.cc/blog/wp-content/uploads/2015/11/burpsuite_list-300x169.jpg)
+
+如上图，京东又偷偷干啥了。
+
+[caption id="attachment_280" align="alignnone" width="300"][![charles 抓包列表](http://www.gl6.cc/blog/wp-content/uploads/2015/11/charles_list-300x240.jpg)](http://www.gl6.cc/blog/wp-content/uploads/2015/11/charles_list.jpg) charles 抓包列表[/caption]
+
+成功抓到了web访问，实际上手机app大部分都是通过api接口来实现各种功能的，抓到web访问数据就已经抓到了绝大分需要的数据了

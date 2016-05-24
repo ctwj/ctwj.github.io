@@ -1,0 +1,30 @@
+---
+author: ww
+comments: true
+date: 2015-09-18 06:09:03+00:00
+layout: post
+link: http://www.gl6.cc/blog/wordpress-%e8%b5%84%e6%ba%90.html
+slug: wordpress-%e8%b5%84%e6%ba%90
+title: wordpress 资源
+wordpress_id: 140
+categories:
+- WordPress
+tags:
+- wordpress
+---
+
+
+https://generatewp.com/
+网站能生成一些基本的代码
+
+http://codex.wordpress.org/zh-cn:Main_Page
+官方中文文档
+
+http://codex.wordpress.org/zh-cn:%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%8F%E8%BF%B0
+数据库描述
+
+http://codex.wordpress.org/zh-cn:%E4%B8%BB%E9%A2%98%E5%BC%80%E5%8F%91
+主题开发
+
+http://codex.wordpress.org/zh-cn:%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E6%8F%92%E4%BB%B6
+插件开发

@@ -1,0 +1,44 @@
+---
+author: ww
+comments: true
+date: 2016-05-09 06:18:19+00:00
+layout: post
+link: http://www.gl6.cc/blog/622.html
+slug: '622'
+title: '[mysql] mysql5.5编码配置'
+wordpress_id: 622
+categories:
+- database
+- uncategorized
+tags:
+- mysql
+- 编码
+---
+
+配置文件 /etc/mysql/my.cnf
+
+ 
+
+    
+    [client]
+    default-character-set=utf8
+    
+    [mysqld]
+    character_set_server=utf8
+    init_connect='SET NAMES utf8'
+
+
+
+最后结果
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8                       |
+| character_set_connection | utf8                       |
+| character_set_database   | utf8                       |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8                       |
+| character_set_server     | utf8                       |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+

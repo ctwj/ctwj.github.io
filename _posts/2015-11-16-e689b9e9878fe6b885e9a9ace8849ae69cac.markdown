@@ -1,0 +1,219 @@
+---
+author: ww
+comments: true
+date: 2015-11-16 01:28:13+00:00
+layout: post
+link: http://www.gl6.cc/blog/%e6%89%b9%e9%87%8f%e6%b8%85%e9%a9%ac%e8%84%9a%e6%9c%ac.html
+slug: '%e6%89%b9%e9%87%8f%e6%b8%85%e9%a9%ac%e8%84%9a%e6%9c%ac'
+title: 批量清马脚本
+wordpress_id: 275
+categories:
+- PHP
+---
+
+## 批量清马脚本
+
+
+
+有朋友网站被批量挂马了，晚上下的网马扫描工具竟然不带清马功能，只好自己写个。
+功能很简单，遍历文件，匹配关键字，删除保存。
+本脚本由php编写，不是cli脚本，需要浏览器访问操作。
+ 
+
+    
+    <html lang="zh_cn">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <title xmlns="http://www.w3.org/1999/html">清马脚本 by 此题无解  2015/11/3</title>
+        <style type="text/css">
+            .container {
+                width: 600px;
+                margin: 10px auto;
+                padding: 10px;
+                /*border: solid 1px #c2ccd1;*/
+                box-shadow: 2px 2px 2px 3px #dddddd;
+                border-radius: 5px;
+                background: #c2ccd1;
+            }
+            .container > div {
+                margin: 10px;
+            }
+            div > label {
+                width: 200px;
+                display: inline-block;
+                text-align: right;
+            }
+            div > input {
+                width: 300px;
+                display: inline-block;
+            }
+            textarea {
+                width: 300px;
+            }
+            #submit {
+                background: #c9cd6;
+                width: 80px;
+                height: 40px;
+                box-shadow: 1px 1px 1px 1px #dddddd;
+            }
+        </style>
+    </head>
+    <body>
+    <form action="?action=clear" method="post" onsubmit="return checkform();">
+        <h1 align="center">清理脚本<small style="color: grey;font-size: 16">--此题无解</small></h1>
+        <div class="container" >
+            <div>
+                <label for="">路径:</label>
+                <input id="path" type="text" name="path" value="."/>
+                <span></span>
+            </div>
+            <div>
+                <label for=""><input type="radio"  name="codetype" value="str"/>被挂代码:</label>
+                <textarea name="str"></textarea>
+                <span></span>
+            </div>
+            <div>
+                <label for=""><input type="radio" checked name="codetype" value="reg"/>正则表达式:</label>
+                <input type="text" name="reg" value=""/>
+                <span></span>
+            </div>
+            <div>
+                <label for="">文件后缀:</label>
+                <input type="text" name="suffix" value="*.htm|*.html"/>
+                <span></span>
+            </div>
+            <div style="text-align: center">
+                <button id="submit" type="submit">开始清理</button>
+            </div>
+        </div>
+        <div class='list'>
+    	<textarea><SCRIPT\sLanguage=VBScript><!--(.*?)<\/SCRIPT></textarea>
+    	</div>
+    </form>
+    <script>
+        function checkform()
+        {
+            var radios = document.getElementsByName('codetype');
+            for( var i=0; i<radios.length; i++ ) {
+                if ( radios[i].checked ) {
+                    if ( radios[i].value == 'str' ) {
+                        var str = document.getElementsByName('str');
+                        if ( str[0].value.length < 5 ) {
+                            alert('请填写要清楚的挂马代码');
+                            return false;
+                        }
+                    } else {    //reg
+                        var reg = document.getElementsByName('reg');
+                        if ( reg[0].value.length < 5 ) {
+                            alert('请填写要匹配挂马代码的正则');
+                            return false;
+                        }
+                    }
+                }
+            }
+            var suffix = document.getElementsByName('suffix');
+            if ( suffix[0].value.length < 3 ) {
+                alert('请填写文件后缀');
+                return false;
+            }
+            var path = document.getElementById('path');
+            if ( path.value.length < 1 ) {
+                alert('请填写清理路径');
+                return false;
+            }
+    
+            if ( confirm('确定已经备份好文件,开始清除吗？') ) {
+                return true;
+            }
+        }
+    </script>
+    <?php
+            ini_set('pcre.backtrack_limit', 999999999);
+    
+            if ( isset($_GET['action']) && $_GET['action'] == 'clear') {
+                set_time_limit(0);
+                clear($_POST["path"]);
+            }
+    
+            function clear($path = ".")
+            {
+                //1. check suffix
+                $suffix = trim($_POST['suffix'], ' |');
+                $suffix = preg_replace('/(.*?)\|/', '\1\$|', $suffix);
+                $suffix = '#(' . str_replace('*', '.*', $suffix) . '$)#iS';
+    
+                //2. check cleartype
+                $codetype = trim($_POST['codetype']);
+                $pat = $_POST[$codetype];
+                if ( $codetype == 'reg' ) $pat = '/' . $pat . '/siS';
+                if ( get_magic_quotes_gpc() ) $pat = stripslashes($pat);
+    
+                $file_count = 0;
+                $safe_count = 0;
+                $count = 0;
+    
+    
+                $it = new RecursiveDirectoryIterator($path);
+                /** @var SplFileInfo $file */
+                foreach ( new RecursiveIteratorIterator($it) as $file )
+                {
+    
+                    if ( ! preg_match( $suffix, $file->getFilename(), $match ) ) {
+                        continue;
+                    }
+                    $file_count++;
+    
+                    $file = $file->getPath() . DIRECTORY_SEPARATOR .$file->getFilename();
+                    $file_content = file_get_contents($file);
+    
+                    if ( $codetype == 'str' ) {
+    
+                        if ( stripos( $file_content, $pat ) ) {
+                            $file_content = str_replace( $pat, '', $file_content );
+                            file_put_contents($file, $file_content);
+    
+                            log_file($file);
+                            $count++;
+                            echo "{$file} cleaned! <br>";
+                        } else {
+                            log_file($file, true);
+                            $safe_count++;
+                        }
+    
+                    } else {
+    
+                        if ( preg_match( $pat, $file_content, $match ) ){
+                            $file_content = preg_replace( $pat, '', $file_content);
+                            file_put_contents($file, $file_content);
+    
+                            log_file($file);
+                            $count++;
+                            echo "{$file} cleaned! <br>";
+                        } else {
+                            log_file($file, true);
+                            $safe_count++;
+                        }
+    
+                    }
+                }
+    
+                echo "<h2 style=\"color:green;\">$file_count file was found! $safe_count file was safe!</h3>";
+                echo "<h2 style=\"color:red;\">$count file was clean!</h3>";
+            }
+            function log_file($file, $safe=false){
+                $logfile = '.' . DIRECTORY_SEPARATOR . 'log.txt';
+                $safelogfile = '.' . DIRECTORY_SEPARATOR . 'safelog.txt';
+                $date = date('Y-m-d H:i:s');
+                if ( !$safe) {
+                    file_put_contents($logfile, "[$date]\t clean {$file} ok! \r\n", FILE_APPEND);
+                } else {
+                    file_put_contents($safelogfile, "[$date]\t {$file} was safe! \r\n", FILE_APPEND);
+                }
+            }
+    
+            ?>
+    
+    
+
+
+

@@ -1,0 +1,34 @@
+---
+author: ww
+comments: true
+date: 2015-12-23 13:18:32+00:00
+layout: post
+link: http://www.gl6.cc/blog/chrome-%e6%9c%89%e7%94%a8%e6%8f%92%e4%bb%b6.html
+slug: chrome-%e6%9c%89%e7%94%a8%e6%8f%92%e4%bb%b6
+title: chrome 有用插件
+wordpress_id: 385
+categories:
+- uncategorized
+tags:
+- chrome
+---
+
+1. IPFuck
+能够伪造ip地址的插件
+
+IPFuck for Chromium is a port of the Firefox addon, originally created by Paul Da Silva.
+http://ipfuck.paulds.fr/
+
+Source: https://github.com/0xa/chromium-ipfuck
+
+2. User-Agent Switcher
+能够自定义User-Agent的插件,本身已经内置很多agent
+
+3. hackbar
+和firefox 下面的功能一模一样.内容一些编码工具
+
+4. Proxy SwitchyOmega
+代理切换,很方便
+
+5. fekit [fekit](http://www.gl6.cc/blog/wp-content/uploads/2015/12/fekit.zip)
+前端盒子，里面含有各种前端工具，编码工具

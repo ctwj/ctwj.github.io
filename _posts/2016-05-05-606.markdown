@@ -1,0 +1,94 @@
+---
+author: ww
+comments: true
+date: 2016-05-05 02:26:25+00:00
+layout: post
+link: http://www.gl6.cc/blog/606.html
+slug: '606'
+title: '[php] 轮子 后台任务和PHP-Resque的使用'
+wordpress_id: 606
+categories:
+- PHP
+tags:
+- php
+- PHP-Resque
+---
+
+参考:http://blog.icewingcc.com/background-jobs-and-phpresque-5.html
+参考:http://avnpc.com/pages/run-background-task-by-php-resque
+
+基本原理是运行一个work , 这个work会监视一个队列, 如果有数据入队, 就会去处理这个数据,
+那怎么处理呢?  队里里面的数据自动会带一个类名, work会自动调用这个类里面的perform函数去处理
+那perform 能知道这个要处理的数据吗? perform里面可通过 $this->args 来获取这个要处理的数据
+
+要跑起来首先需要环境, 用composer安装, 然后 include autoload.php
+大概一个worker长这个样子,前面的putenv 都是设置环境变量, 这个可以在bash里面也可以做, 只有第一个要监视的队列是必须的,QUEUE=* 表示监视所有队列,其它可选
+
+    
+    <?php
+            putenv('QUEUE=*');
+    
+            putenv('VVERBOSE=1');
+            putenv('LOGGING=1');
+            putenv('KEY=domain');
+            //putenv('INTERVAL=8');
+            //putenv('COUNT=1');
+            //putenv('REDIS_BACKEND=127.0.0.1:6379');
+    
+            require_once dirname(__FILE__) . '/loader.php';
+    
+            require_once dirname(__FILE__) . '/lib/vendor/chrisboulton/php-resque/resque.php'
+
+
+直接用php在shell里面运行这个脚本就可以一直监视了.
+
+再给个数据给work处理
+ 
+
+    
+    <?php
+            include dirname(__FILE__) . '/loader.php';
+    
+            $jobId = Resque::enqueue('JESSE', 'Dog', ['hey'], true);
+            echo $jobId;
+    
+            $status = new Resque_Job_Status($jobId);
+            if ( $status->isTracking() ) {
+                    echo "\nStatus: " . $status->get();
+            }
+
+
+这个代码就是给队列插入数据`Resque::enqueue('JESSE', 'Dog', ['hey'], true);`
+其中第一个参数就是队列的名字, 第二个是处理的类的名字 需要一个叫Dog的类, 在work中需要能访问到这个类,我是在loader.php里面include了,
+第三个参数就是要处理的数据.
+运行这个脚本后, work就能自动检测到这个, 并调用dog类来处理数据了.
+
+最后, 对任务的状态跟踪,前面入队函数enqueue返回的就是一个任务id,通过这个id可以获取,这个任务的状态
+ 
+
+    
+    <?php
+    if(empty($argv[1])) {
+            die('Specify the ID of a job to monitor the status of.');
+    }
+    
+    include 'loader.php';
+    
+    $status = new Resque_Job_Status($argv[1]);
+    if(!$status->isTracking()) {
+            die("Resque is not tracking the status of this job.\n");
+    }
+    
+    echo "Tracking status of ".$argv[1].". Press [break] to stop.\n\n";
+    while(true) {
+            fwrite(STDOUT, "Status of ".$argv[1]." is: ".$status->get()."\n");
+            sleep(1);
+    }
+
+
+Resque_Job_Status::STATUS_WAITING = 1; (等待)
+Resque_Job_Status::STATUS_RUNNING = 2; (正在执行)
+Resque_Job_Status::STATUS_FAILED = 3; (失败)
+Resque_Job_Status::STATUS_COMPLETE = 4; (结束)
+
+[PHP-Resque 实例](http://www.gl6.cc/blog/wp-content/uploads/2016/05/438-domain_collection-master.zip)

@@ -1,0 +1,157 @@
+---
+author: ww
+comments: true
+date: 2015-11-24 09:21:34+00:00
+layout: post
+link: http://www.gl6.cc/blog/php-%e5%87%bd%e6%95%b0%e5%88%ab%e5%90%8d.html
+slug: php-%e5%87%bd%e6%95%b0%e5%88%ab%e5%90%8d
+title: php 函数别名
+wordpress_id: 296
+categories:
+- PHP
+tags:
+- 反射
+---
+
+php 给函数一个 别名， 通过反射获取函数的相关信息
+
+    
+    /**
+     *
+     * Function Name :
+     *     val2str
+     *     参考:http://www.php.net/manual/en/function.create-function.php#103080
+     *
+     * Description :
+     *     将变量值变成php代码
+     *
+     * Parameters :
+     *     $mixed[mixed] : 变量值
+     *
+     * Returns :
+     *     [string]php代码
+     *
+     * Demo :
+     *     $object = new stdClass;
+     *     $object->arg = 'object';
+     *     echo val2str($object);
+     *
+     *     $cls = new stdClass();
+     *     $cls->key ='value';
+     *     $array = (array)$cls;
+     *     echo val2str($array);
+     *     
+     *     $temp = array(
+     *         'int' => 100,
+     *         'double' => 3.14,
+     *         'string' => 'string test',
+     *         'array' => array('test21' => 'ok21', 'test22' => 'ok22'),
+     *         'object' => (object)array('test31' => 'ok31', 'test32' => 'ok32'),
+     *         'bool' => true,
+     *         'null' => NULL,
+     *     );
+     *     eval(sprintf('$test=%1$s;', val2str($temp)));
+     *     print_r($test);
+     */
+    function val2str($mixed) {
+        // 获取变量名
+        $var_name = '';
+        
+        // 获取变量值
+        switch(gettype($mixed)) {
+            case 'string':
+                return sprintf('\'%1$s\'', $mixed);case 'object':
+            case 'array':
+                $isobject = false;
+                if(is_object($mixed)) {
+                    $isobject = true;
+                    $mixed = get_object_vars($mixed);
+                }
+                
+                $delimiter = ', ';
+                $out = '';
+                foreach($mixed as $key => $value) {
+                    $fun = __FUNCTION__;
+                    $out .= sprintf('%1$s\'%2$s\' => %3$s', $delimiter, $key, $fun($value));
+                }
+                if(!empty($out)) {
+                    // 删除前面的$delimiter
+                    $out = substr($out, strlen($delimiter));
+                }
+                $out = $isobject ? sprintf('(object)array(%1$s)', $out) : sprintf('array(%1$s)', $out);
+                return $out;
+            
+            case 'boolean':
+                return $mixed ? 'true' : 'false';
+            
+            case 'NULL':
+                return 'NULL';
+            
+            //case 'integer':
+            //case 'double':
+            //case 'resource':
+            default :
+                return $mixed;
+        }
+    }
+    /**
+     *
+     * Function Name :
+     *     CreateFunctionAlias
+     *     参考:http://www.php.net/manual/en/function.create-function.php#103080
+     *
+     * Description :
+     *     创建函数别名
+     *
+     * Parameters :
+     *     $function_name[string] : 函数名(必须已存在)
+     *     $alias_name[string] : 新别名(必须不存在)
+     *
+     * Returns :
+     *     [bool]返回结果
+     *
+     */
+    function CreateFunctionAlias($function_name, $alias_name)
+    { 
+        if(function_exists($alias_name)) 
+            return false; 
+        $rf = new ReflectionFunction($function_name); 
+        $fproto = $alias_name.'('; 
+        $fcall = $function_name.'('; 
+        $need_comma = false; 
+        
+        foreach($rf->getParameters() as $param) 
+        {
+            if($need_comma) 
+            { 
+                $fproto .= ','; 
+                $fcall .= ','; 
+            } 
+    
+            $fproto .= '$'.$param->getName(); 
+            $fcall .= '$'.$param->getName(); 
+    
+            if($param->isOptional() && $param->isDefaultValueAvailable()) 
+            { 
+                $val = $param->getDefaultValue();
+                $fproto .= ' = '.val2str($val);
+            } 
+            $need_comma = true; 
+        } 
+        $fproto .= ')'; 
+        $fcall .= ')'; 
+    
+        $f = sprintf('function %1$s{return %2$s;}', $fproto, $fcall);
+        eval($f);
+        
+        return true; 
+    }
+    // 创建CreateFunctionAlias别名
+    if(!function_exists('function_alias')) {
+        function function_alias($function_name, $alias_name)  {
+            return CreateFunctionAlias($function_name, $alias_name) ;
+        }
+    }
+
+
+

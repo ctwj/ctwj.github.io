@@ -1,0 +1,34 @@
+---
+author: ww
+comments: true
+date: 2016-04-22 02:24:15+00:00
+layout: post
+link: http://www.gl6.cc/blog/586.html
+slug: '586'
+title: '[raspberry] 配置usb无线网卡'
+wordpress_id: 586
+categories:
+- uncategorized
+tags:
+- raspberry
+---
+
+1. sd卡插入读卡器,使用虚拟机挂载
+2. 编辑/etc/network/interface文件
+ 
+
+    
+    auto lo
+    iface lo inet loopback
+    
+    auto eth0
+    iface eth0 inet dhcp
+    
+    auto wlan0 
+    allow-hotplug wlan0 
+    iface wlan0 inet dhcp 
+    wpa-ssid "JoStudio" 
+    wpa-psk "password"
+
+
+

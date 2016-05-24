@@ -1,0 +1,44 @@
+---
+author: ww
+comments: true
+date: 2015-03-30 16:25:29+00:00
+layout: post
+link: http://www.gl6.cc/blog/solr-5-0-0-%e7%ac%94%e8%ae%b01-%e5%bf%ab%e9%80%9f%e5%bc%80%e5%a7%8b.html
+slug: solr-5-0-0-%e7%ac%94%e8%ae%b01-%e5%bf%ab%e9%80%9f%e5%bc%80%e5%a7%8b
+title: Solr 5.0.0 笔记1 快速开始
+wordpress_id: 37
+categories:
+- solr
+tags:
+- solr
+---
+
+1. 为什么学习使用solr
+
+Solr是一个高性能，采用Java5开发，Solr基于Lucene的全文搜索服务器。同时对其进行了扩展，提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展并对查询性能进行了优化，并且提供了一个完善的功能管理界面，是一款非常优秀的全文搜索引擎。与sphinx相比支持搞并发，有更好的中文分词支持，索引支持实时新增、更新和删除，可以根据记录的最后更新时间实现增量更新。
+
+2. 开始准备
+
+solr需要jdk环境 java7及以上，如果没有还是能启动，不过看不到webUI，其它操作会报错，([JDK安装](http://blog.gl6.cc/?p=29))
+
+    
+    cd ~
+    wget http://mirrors.hust.edu.cn/apache/lucene/solr/5.0.0/solr-5.0.0.zip
+    unzip -q solr-5.0.0.zip
+    cd solr-5.0.0
+    
+
+
+3. 测试运行,如果能够打开 http://localhost:8983/solr/ 表示solr应经运行成功，可以接下来的学习了
+
+    
+    bin/solr start -e cloud -noprompt
+
+
+
+[![QQ截图20150331001903](http://blog.gl6.cc/wp-content/uploads/2015/03/QQ截图20150331001903-297x300.png)](http://blog.gl6.cc/wp-content/uploads/2015/03/QQ截图20150331001903.png)
+
+[![QQ截图20150331002117](http://blog.gl6.cc/wp-content/uploads/2015/03/QQ截图20150331002117-300x108.png)](http://blog.gl6.cc/wp-content/uploads/2015/03/QQ截图20150331002117.png)
+
+
+

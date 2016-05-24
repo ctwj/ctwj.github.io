@@ -1,0 +1,177 @@
+---
+author: ww
+comments: true
+date: 2015-05-11 07:06:42+00:00
+layout: post
+link: http://www.gl6.cc/blog/plupload-%e4%b8%8a%e4%bc%a0%e6%96%87%e4%bb%b6.html
+slug: plupload-%e4%b8%8a%e4%bc%a0%e6%96%87%e4%bb%b6
+title: plupload 上传文件
+wordpress_id: 86
+categories:
+- PHP
+---
+
+网页代码
+
+
+
+                        
+
+
+                            
+                            
+
+
+                                [[选择文件...]](;)
+                                [[上传文件...]](;)
+                            
+
+
+
+                        
+
+
+                        
+
+Your browser doesn't have Flash, Silverlight or HTML5 support.
+
+
+                    
+
+
+
+上传到upyun
+
+    $('#selecthobby').multiSelect();
+    var d= new Date();
+    var options = {
+        'bucket': 'bucket',                //bucket
+        'save-key': '/article/'+ d.getFullYear()+'/'+ d.getMonth()+'/'+ d.getDate()+'/{{ username }}/'+ d.getTime(),
+        'expiration': Math.floor(new Date().getTime() / 1000) + 86400
+    };
+    // 查看更多参数：http://docs.upyun.com/api/form_api/#表单API接口简介
+    var policy = window.btoa(JSON.stringify(options));
+    // 从 UPYUN 用户管理后台获取表单 API
+    var form_api_secret = 'kekekekekekkekekekkekekekekey';   //key
+    var signature = md5(policy + '&' + form_api_secret);
+    var uploader = new plupload.Uploader({
+        runtimes : 'html5,flash,silverlight,html4',
+        browse_button : 'pickfiles', // you can pass in id...
+        container: document.getElementById('container'), // ... or DOM Element itself
+        flash_swf_url : 'lib/plupload-2.1.2/js/Moxie.swf',
+        silverlight_xap_url : 'lib/plupload-2.1.2/js/Moxie.xap',
+        url : 'http://v0.api.upyun.com/' + options.bucket,
+        multipart_params: {
+            'Filename': '${filename}', // adding this to keep consistency across the runtimes
+            'Content-Type': '',
+            'policy': policy,
+            'signature': signature
+        },
+
+        init: {
+            PostInit: function() {
+                document.getElementById('filelist').innerHTML = '';
+
+                document.getElementById('uploadfiles').onclick = function() {
+                    uploader.start();
+                    return false;
+                };
+            },
+
+            FilesAdded: function(up, files) {
+                plupload.each(files, function(file) {
+                    document.getElementById('filelist').innerHTML += '
+
+' + file.name + ' (' + plupload.formatSize(file.size) + ') ****
+
+';
+                });
+            },
+
+            UploadProgress: function(up, file) {
+                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '' + file.percent + "%";
+            },
+
+            FileUploaded: function(up, file, info) {
+                var response = JSON.parse(info.response);
+                if (response.code == 200) {
+                    var imageurl = 'http://hn-image.b0.upaiyun.com';
+                    imageurl = imageurl + response.url;
+                    document.getElementById('filelist').innerHTML = '
+
+' + file.name + ' (' + plupload.formatSize(file.size) + ') ****'
+                        +'![]('+imageurl+')'
+                        +'
+
+';
+
+                    document.getElementById('inputuserimage').value=imageurl;
+                    //document.getElementById('inputuserimage').value=response.url;
+                }
+                console.log(response.url);
+            },
+
+            Error: function(up, err) {
+                document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+            }
+        }
+    });
+
+    uploader.init();
+
+
+
+
+
+直接上传到web
+
+    var uploader = new plupload.Uploader({
+        runtimes : 'html5,flash,silverlight,html4',
+        browse_button : 'pickfiles', // you can pass in id...
+        container: document.getElementById('container'), // ... or DOM Element itself
+        flash_swf_url : 'lib/plupload-2.1.2/js/Moxie.swf',
+        silverlight_xap_url : 'lib/plupload-2.1.2/js/Moxie.xap',
+        url : '{{ constant('RELATIVE_PATH') }}/Home/Article/uploadFile',
+
+        init: {
+            PostInit: function() {
+                document.getElementById('filelist').innerHTML = '';
+                document.getElementById('uploadfiles').onclick = function() {
+                    uploader.start();
+                    return false;
+                };
+            },
+
+            FilesAdded: function(up, files) {
+                plupload.each(files, function(file) {
+                    document.getElementById('filelist').innerHTML += '
+
+' + file.name + ' (' + plupload.formatSize(file.size) + ') ****
+
+';
+                });
+            },
+
+            UploadProgress: function(up, file) {
+                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '' + file.percent + "%";
+            },
+
+            FileUploaded: function(up, file, info) {
+                var response = JSON.parse(info.response);
+                if (response.code == 200) {
+                    $("#attachementlist").append('
+* '+response.filename+'
+');
+                } else {
+                    alert('文件上传失败:'+response.error.message);
+                }
+            },
+
+            Error: function(up, err) {
+                document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+            }
+        }
+    });
+
+    uploader.init();
+

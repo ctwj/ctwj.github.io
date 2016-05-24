@@ -1,0 +1,117 @@
+---
+author: ww
+comments: true
+date: 2015-09-19 02:25:15+00:00
+layout: post
+link: http://www.gl6.cc/blog/ecshop-%e7%bb%99%e7%94%a8%e6%88%b7%e8%b5%84%e6%96%99%e6%b7%bb%e5%8a%a0%e8%ba%ab%e4%bb%bd%e8%af%81%e5%9b%be%e7%89%87.html
+slug: ecshop-%e7%bb%99%e7%94%a8%e6%88%b7%e8%b5%84%e6%96%99%e6%b7%bb%e5%8a%a0%e8%ba%ab%e4%bb%bd%e8%af%81%e5%9b%be%e7%89%87
+title: ecshop 给用户资料添加身份证图片
+wordpress_id: 147
+categories:
+- ECShop
+tags:
+- ecshop
+---
+
+1. 数据的保存
+用户的扩展数据保存在  ecs_reg_fields,ecs_reg_extend_info 中
+其中 前者是名字，后者为内容
+
+2. 添加一个身份证字段
+INSERT INTO ecs_reg_fields (id,reg_file_name,dis_order,display,type,is_need) VALUES ('7','身份证照片',0,1,0,0)
+
+有地方存数据后开始修改代码
+因为上传图片函数upload_file在 lib_main.php 中，在 init.php 中已经include了，所以不用新include file
+
+3. 找到修改个人资料的处理，有个循环是循环更新扩展用户信息
+因为我们插入的记录中 身份证照片字段是7，所以添加如下代码
+
+    
+    
+    if ( $val['id'] == 7) {
+    
+                $id_img = (isset($_FILES['id_img']['error']) && $_FILES['id_img']['error'] == 0) || (!isset($_FILES['id_img']['error']) && isset($_FILES['id_img']['tmp_name']) && $_FILES['id_img']['tmp_name'] != 'none')? $_FILES['id_img'] : array();
+    
+                if ( !empty( $id_img ) ) {
+                    $id_img_path = upload_file($id_img, 'identityimg');
+    
+                    if ( !$id_img_path ) {
+                        $error_message = $GLOBALS['err']->last_message();
+                        show_message($error_message[0], '返回到用户中心', 'user.php?act=profile', 'error');
+                    }
+                    $_POST[$extend_field_index] = $id_img_path;
+                }
+            }
+    
+
+
+最后把图片地址放到post里面，是因为系统代码就是访问这个变量处理的。
+
+4. 因为上传用到了一个文件夹，第二个参数。
+所以需要在 data目录创建一个文件夹identityimg来存放图片，
+否则无法上传成功。
+
+5. 代码修改好，最后修改模板，模板文件为 user_transaction.dwt
+因为是扩展字段 $extend_info_list ，直接找到目标位置。
+根据field.id = 7 来添加判断条件。
+有个条件判断，是如果有值，则显示图片，没有则显示上传按钮。
+
+    
+    
+    
+    					<tr>
+    						<td class="label" id="extend_field{$field.id}i">{$field.reg_field_name}：</td>
+    						<td>
+    							<span style="color:#FF0000"> *</span>
+    						</td>
+    					</tr>
+    					
+                            
+                            <tr>
+                                <td class="label" id="extend_field{$field.id}i">
+                                {$field.reg_field_name}：
+                                </td>
+                                <td id="extend_field{$field.id}">
+                                <img src="data/identityimg/{$field.content}">
+                                <a href="#">更换</a>
+                                </td>
+                            </tr>
+                            
+                                <tr>
+                                <td class="label" id="extend_field{$field.id}i">{$field.reg_field_name}：</td>
+                                <td></td>
+                                </tr>
+                                <tr>
+                                      <td> </td>
+                                      <td>
+                                      {$lang.img_type_tips}<br></br>
+                                      能够上传如下格式 gif、jpg、png
+                                      </td>
+                                </tr>
+                            
+                        
+    
+
+
+
+6. 其中 有个移除原图片的操作，javascript函数添加在 user.js 中
+
+    
+    
+    function removePic()
+    {
+        var newTag = document.createElement("td");
+        newTag.innerHTML = "<a href="#">更换</a>";
+    
+        var imgTag = document.getElementById('extend_field7');
+    
+        imgTag.parentNode.insertBefore(newTag,imgTag);
+        parentTag = imgTag.parentNode;
+        parentTag.removeChild(imgTag);
+    
+    }
+    
+
+
+
+7. 给form添加 enctype="multipart/form-data" ，否则表单不能穿图片

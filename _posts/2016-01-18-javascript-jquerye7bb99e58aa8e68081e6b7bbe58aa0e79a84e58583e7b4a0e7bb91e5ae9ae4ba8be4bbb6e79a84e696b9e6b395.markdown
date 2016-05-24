@@ -1,0 +1,29 @@
+---
+author: ww
+comments: true
+date: 2016-01-18 02:23:04+00:00
+layout: post
+link: http://www.gl6.cc/blog/javascript-jquery%e7%bb%99%e5%8a%a8%e6%80%81%e6%b7%bb%e5%8a%a0%e7%9a%84%e5%85%83%e7%b4%a0%e7%bb%91%e5%ae%9a%e4%ba%8b%e4%bb%b6%e7%9a%84%e6%96%b9%e6%b3%95.html
+slug: javascript-jquery%e7%bb%99%e5%8a%a8%e6%80%81%e6%b7%bb%e5%8a%a0%e7%9a%84%e5%85%83%e7%b4%a0%e7%bb%91%e5%ae%9a%e4%ba%8b%e4%bb%b6%e7%9a%84%e6%96%b9%e6%b3%95
+title: '[javascript] jQuery给动态添加的元素绑定事件的方法'
+wordpress_id: 438
+categories:
+- Javascript
+- uncategorized
+tags:
+- javascript
+- jquery
+---
+
+jquery 1.7版以前使用live动态绑定事件
+
+$("#testdiv ul li").live("click",function(){
+
+//do something here
+});
+
+jquery 1.7版以后使用on动态绑定事件
+
+$("#testdiv ul").on("click","li", function() {
+//do something here
+});

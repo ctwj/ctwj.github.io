@@ -1,0 +1,34 @@
+---
+author: ww
+comments: true
+date: 2015-11-21 01:29:05+00:00
+layout: post
+link: http://www.gl6.cc/blog/php%e5%88%a4%e6%96%ad%e6%96%87%e4%bb%b6%e5%a4%b9%e6%98%af%e5%90%a6%e5%8f%af%e5%86%99.html
+slug: php%e5%88%a4%e6%96%ad%e6%96%87%e4%bb%b6%e5%a4%b9%e6%98%af%e5%90%a6%e5%8f%af%e5%86%99
+title: php判断文件夹是否可写
+wordpress_id: 292
+categories:
+- PHP
+---
+
+php 测试文件夹是否可写
+
+    
+    function dir_writeable($dir) {
+        if(!is_dir($dir)) {
+            @mkdir($dir, 0777);
+        }
+        if(is_dir($dir)) {
+            if($fp = @fopen("$dir/test.txt", 'w')) {
+                @fclose($fp);
+                @unlink("$dir/test.txt");
+                $writeable = 1;
+            } else {
+                $writeable = 0;
+            }
+        }
+        return $writeable;
+    }
+
+
+

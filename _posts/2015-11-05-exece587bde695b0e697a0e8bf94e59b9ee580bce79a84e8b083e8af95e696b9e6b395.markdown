@@ -1,0 +1,55 @@
+---
+author: ww
+comments: true
+date: 2015-11-05 06:04:57+00:00
+layout: post
+link: http://www.gl6.cc/blog/exec%e5%87%bd%e6%95%b0%e6%97%a0%e8%bf%94%e5%9b%9e%e5%80%bc%e7%9a%84%e8%b0%83%e8%af%95%e6%96%b9%e6%b3%95.html
+slug: exec%e5%87%bd%e6%95%b0%e6%97%a0%e8%bf%94%e5%9b%9e%e5%80%bc%e7%9a%84%e8%b0%83%e8%af%95%e6%96%b9%e6%b3%95
+title: exec 函数无返回值的调试方法
+wordpress_id: 200
+categories:
+- PHP
+- uncategorized
+---
+
+## 本文记录 exec 不显示错误的调试方法
+
+
+代码如下
+
+    
+    $command = "cat 1.txt";
+    $command = EscapeShellCmd($command);
+    exec($command, $output, $return_val);
+    
+
+
+exec函数有三个参数
+
+
+
+	
+  * 执行的命令
+
+	
+  * 最后一句输出
+
+	
+  * 返回值，0表示成功，其他失败
+
+
+exec()执行外部命令失败，但没有任何错误信息。
+
+假如你的命令是
+
+    
+    cat 1.txt
+
+
+就可以改成
+
+    
+    cat 1.txt 2>&1
+
+
+这样就把错误信息重定向到了正常管道，能看到错误信息了

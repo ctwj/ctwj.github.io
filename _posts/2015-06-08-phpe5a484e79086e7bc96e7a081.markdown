@@ -1,0 +1,21 @@
+---
+author: ww
+comments: true
+date: 2015-06-08 17:46:01+00:00
+layout: post
+link: http://www.gl6.cc/blog/php%e5%a4%84%e7%90%86%e7%bc%96%e7%a0%81.html
+slug: php%e5%a4%84%e7%90%86%e7%bc%96%e7%a0%81
+title: php处理编码
+wordpress_id: 101
+categories:
+- PHP
+tags:
+- php
+- 编码
+---
+
+// 处理编码
+$encode = mb_detect_encoding($content, array("ASCII" ,"UTF-8","GB2312","BIG5"));
+if ($encode != "UTF-8") {
+$content = iconv($encode, "UTF-8",$content);
+}

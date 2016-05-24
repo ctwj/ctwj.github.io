@@ -1,0 +1,29 @@
+---
+author: ww
+comments: true
+date: 2015-09-26 16:25:47+00:00
+layout: post
+link: http://www.gl6.cc/blog/wordpress-7%e4%b8%aa%e4%b8%8d%e9%94%99%e7%9a%84%e6%8f%92%e4%bb%b6.html
+slug: wordpress-7%e4%b8%aa%e4%b8%8d%e9%94%99%e7%9a%84%e6%8f%92%e4%bb%b6
+title: WordPress 7个不错的插件
+wordpress_id: 161
+categories:
+- WordPress
+tags:
+- wordpress
+- 插件
+---
+
+SEO friendly image
+
+WP Socializer
+
+Contact Form 7
+
+wordpress SEO yoast
+
+SumoMe Listbuilder
+
+Google xml sitemap
+
+Yoast Google Analytics

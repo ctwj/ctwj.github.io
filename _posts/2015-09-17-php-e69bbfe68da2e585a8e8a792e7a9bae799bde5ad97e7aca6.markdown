@@ -1,0 +1,35 @@
+---
+author: ww
+comments: true
+date: 2015-09-17 23:49:15+00:00
+layout: post
+link: http://www.gl6.cc/blog/php-%e6%9b%bf%e6%8d%a2%e5%85%a8%e8%a7%92%e7%a9%ba%e7%99%bd%e5%ad%97%e7%ac%a6.html
+slug: php-%e6%9b%bf%e6%8d%a2%e5%85%a8%e8%a7%92%e7%a9%ba%e7%99%bd%e5%ad%97%e7%ac%a6
+title: php 替换全角空白字符
+wordpress_id: 127
+categories:
+- PHP
+tags:
+- 编码
+---
+
+<blockquote>$full_width_space = "xe3x80x80";
+$content= str_ireplace($full_width_space, '', $content);</blockquote>
+
+
+php中全角空格替换
+
+在php中用str_replace函数替换utf-8编码文本中的全角空格，下面几个表示全角空格的方法都不好用：
+两个半角空格表示全角空格；
+直接在代码里面输全角空格；
+用s空格表示全角空格;
+解决方案：
+全角空格的utf-8编码是0xe38080，gbk编码是0xa1a1。
+在 utf-8编码编辑器中全角空格要写为$full_width_space = “xe3x80x80”;
+在非utf-8编码编辑器里全角空格要写为$full_width_space = iconv(‘gbk’, ‘utf-8’, “xa1xa1”);
+
+
+
+替换文章列表前一些字符空白
+
+preg_replace('/\x{3000}/u','',$text);

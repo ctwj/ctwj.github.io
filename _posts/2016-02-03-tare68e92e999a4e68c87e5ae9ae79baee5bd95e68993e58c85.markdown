@@ -1,0 +1,39 @@
+---
+author: ww
+comments: true
+date: 2016-02-03 03:23:31+00:00
+layout: post
+link: http://www.gl6.cc/blog/tar%e6%8e%92%e9%99%a4%e6%8c%87%e5%ae%9a%e7%9b%ae%e5%bd%95%e6%89%93%e5%8c%85.html
+slug: tar%e6%8e%92%e9%99%a4%e6%8c%87%e5%ae%9a%e7%9b%ae%e5%bd%95%e6%89%93%e5%8c%85
+title: tar排除指定目录打包
+wordpress_id: 460
+categories:
+- Linux
+tags:
+- tar
+---
+
+假设 test目录下有 1 2 3 4 5 这5个目录
+现在要将 3 4 5目录tar打包,1和2目录不要
+命令如下：
+
+tar -zcvf test.tar.gz --exclude=1 --exclude=2 test
+
+或
+
+tar -zcvf test.tar.gz --exclude=test/1 --exclude=test/2 test
+
+看man tar帮助,--exclude后面跟的好像是正则
+注意: 要打包的test必须在命令最后,不然没有效果.
+
+
+
+将 /etc/ 内的所有文件备份下来，并且保存其权限！
+tar -zxvpf /tmp/etc.tar.gz /etc
+#这个 -p 的属性是很重要的，尤其是当您要保留原本文件的属性时！
+
+在 /home 当中，比 2010/06/01 新的文件才备份
+tar -N '2010/06/01' -zcvf home.tar.gz /home
+
+备份 /home, /etc ，但不要 /home/dmtsai
+tar --exclude /home/dmtsai -zcvf myfile.tar.gz /home/* /etc

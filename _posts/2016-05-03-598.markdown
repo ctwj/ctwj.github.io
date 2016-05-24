@@ -1,0 +1,27 @@
+---
+author: ww
+comments: true
+date: 2016-05-03 01:59:35+00:00
+layout: post
+link: http://www.gl6.cc/blog/598.html
+slug: '598'
+title: 使用Genymotion调试出现错误INSTALL_FAILED_CPU_ABI_INCOMPATIBLE解决办法
+wordpress_id: 598
+categories:
+- uncategorized
+tags:
+- Genymotion
+- 模拟器
+---
+
+下载:
+http://filetrip.net/dl?4SUOrdcMRv 需要翻墙
+
+百度网盘:
+http://pan.baidu.com/s/1eSNjSOy
+如果还不行,再试试下面这个
+http://pan.baidu.com/s/1o7G7Jrs
+
+重启生效
+
+参考: http://forum.xda-developers.com/showthread.php?t=2528952

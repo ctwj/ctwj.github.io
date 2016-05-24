@@ -1,0 +1,20 @@
+---
+author: ww
+comments: true
+date: 2016-03-03 04:02:01+00:00
+layout: post
+link: http://www.gl6.cc/blog/mysql-if%e5%87%bd%e6%95%b0.html
+slug: mysql-if%e5%87%bd%e6%95%b0
+title: '[mysql] if函数'
+wordpress_id: 508
+categories:
+- database
+- uncategorized
+tags:
+- mysql
+---
+
+
+
+    
+    select  if ( now()>vtime, '过期', vtime) as v_time from table;

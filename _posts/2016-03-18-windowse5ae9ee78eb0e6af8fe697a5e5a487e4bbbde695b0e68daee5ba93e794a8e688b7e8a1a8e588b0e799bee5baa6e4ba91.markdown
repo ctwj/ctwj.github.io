@@ -1,0 +1,26 @@
+---
+author: ww
+comments: true
+date: 2016-03-18 07:03:35+00:00
+layout: post
+link: http://www.gl6.cc/blog/windows%e5%ae%9e%e7%8e%b0%e6%af%8f%e6%97%a5%e5%a4%87%e4%bb%bd%e6%95%b0%e6%8d%ae%e5%ba%93%e7%94%a8%e6%88%b7%e8%a1%a8%e5%88%b0%e7%99%be%e5%ba%a6%e4%ba%91.html
+slug: windows%e5%ae%9e%e7%8e%b0%e6%af%8f%e6%97%a5%e5%a4%87%e4%bb%bd%e6%95%b0%e6%8d%ae%e5%ba%93%e7%94%a8%e6%88%b7%e8%a1%a8%e5%88%b0%e7%99%be%e5%ba%a6%e4%ba%91
+title: windows实现每日备份数据库用户表到百度云
+wordpress_id: 541
+categories:
+- database
+- uncategorized
+tags:
+- mysql
+- 备份
+---
+
+添加bat文件
+@echo off
+set Today=%date:~0,4%%date:~5,2%%date:~8,2%
+mkdir %date:~0,4%%date:~5,2%\%date:~8,2%
+mysqldump -uroot -ppassword database table %date:~0,4%%date:~5,2%\%date:~8,2%\table.sql
+
+添加计划任务设置每日执行一次脚本
+
+百度云将目录设置为自动备份

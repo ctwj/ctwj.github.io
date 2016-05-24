@@ -1,0 +1,71 @@
+---
+author: ww
+comments: true
+date: 2016-02-17 07:38:10+00:00
+layout: post
+link: http://www.gl6.cc/blog/delphi-%e4%bd%bf%e7%94%a8%e3%80%80phprpc%e3%80%80%e8%bf%9c%e7%a8%8b%e5%87%bd%e6%95%b0%e8%b0%83%e7%94%a8.html
+slug: delphi-%e4%bd%bf%e7%94%a8%e3%80%80phprpc%e3%80%80%e8%bf%9c%e7%a8%8b%e5%87%bd%e6%95%b0%e8%b0%83%e7%94%a8
+title: '[delphi] 使用 phprpc 远程函数调用'
+wordpress_id: 466
+categories:
+- Delphi
+- uncategorized
+tags:
+- delphi
+- phprpc
+---
+
+ 
+
+    
+    function passApiParam( pass:String):String;
+      var
+        Obj, ChildObj: TJsonObject;
+      begin
+        Obj := TJsonObject.Create;
+        try
+          Obj.S['pass'] := pass;
+          Result := Obj.ToJSON( False );
+        finally
+          Obj.Free;
+        end;
+      end;
+
+
+
+
+
+    
+    var
+      clientProxy: Variant;
+      vhashmap: Variant;
+      ohashmap,datamap : THashMap;
+      para_str : String;
+    
+    begin
+      // http://www.phprpc.org/zh_CN/docs/
+      clientProxy := phprpcdhtpclnt1.useService('http://localhost/Api/Exploit/?service=PHP.OShell');
+    
+    
+      // 编码参数
+      para_str := passApiParam('bb');
+    
+    
+      // 参数是，把键和值，编码成json　再转换成varint传就可以了，
+      // 返回的数据是variant，可以映射成thashmap; 就能通过key获取值了
+      // 如果值还是数组，再映射一下，就能取出值了
+      vhashmap :=  clientProxy.response( Variant(AnsiToUtf8(para_str)) );
+    
+    
+      ohashmap := THashMap(THashMap.FromVariant(vhashmap));
+    
+      if ( ohashmap['ret'] = 200 ) then
+      begin
+        datamap := THashMap(THashMap.FromVariant(ohashmap['data']));
+        mmoShell.Lines.Add(datamap['code']);
+      end;
+    
+    end;
+
+
+

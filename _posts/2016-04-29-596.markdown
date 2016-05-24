@@ -1,0 +1,33 @@
+---
+author: ww
+comments: true
+date: 2016-04-29 02:19:03+00:00
+layout: post
+link: http://www.gl6.cc/blog/596.html
+slug: '596'
+title: '[php] TP模版中时间处理'
+wordpress_id: 596
+categories:
+- PHP
+tags:
+- thinkphp
+- 日期
+- 模版
+---
+
+1. 日期字符串的截取,取时间的月日
+`{$vo.birthday|substr=5,5}`
+
+2. 时间戳的格式化
+`{$dm|default=time()|date='m-d',###}`
+
+3. 模版中比较
+ 
+
+    
+    <if condition="substr($vo['birthday'],5,5) == date('m-d',time())">
+      今天生日
+     </if>
+
+
+这里不能用$vo.birthday
