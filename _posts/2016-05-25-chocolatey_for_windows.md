@@ -54,6 +54,7 @@ powershell 4.0 [介绍](http://www.pstips.net/windows-management-framework-4-0-i
 装个7zip
 	
 	C:\Windows\System32\WindowsPowerShell\v1.0>choco install 7zip.install
+
 ![](http://i4.buimg.com/af7ee9f0dd115bd6.jpg)
 
 当前一共有 ***3950*** 个软件可以安装
