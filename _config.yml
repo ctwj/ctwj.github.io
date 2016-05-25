@@ -32,7 +32,7 @@ google_analytics: UA-77807415-1
 
 # Build settings
 highlighter: pygments
-markdown: redcarpet
+markdown: kramdown
 redcarpet:
 extensions: ["fenced_code_blocks", "tables", "highlight", "strikethrough"]
 sass:
