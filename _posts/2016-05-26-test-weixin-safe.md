@@ -3,7 +3,7 @@ layout: post
 title: "公众号安全测试"
 data: 2016-05-26 11:09:11 
 categories: safe
-tags: 
+tags: weixin burpsuite mysql 公众号
 ---
 
 ## 公众号安全测试 ##
@@ -52,7 +52,7 @@ tags:
 
 	![Inject](http://i.imgur.com/sef5d43.jpg)
 
-使用burpsuit 快速获取信息,有点不会因为扫描访问过快被封ip
+使用burpsuit 快速获取信息,优点是不会因为扫描访问过快被封ip
 
 1. 获取数据库
 
