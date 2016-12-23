@@ -1,3 +1,11 @@
+---
+layout: post
+title: "Eric Window Install"
+data: 2016-10-11 11:09:11 
+categories: python
+tags: python eric
+---
+
 ## Eric Window 安装
 
 Python 2.7
