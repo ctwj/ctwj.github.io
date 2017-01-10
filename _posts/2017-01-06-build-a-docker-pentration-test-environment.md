@@ -10,12 +10,13 @@ tags: linux
 
 今天我们通过Docker构建一个渗透平台, 不需要系统装任何环境.
 
-准备工作,首先架设docker已经装好了
+准备工作,首先架设docker已经装好了,默认docker-machine的ip为192.168.99.100
 
 >**下载容器**  
 >$ docker pull owasp/zap2docker-stable  
->$ docker pull citizenstig/dvwa  
+>$ docker pull benoitg/dvwa  
 >$ docker pull jmbmxer/threadfix  
+>$ docker pull remnux/metasploit  
 
 
 1. Zap
@@ -29,7 +30,7 @@ tags: linux
 
 	![](http://i.imgur.com/XsbCwj4.jpg)
 
-	输入`localhost`和设置密码,根据Zap的手册,就可以配置好ZAP了.
+	输入`192.168.99.100`和设置密码,根据Zap的手册,就可以配置好ZAP了.
 
 	![](http://i.imgur.com/CDHWyGw.jpg) 
 
@@ -37,8 +38,8 @@ tags: linux
 
 2. DVWA
 
-	>**dvwa环境**
-	>$ docker run -d -p 8081:80 --name dvwa citizenstig/dvwa  
+	>**dvwa环境**    
+	>$ docker run --name dvwa -p 8082:80 -d benoitg/dvwa  
 	>**等待启动完成**  
 	>$ docker  logs -f dvwa   
 	
@@ -47,6 +48,30 @@ tags: linux
 	![](http://i.imgur.com/YY9t0GV.jpg)
 
 3. ThreadFix
+
+	>**Threadfix**
+	>$ docker run -d -p 8443:8443 --name threadfix jmbmxer/threadfix start
+	
+	打开浏览器并登录 https://192.168.99.100:8443/threadfix 就可以开始使用了。
+	
+4. Metasploit
+
+	>$ docker run -it -p 443:443 -v ~/.msf4:/root/.msf4 -v /tmp/msf:/tmp/data --name=msf remnux/metasploit  
+	
+5. QuasiBot	
+
+	>git clone https://github.com/Smaash/quasibot.git   
+	>$ docker run -itd -p 80:80 --name=web nickistre/ubuntu-lamp. 
+	>$ docker cp ./quasibot web:/var/www/html  
+	>$ docker exec -it web apt-get install php5-curl  
+	>$ docker exec -it web /etc/init.d/apache2 restart    
+	
+	进入容器将`/var/www/html/quasibot`内容移到上一层目录。  
+	配置 `/var/www/html/config.php` 的mysql密码为空。  
+	访问 https://192.168.99.100 输入 quasi:changeme  登陆系统
+	
+	
+6. 
 
 
 参考 http://softwaretester.info/build-a-docker-penetration-test-environment/
