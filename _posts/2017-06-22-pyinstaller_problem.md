@@ -3,7 +3,7 @@ author: ww
 date: 2017-01-10 01:15:57+00:00
 title: Pyinstaller 打包，程序一闪而过
 categories:
-- python
+- Linux
 tags:
 - python
 - pyinstaller
