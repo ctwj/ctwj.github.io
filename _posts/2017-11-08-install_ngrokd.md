@@ -110,7 +110,7 @@ tunnels:
             http: 80
 </pre></code>  
 	可以通过运行命令 `ngrok.exe -config ngrok.cfg start api`  
-	来把本机**80**端口指向到 **http://api.dtg.win**
+	来把本机**80**端口指向到 **http://api.d6g.win**
 - 运行命令
 	`ngrok -config ngrok.cfg 127.0.0.1:80` 能够得到一个随机的二级域名
 	![](https://i.imgur.com/e1zpeoF.png)  
