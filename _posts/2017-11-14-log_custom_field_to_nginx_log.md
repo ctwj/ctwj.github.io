@@ -32,4 +32,4 @@ tags:
 6. Now we can test it ! 
 	![](https://i.imgur.com/UiJl7Fl.png)
 
-7. have something need attention to. about the nginx version.if the version greater than or equal to  1.9.7, we need add prefix **`sent_http_`**, else we just need add **`http_`**
+7. if you can finish it, maybe you can pay attention to nginx version.if the version greater than or equal to  1.9.7, we need add prefix **`sent_http_`**, else we just need add **`http_`**
