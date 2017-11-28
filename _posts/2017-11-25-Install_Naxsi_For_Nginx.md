@@ -10,7 +10,7 @@ tags:
 
 ## Install Naxsi
 
-- download naxsi source code
+- download naxsi [source code](https://github.com/nbs-system/naxsi/archive/master.zip)
 
 ```php
 [root@mail src]# pwd
@@ -37,7 +37,7 @@ configure arguments: --prefix=/usr/local/etc/nginx --with-pcre=/usr/local/src/pc
 
 ```php
 [root@mail naxsi_src]# cd /usr/local/src/nginx-1.4.2
-[root@mail nginx-1.4.2]# ./configure --prefix=/usr/local/etc/nginx --with-pcre=/usr/local/src/pcre-8.38 --with-zlib=/usr/local/src/zlib-1.2.8 --conf-path=/usr/local/etc/nginx/nginx.conf --pid-path=/usr/local/etc/nginx/conf/nginx.pid --with-http_ssl_module --with-openssl=/usr/local/src/openssl-1.0.1c --add-module=/usr/local/src/headers-more-nginx-module-0.23 --add-module=/usr/local/src/nginx-http-concat-master --add-module=/usr/local/src/naxsi-master/naxsi_src
+[root@mail nginx-1.4.2]# ./configure --prefix=/usr/local/etc/nginx --add-module=/usr/local/src/naxsi-master/naxsi_src --with-pcre=/usr/local/src/pcre-8.38 --with-zlib=/usr/local/src/zlib-1.2.8 --conf-path=/usr/local/etc/nginx/nginx.conf --pid-path=/usr/local/etc/nginx/conf/nginx.pid --with-http_ssl_module --with-openssl=/usr/local/src/openssl-1.0.1c --add-module=/usr/local/src/headers-more-nginx-module-0.23 --add-module=/usr/local/src/nginx-http-concat-master 
 [root@mail nginx-1.4.2]# make && make install
 ```
 
@@ -96,3 +96,7 @@ server {
 ```
 
 - restart nginx
+- [IMPORTANT](https://github.com/nbs-system/naxsi/wiki/naxsi-compil)  
+
+	You need to remember this : NGINX will decide the order of modules according the order of the module's directive in nginx's ./configure. So, no matter what (except you really know what you are doing) put naxsi first in your ./configure. If you don't do so, you might run into various problems, from random / unpredictable behaviors to non-effective WAF.
+- At the last,I spend two day to test,but I faild, maxsi didn't work!
