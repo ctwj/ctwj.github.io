@@ -1,0 +1,21 @@
+<article class="wrapper style1 align-left">
+ <div class="inner">
+   <div class="header">
+     <h1 class="title"><%- post.title %></h1>
+     <div>
+       <span>日期：<%- date(post.date, 'YYYY/M/D') %></span>
+       <span>字数：<%- strip_html(post.content).length %></span>
+     </div>
+   </div>
+   <%- post.content %>
+ </div>
+ <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+ <div id="vcomments"></div>
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: '<%- theme.valine.API_ID %>',
+            appKey: '<%- theme.valine.API_KEY %>',
+        });
+    </script>
+</article>

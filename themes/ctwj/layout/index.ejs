@@ -1,0 +1,41 @@
+<%- partial('_partial/header') %>
+<body class="is-preload">
+
+<!-- Wrapper -->
+        <div id="wrapper" class="divided">
+
+            <% page.posts.each(function(post){ %>
+             <section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
+               <div class="content">
+                 <h2><a href="<%- url_for(post.path) %>"><%= post.title %></a></h2>
+                 <p><%= post.description %></p>
+                 <ul class="actions stacked">
+                   <li><a href="<%- url_for(post.path) %>" class="button">Learn More</a></li>
+                 </ul>
+               </div>
+               <div class="image">
+                 <img src="<%= post.photos %>" alt="" />
+               </div>
+             </section>
+            <% }) %> 
+
+
+            <!-- Footer -->
+                <footer class="wrapper style1 align-center">
+                    <div class="inner">
+                        <ul class="icons">
+                            <li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+                            <li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+                            <li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+                            <li><a href="#" class="icon brands style2 fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+                            <li><a href="#" class="icon style2 fa-envelope"><span class="label">Email</span></a></li>
+                        </ul>
+                        <p>&copy; Untitled. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+                    </div>
+                </footer>
+
+        </div>
+</body>
+<footer>
+<%- partial('_partial/footer') %>
+</footer>
