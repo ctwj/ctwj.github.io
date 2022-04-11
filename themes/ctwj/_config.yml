@@ -1,29 +1,3 @@
 valine:
   API_ID: KcdKLtMNO9aYyv1gANiS94tu-gzGzoHsz
   API_KEY: 2nMmOqKC9dPh37urNvWHCTuY
-
-default_category: uncategorized
-
-category_map:
-  新房: house
-  二手房: resold_house
-  装修流程: decorate
-  买房准备: prepare_buy
-  看房选房: choose_house
-  订房签约: booking_contract
-  贷款办理: loan
-  缴税过户: tax
-  收房验房: check_house
-  退房维权: maintain_legal_rights
-  装修前准备: prepare_decorate
-  装修合同: decorate_contract
-  水电: water_electricity
-  厨卫: kitchen_bath
-  墙顶地: wall_ceil_floor
-  门窗: door_window
-  家具: furniture
-  家电: appliances
-  入住: check_in
-  
-  
-
