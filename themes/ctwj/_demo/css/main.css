@@ -39,14 +39,20 @@ body {
 }
 
 /* appbar 中导航 */
-.nav-appbar {
+.nav-appbar,
+.nav-appbar .category-list {
     display: flex;
 }
-.nav-appbar .nav-item {
+.nav-appbar .nav-item,
+.nav-appbar .category-list-item {
     height: 26px;
     padding: 0 16px;
     border: 1px solid #14161A;
     color: #14161A;
+}
+.nav-appbar .category-list-child,
+.nav-appbar .category-list-count {
+    display: none;
 }
 .nav-appbar .nav-item.active {
     background-color: #14161A;
