@@ -1,74 +1,36 @@
 <section class="content">
     <div class="content-appbar">
-        <div class="content-appbar-item center active">s</div>
-        <div class="content-appbar-item center">s</div>
-        <div class="content-appbar-item center">s</div>
-        <div class="content-appbar-item center">s</div>
-        <div class="content-appbar-item center">s</div>
+<% 
+    // category_list
+    const category = main_category(page.path, is_home());
+    const pCate = site.categories.data.find(item => item.slug === category);
+    const pId = pCate._id;
+    const categories = site.categories.data.filter(item => item.parent === pId);
+
+    // category
+    const category_name =is_home() ? categories[0].name : page.category;
+%>
+<% for (item in categories) { %>
+    <div class="content-appbar-item center <% if (category_name === categories[item].name) {%>active<% }%>">
+        <a href="/<%= categories[item].path %>">
+            <%= categories[item].name %>
+        </a>
     </div>
+<% } %>
+    </div>
+<% 
+    const reg = new RegExp(`^${categories[0].slug.replace(/-/g, '_')}/`);
+    const posts = site.posts.data.filter(item => reg.test(item.slug.replace(/-/g, '_')));
+%>
     <div class="content-body">
         <div class="scroll-panel scroll">
-          <%- list_categories(site.categories,{depth: 2}) %> 
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才公摊面积有多坑， 看来你才公摊面积有多坑， 看来你才公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
-            <article class="content-body-article">
-                <span class="title">公摊面积有多坑， 看来你才</span>
-            </article>
+            <% for (let i = 0; i< posts.length; i++) { %>
+            <a href="/<%= posts[i].path %>">
+                <article class="content-body-article">
+                    <span class="title"><%= posts[i].title %></span>
+                </article>
+            </a>
+            <% } %>
         </div>
     </div>
 </section>

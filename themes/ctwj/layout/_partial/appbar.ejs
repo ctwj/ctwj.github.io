@@ -1,4 +1,10 @@
 <section class="appbar">
+    <%
+        let backUrl = '/';
+        if (is_post()) {
+            // log(page);
+        }
+    %>
     <div class="leading center">
         <a href="/" >
             <span class="iconfont">&#xe603;</span>
@@ -7,10 +13,16 @@
     <div class="appbar-title center"> 
         <% if (is_home() || is_show_appbar_nav(page.path)) { %>
         <nav class="nav-appbar">
-            <div class="nav-item center <%= is_appbar_nav_active(page.path, 'house/')%>">
+            <div class="nav-item center 
+            <% if (is_appbar_nav_active(page.path, 'house/') || is_home()) { %>
+                active
+            <% } %>">
                 <span>新房</span>
             </div>
-            <div class="nav-item center <%= is_appbar_nav_active(page.path, 'house_resold')%>">
+            <div class="nav-item center 
+            <% if (is_appbar_nav_active(page.path, 'house_resold')) { %>
+                active
+            <% } %>">
                 <span>二手房</span>
             </div>
         </nav>
@@ -18,7 +30,7 @@
             <div class="appbar-title center"> 
                 <span class="appbar-title-text"><%= page.category %></span>
             </div>
-        <% } else if (is_page()) { %>
+        <% } else if (is_post() || is_page()) { %>
             <div class="appbar-title center"> 
                 <span class="appbar-title-text"><%= page.title %></span>
             </div>
