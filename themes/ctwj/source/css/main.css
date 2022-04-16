@@ -51,8 +51,14 @@ a {
     border: 1px solid #14161A;
     color: #14161A;
 }
+.nav-appbar .nav-item a {
+    color: #14161A;
+}
 .nav-appbar .nav-item.active {
     background-color: #14161A;
+    color: white;
+}
+.nav-appbar .nav-item.active a {
     color: white;
 }
 

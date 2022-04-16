@@ -1,12 +1,15 @@
 <section class="appbar">
     <%
         let backUrl = '/';
-        if (is_post()) {
-            // log(page);
+        if (is_post() && page.categories) {
+            backUrl = `/categories/${page.categories.data[page.categories.data.length-1].slug}/`;
+        }
+        if (is_category() && page.categories) {
+            backUrl = `/categories/${page.categories.data[0].slug}/`;
         }
     %>
     <div class="leading center">
-        <a href="/" >
+        <a href="<%= backUrl %>" >
             <span class="iconfont">&#xe603;</span>
         </a> 
     </div>
@@ -17,13 +20,17 @@
             <% if (is_appbar_nav_active(page.path, 'house/') || is_home()) { %>
                 active
             <% } %>">
+            <a href="/categories/house/">
                 <span>新房</span>
+            </a>
             </div>
             <div class="nav-item center 
             <% if (is_appbar_nav_active(page.path, 'house_resold')) { %>
                 active
             <% } %>">
+            <a href="/categories/resold-house/">
                 <span>二手房</span>
+            </a>
             </div>
         </nav>
         <% } else if (is_category()) { %>
@@ -37,6 +44,6 @@
         <% }%>
     </div>
     <div class="right center">
-        <span class="iconfont">&#xe612;</span>
+        <!-- <span class="iconfont">&#xe612;</span> -->
     </div>
 </section>

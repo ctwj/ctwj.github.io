@@ -1,6 +1,3 @@
-hexo.extend.helper.register('log1', function(data ){
-    this.log(data);
-});
 
 /**
  * 是否需要显示 switch appbar
