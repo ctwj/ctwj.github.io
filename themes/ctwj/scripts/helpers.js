@@ -3,7 +3,7 @@
  * 是否需要显示 switch appbar
  */
 hexo.extend.helper.register('is_show_appbar_nav', function(path){
-    return /^categories\/(house|house_resold)/i.test(path);
+    return /^categories\/(house|resold\-house)/i.test(path);
 });
 
 /**
@@ -57,4 +57,12 @@ hexo.extend.helper.register('sub_category', function(path, category){
 hexo.extend.helper.register('is_appbar_nav_active', function(path, category){
     let reg = new RegExp(`^categories\/${category}`);
     return reg.test(path) ? 'active' : '';
+});
+
+
+/**
+ * 通过path 判断 base level
+ */
+hexo.extend.helper.register('level', function (base) {
+    return base.split('/').filter(item => !['categories', ''].includes(item)).length;
 });

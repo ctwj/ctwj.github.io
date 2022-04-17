@@ -7,11 +7,8 @@
     const pId = pCate._id;
     const categories = site.categories.data.filter(item => item.parent === pId);
 
-    const level = base => base.split('/').filter(item => !['categories', ''].includes(item));
-
     // category
     const category_name = (is_home() || level(page.base) == 1) ? categories[0].name : page.category;
-    log(category_name);
 %>
 <% for (item in categories) { %>
     <div class="content-appbar-item center <% if (category_name === categories[item].name) {%>active<% }%>">
