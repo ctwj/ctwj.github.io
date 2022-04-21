@@ -9,6 +9,7 @@
 
     // category
     const category_name = is_home() ? categories[0].name : page.category;
+    log(is_home, category_name, page.path);
     const current_slug = is_home() ? categories[0].slug : pCate.slug;
 %>
 <% for (item in categories) { %>
@@ -20,9 +21,12 @@
 <% } %>
     </div>
 <% 
-    const currCate = site.categories.data.find(item => item.name == category_name);
-    const reg = new RegExp(`^${currCate.slug.replace(/-/g, '_')}/`);
-    const posts = site.posts.data.filter(item => reg.test(item.slug.replace(/-/g, '_')));
+    let posts = [];
+    if (category_name) {
+        const currCate = site.categories.data.find(item => item.name == category_name);
+        const reg = new RegExp(`^${currCate.slug.replace(/-/g, '_')}/`);
+        posts = site.posts.data.filter(item => reg.test(item.slug.replace(/-/g, '_')));
+    }
 %>
     <div class="content-body">
         <div class="scroll-panel scroll">

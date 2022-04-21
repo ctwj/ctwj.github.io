@@ -14,6 +14,7 @@
         </a> 
     </div>
     <div class="appbar-title center"> 
+        <% page.path %>
         <% if (is_home() || is_show_appbar_nav(page.path)) { %>
         <nav class="nav-appbar">
             <div class="nav-item center 
@@ -25,7 +26,7 @@
             </a>
             </div>
             <div class="nav-item center 
-            <% if (is_appbar_nav_active(page.path, 'house_resold')) { %>
+            <% if (is_appbar_nav_active(page.path, 'resold-house')) { %>
                 active
             <% } %>">
             <a href="/categories/resold-house/">
