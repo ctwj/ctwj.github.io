@@ -37,18 +37,48 @@ hexo.extend.helper.register('sub_category', function(path, category){
     return 'house';
 });
 
+
+const CATEGORY_ORDER = [
+    { key: 'prepare-buy', value:  1 },
+    { key: 'choose-house', value:  2 },
+    { key: 'booking-contract', value:  3 },
+    { key: 'loan', value:  4 },
+    { key: 'tax', value:  5 },
+    { key: 'check-house', value:  6 },
+    { key: 'maintain-legal-rights', value:  7 },
+    { key: 'prepare-decorate', value:  8 },
+    { key: 'decorate-contract', value:  9 },
+    { key: 'water-electricity', value:  10 },
+    { key: 'kitchen-bath', value:  11 },
+    { key: 'wall-ceil-floor', value:  12 },
+    { key: 'door-window', value:  13 },
+    { key: 'furniture', value:  14 },
+    { key: 'appliances', value:  15 },
+    { key: 'check-in', value:  16 },
+];
+
 /**
- * 二层 category_list
+ *  category 排序
  */
- hexo.extend.helper.register('sub_category_list', function(categories, category){
-    // this.log('sub_category_list', category);
-    const cate = categories.data.find(item => item.name === category);
-    // this.log(cate, categories.data[0].name, category);
-    // const items = categories.filter(category => category.parent === item._id);
-    // this.log('sub_category', items);
-    // return items;
-    return [1,2];
+ hexo.extend.helper.register('category_order', function(categories){
+    // const orderFun = (a, b) => {
+    //     return a['order'] - b['order'] ? 1 : -1;
+    // }
+    categories.map(item => {
+        let slugArr = item.slug.split('/');
+        const categoryEn = slugArr[slugArr.length - 1]; 
+        let orderItem = CATEGORY_ORDER.find(item => item.key === categoryEn);
+        if (!orderItem) {
+            item.order = 1;
+        }
+        item.order = !orderItem ? 1 : orderItem.value;
+        return item;
+    });
+    // this.log(categories.sort(orderFun));
+    // return categories.sort(orderFun);
 });
+
+
 
 
 /**

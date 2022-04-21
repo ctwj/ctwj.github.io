@@ -7,6 +7,9 @@
     const pId = pCate._id;
     const categories = site.categories.data.filter(item => item.parent === pId);
 
+    category_order(categories);
+    categories.sort((a,b) => a.order - b.order);
+    
     // category
     const category_name = (is_home() || level(page.base) == 1) ? categories[0].name : page.category;
 %>
