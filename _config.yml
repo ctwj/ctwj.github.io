@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: 买房装修避坑指南
 subtitle: ''
 description: ''
-keywords:
-author: John Doe
+keywords: 新房,二手房,买房,装修,避坑,宝典
+author: ctwj
 language: zh_CN
 timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://ctwj.github.io/
+url: https://www.d6g.win/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
