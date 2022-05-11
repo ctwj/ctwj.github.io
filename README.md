@@ -9,3 +9,6 @@ hexo d
 
 开启本地服务
 hexo s
+
+
+./create.js --template template.md --data data.json --target=./source/_posts/house/booking_contract/
