@@ -3,10 +3,10 @@ const fs = require('fs');
 const request = require('request');
 var argv = require('yargs').argv;
 
-const category1 = '二手房';
-const category2 = '缴税过户';
-const targetPath = './source/_posts/house_resold/tax/';
-const dataFile = './themes/ctwj/_demo/data/resold/缴税过户.json';
+const category1 = '新房';
+const category2 = '买房准备';
+const targetPath = './source/_posts/house/prepare_buy/';
+const dataFile = './themes/ctwj/_demo/data/new/买房准备.json';
 
 const printHelp = () => {
     console.log(' usage: ./create.js --template template.md --data data.json --target=./source/_posts/house/booking_contract/');
