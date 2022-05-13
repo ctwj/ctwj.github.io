@@ -69,7 +69,7 @@ index_generator:
 default_category: uncategorized
 category_map:
   新房: house
-  二手房: resold-house
+  二手房: house-resold
   装修流程: decorate
   买房准备: prepare-buy
   看房选房: choose-house

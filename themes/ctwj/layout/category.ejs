@@ -24,7 +24,9 @@
 <% 
     const currCate = site.categories.data.find(item => item.name == page.category);
     const reg = new RegExp(`^${currCate.slug.replace(/-/g, '_')}/`);
-    const posts = site.posts.data.filter(item => reg.test(item.slug));
+    const posts = site.posts.data.filter(item => {
+        return reg.test(item.slug);
+    });
 %>
     <div class="content-body">
         <div class="scroll-panel scroll">
