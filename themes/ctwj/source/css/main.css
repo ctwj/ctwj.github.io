@@ -157,4 +157,5 @@ a {
 
 .footer {
     flex: 0;
+    display: none;
 }
