@@ -98,17 +98,32 @@ const ariticleImageGet = async (file) => {
             const pathArr = image.split('/');
             const imageName = pathArr[pathArr.length - 1];
             const imagePath = `${targetPath}${imageName}`;
-            if (fs.existsSync(imagePath)) {
-                resolve();
-            } else {
-                let data = await reqeustAsyn(image).catch(error => {
-                    console.log('request', image, error)
-                });
-                await writeFileAsync(imagePath, data);
-                console.log('save file', imagePath);
-                resolve();
-            }
+            // if (fs.existsSync(imagePath)) {
+            //     resolve();
+            // } else {
+            //     let data = await reqeustAsyn(image).catch(error => {
+            //         console.log('request', image, error)
+            //     });
+            //     await writeFileAsync(imagePath, data);
+            //     console.log('save file', imagePath);
+            //     resolve();
+            // }
             // resolve();
+
+                // 2, 更新文件内容
+            if (fs.existsSync(imagePath)) {
+                console.log('update ',file );
+                let data = getFile(file);
+                let content = data.replace(image, `/images/${imageName}`)
+                // request(image).pipe(fs.createWriteStream(`${targetPath}${imageName}`));
+                fs.writeFile(file, content, {flag: 'w'}, function (err) {
+                    if(err) {
+                     console.error(err);
+                     } else {
+                        console.log('写入成功', file);
+                     }
+                 });
+            }
         }
     });
 }
@@ -118,16 +133,11 @@ const ariticleImageGet = async (file) => {
 // enter
 const main = () => {
     readDir(dataDir);
-    // console.log(files);
-    let arr = [];
     files.forEach(async file => {
         await ariticleImageGet(file).catch(error => {
             console.log(error);
         });
     });
-    // ariticleImageGet(files[10]).catch(error => {
-    //     console.log(error);
-    // });
 }
 
 main();
