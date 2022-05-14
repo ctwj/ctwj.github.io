@@ -15,10 +15,10 @@
     </div>
     <div class="appbar-title center"> 
         <% page.path %>
-        <% if (is_home() || is_show_appbar_nav(page.path)) { %>
+        <% if (is_show_appbar_nav(page.path)) { %>
         <nav class="nav-appbar">
             <div class="nav-item center 
-            <% if (is_appbar_nav_active(page.path, 'house/') || is_home()) { %>
+            <% if (is_appbar_nav_active(page.path, 'house/')) { %>
                 active
             <% } %>">
             <a href="/categories/house/">
@@ -26,10 +26,10 @@
             </a>
             </div>
             <div class="nav-item center 
-            <% if (is_appbar_nav_active(page.path, 'resold-house')) { %>
+            <% if (is_appbar_nav_active(page.path, 'house-resold')) { %>
                 active
             <% } %>">
-            <a href="/categories/resold-house/">
+            <a href="/categories/house-resold/">
                 <span>二手房</span>
             </a>
             </div>
@@ -41,6 +41,10 @@
         <% } else if (is_post() || is_page()) { %>
             <div class="appbar-title center"> 
                 <span class="appbar-title-text"><%= page.title %></span>
+            </div>
+        <% } else if (is_home()) { %>
+            <div class="appbar-title center"> 
+                <span class="appbar-title-text">买房装修避坑指南</span>
             </div>
         <% }%>
     </div>

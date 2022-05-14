@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: 买房装修避坑指南
 subtitle: ''
 description: ''
-keywords:
-author: John Doe
+keywords: 新房,二手房,买房,装修,避坑,宝典
+author: ctwj
 language: zh_CN
 timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://ctwj.github.io/
+url: https://www.d6g.win/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -69,24 +69,24 @@ index_generator:
 default_category: uncategorized
 category_map:
   新房: house
-  二手房: resold_house
+  二手房: house-resold
   装修流程: decorate
-  买房准备: prepare_buy
-  看房选房: choose_house
-  订房签约: booking_contract
+  买房准备: prepare-buy
+  看房选房: choose-house
+  订房签约: booking-contract
   贷款办理: loan
   缴税过户: tax
-  收房验房: check_house
-  退房维权: maintain_legal_rights
-  装修前准备: prepare_decorate
-  装修合同: decorate_contract
-  水电: water_electricity
-  厨卫: kitchen_bath
-  墙顶地: wall_ceil_floor
-  门窗: door_window
+  收房验房: check-house
+  退房维权: maintain-legal-rights
+  装修前准备: prepare-decorate
+  装修合同: decorate-contract
+  水电: water-electricity
+  厨卫: kitchen-bath
+  墙顶地: wall-ceil-floor
+  门窗: door-window
   家具: furniture
   家电: appliances
-  入住: check_in
+  入住: check-in
 tag_map:
 
 # Metadata elements

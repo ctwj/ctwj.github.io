@@ -157,4 +157,8 @@ a {
 
 .footer {
     flex: 0;
+    display: none;
+}
+#busuanzi_container_site_pv {
+    display:none;
 }

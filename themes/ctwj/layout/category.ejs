@@ -7,6 +7,9 @@
     const pId = pCate._id;
     const categories = site.categories.data.filter(item => item.parent === pId);
 
+    category_order(categories);
+    categories.sort((a,b) => a.order - b.order);
+    
     // category
     const category_name = (is_home() || level(page.base) == 1) ? categories[0].name : page.category;
 %>
@@ -21,7 +24,9 @@
 <% 
     const currCate = site.categories.data.find(item => item.name == page.category);
     const reg = new RegExp(`^${currCate.slug.replace(/-/g, '_')}/`);
-    const posts = site.posts.data.filter(item => reg.test(item.slug.replace(/-/g, '_')));
+    const posts = site.posts.data.filter(item => {
+        return reg.test(item.slug);
+    });
 %>
     <div class="content-body">
         <div class="scroll-panel scroll">
