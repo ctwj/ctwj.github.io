@@ -1,0 +1,164 @@
+body {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+}
+a {
+    text-decoration:none;
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.appbar {
+    height: 48px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-shadow: 2px 2px 4px #EEE;
+    overflow: hidden;
+    width: inherit;
+    box-sizing: border-box;
+}
+.appbar-title {
+    flex-grow: 1;
+    flex-shrink: 1;
+    text-align: center;
+    overflow: hidden;
+}
+.appbar-title-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    white-space: nowrap;
+    padding: 0 24px;
+    width: inherit;
+}
+
+/* appbar 中导航 */
+.nav-appbar {
+    display: flex;
+}
+.nav-appbar .nav-item {
+    height: 26px;
+    padding: 0 16px;
+    border: 1px solid #14161A;
+    color: #14161A;
+}
+.nav-appbar .nav-item a {
+    color: #14161A;
+}
+.nav-appbar .nav-item.active {
+    background-color: #14161A;
+    color: white;
+}
+.nav-appbar .nav-item.active a {
+    color: white;
+}
+
+.appbar .leading,
+.appbar .right {
+    width: 24px;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.content-body {
+    flex: 1;
+    overflow: hidden;
+}
+
+
+/* 左侧导航 */
+.content-appbar {
+    display: flex;
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 64px;
+    height: 100%;
+    flex-direction: column;
+    background-color: rgba(238, 238, 238, 0.561);
+}
+
+.content-appbar .content-appbar-item {
+    width: 64px;
+    height: 64px;
+    background-color: rgba(238, 238, 238, 0.561);
+    opacity: 0.5;
+    box-sizing: border-box;
+}
+
+.content-appbar .content-appbar-item a {
+    font-size: 10px;
+    color: #14161F;
+}
+
+.content-appbar .content-appbar-item.active {
+    opacity: 0.8;
+    background-color: #FFF;
+    border-left: 2px solid #36F;
+}
+
+.content-appbar .content-appbar-item:hover {
+    background-color: rgb(197, 197, 197);
+}
+
+/* 滚动条 */
+.scroll::-webkit-scrollbar {
+    width: 2px;
+}
+.scroll::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-left: none;
+    transition: all 0.1s linear;
+}
+.scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(68, 75, 85, 0.1);
+    cursor: pointer;
+    border-radius: 10px;
+    margin: 0 2px;
+}
+
+.scroll-panel {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* 文章列表 */
+.content-body-article {
+    flex-shrink: 0;
+    height: 48px;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(238, 238, 238, 0.561);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    color: #14161A;
+    overflow: hidden;
+}
+
+.content-body-article .title {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.footer {
+    flex: 0;
+    display: none;
+}
+#busuanzi_container_site_pv {
+    display:none;
+}

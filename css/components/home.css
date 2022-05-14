@@ -1,0 +1,30 @@
+.home {
+  padding: 0 24px;
+}
+.home a {
+  color: #14161a;
+}
+.home .category-list {
+  padding-left: 0;
+  list-style: none;
+}
+.home .category-list-item {
+  padding: 0;
+  font-size: 14px;
+}
+.home .category-list-child {
+  padding-left: 16px;
+  margin-top: 16px;
+}
+.home .category-list-child .category-list-item {
+  font-size: 12px;
+}
+.home .category-list-item {
+  list-style: none;
+  margin-bottom: 8px;
+  padding: 4px 8px;
+}
+.home .category-list-child {
+  display: flex;
+  flex-wrap: wrap;
+}

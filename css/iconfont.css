@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'iconfont';
+    src: url('/iconfont/iconfont.woff2?t=1649663229100') format('woff2'),
+         url('/iconfont/iconfont.woff?t=1649663229100') format('woff'),
+         url('/iconfont/iconfont.ttf?t=1649663229100') format('truetype');
+  }
+
+
+  .iconfont {
+    font-family: "iconfont" !important;
+    font-size: 24px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  @font-face {
+    font-family: 'webfont';
+    font-display: swap;
+    src: url('//at.alicdn.com/t/webfont_0nemb00qo9x.eot'); /* IE9*/
+    src: url('//at.alicdn.com/t/webfont_0nemb00qo9x.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('//at.alicdn.com/t/webfont_0nemb00qo9x.woff2') format('woff2'),
+    url('//at.alicdn.com/t/webfont_0nemb00qo9x.woff') format('woff'), /* chrome、firefox */
+    url('//at.alicdn.com/t/webfont_0nemb00qo9x.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url('//at.alicdn.com/t/webfont_0nemb00qo9x.svg#Alibaba-PuHuiTi-Regular') format('svg'); /* iOS 4.1- */
+  }
+
+  .web-font{
+    font-family:"webfont" !important;
+    font-size:12px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
